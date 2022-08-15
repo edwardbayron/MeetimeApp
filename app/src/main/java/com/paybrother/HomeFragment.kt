@@ -9,39 +9,45 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_reservations.*
 
 class HomeFragment : Fragment() {
 
-    var year : Int = 0
-    var month : Int = 0
-    var day : Int = 0
-    val datePickerFragment = DatePickerFragment()
-    val items  = listOf(ContactItem("Irina", "Kosmetolog"), ContactItem("Tanja", "Nogti"))
+    val items = listOf(
+        ReservationItem("Irina", "Kosmetolog", "July 10 2022"),
+        ReservationItem("Tanja", "Nogti", "July 11 2022"),
+        ReservationItem("Oksana", "Nogti", "July 12 2022"),
+        ReservationItem("Igor", "Massage", "July 69 2022"),
+        ReservationItem("Andrei", "Byxi4", "July 31 2022"),
+        ReservationItem("Juri 1", "Project start", "July 06 2022"),
+        ReservationItem("Juri 2 ", "Project start", "July 06 2022"),
+        ReservationItem("Juri 3", "Project start", "July 06 2022"),
+        ReservationItem("Juri 4", "Project start", "July 06 2022")
+    )
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_reservations, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val contactsAdapter = ContactsAdapter(items, object : ContactsAdapter.Callback{
-            override fun onItemClicked(item: ContactItem){
-                activity?.supportFragmentManager?.let { datePickerFragment.show(it, "datePicker") }
+        val reservationsAdapter = ReservationsAdapter(items, object : ReservationsAdapter.Callback {
+            override fun onItemClicked(item: ReservationItem) {
+
             }
         })
 
-        list_contacts.adapter = contactsAdapter
+        reservations_rv.adapter = reservationsAdapter
+
     }
 
-    override fun onResume() {
-        super.onResume()
-        val intent = Intent()
 
-        if(intent.extras != null) {
-            val sent = intent.extras.get("year")
-            year = intent.extras.get("year") as Int
-            Toast.makeText(activity, "year: " + year, Toast.LENGTH_SHORT).show()
-        }
-    }
+
+
+
 }

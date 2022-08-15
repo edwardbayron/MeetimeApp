@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -37,4 +39,13 @@ dependencies {
     implementation('com.mikepenz.materialdrawer:library:0.9.5@aar') {
         transitive = true
     }
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+
+    // lifecycleScope:
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-alpha04'
+
+    // viewModelScope:
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-alpha04'
+
+    kapt "android.arch.persistence.room:compiler:1.1.1"
 }
