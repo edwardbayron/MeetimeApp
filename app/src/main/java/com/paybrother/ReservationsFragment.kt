@@ -19,7 +19,7 @@ class ReservationsFragment : Fragment() {
     val items  = listOf(ContactItem("Irina", "Kosmetolog"), ContactItem("Tanja", "Nogti"))
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_reservations, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
