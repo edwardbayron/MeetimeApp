@@ -1,98 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/register_fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:id="@+id/register_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
+    <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/register_year_til"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="password_toggle"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:theme="@style/Theme.MaterialComponents"
 
-        <androidx.appcompat.widget.AppCompatTextView
+            app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/register_year"
                 android:layout_width="match_parent"
-                android:layout_height="36dp"
-                tools:text="2019"
-                android:background="@drawable/date_item_card"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:paddingLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/cmn_black"
-                android:textSize="24sp"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/cmn_black" />
 
-        />
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-        <androidx.appcompat.widget.AppCompatTextView
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/register_month_til"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Month"
+            app:endIconMode="password_toggle"
+            app:layout_constraintTop_toBottomOf="@id/register_year_til"
+            app:shapeAppearance="@style/Rounded">
+
+        <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/register_month"
                 android:layout_width="match_parent"
-                android:layout_height="36dp"
-                tools:text="October"
-                android:textSize="24sp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textColor="@color/cmn_black"
-                android:layout_marginTop="10dp"
-                app:layout_constraintTop_toBottomOf="@id/register_year"
+                android:layout_height="wrap_content"
+                android:textColor="@color/cmn_black" />
 
-                android:paddingLeft="15dp"
-                android:background="@drawable/date_item_card"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatTextView
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/register_day_til"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Day"
+            app:endIconMode="password_toggle"
+            app:layout_constraintTop_toBottomOf="@id/register_month_til"
+            app:shapeAppearance="@style/Rounded">
+
+        <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/register_day"
                 android:layout_width="match_parent"
-                android:layout_height="36dp"
-                tools:text="15"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textColor="@color/cmn_black"
-                android:layout_marginTop="10dp"
-                app:layout_constraintTop_toBottomOf="@id/register_month"
-                android:textSize="24sp"
-                android:paddingLeft="15dp"
-                android:background="@drawable/date_item_card"/>
+                android:layout_height="wrap_content"
+                android:textColor="@color/cmn_black" />
 
-        <androidx.appcompat.widget.AppCompatEditText
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/number_et_til"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Your phone number"
+            app:endIconMode="password_toggle"
+            app:layout_constraintTop_toBottomOf="@id/register_month_til"
+            app:shapeAppearance="@style/Rounded">
+
+        <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/number_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textColor="@color/cmn_black"
-                android:hint="Your phone number"
-                app:layout_constraintTop_toBottomOf="@id/register_day"
-                android:textColorHint="@color/cmn_black"
-                tools:ignore="LabelFor"/>
+                android:textColor="@color/cmn_black" />
 
-        <androidx.appcompat.widget.AppCompatEditText
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/firstName_et_til"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Your phone number"
+            app:endIconMode="password_toggle"
+            app:layout_constraintTop_toBottomOf="@id/number_et_til"
+            app:shapeAppearance="@style/Rounded">
+
+        <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/firstName_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textColor="@color/cmn_black"
-                android:hint="Your first name"
-                app:layout_constraintTop_toBottomOf="@id/number_et"
-                android:textColorHint="@color/cmn_black"
-                tools:ignore="LabelFor"/>
+                android:hint="First name"
+                android:textColor="@color/cmn_black" />
 
-        <androidx.appcompat.widget.AppCompatEditText
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/lastName_et_til"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            app:endIconMode="password_toggle"
+            app:layout_constraintTop_toBottomOf="@id/firstName_et_til"
+            app:shapeAppearance="@style/Rounded">
+
+        <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/lastName_et"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:autofillHints="gfdg" android:inputType="number"
-                app:layout_constraintTop_toBottomOf="@id/firstName_et"
-                android:textColor="@color/cmn_black"
-                android:hint="Your last name"
-                android:textColorHint="@color/cmn_black"
-                tools:ignore="LabelFor"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Register"
-                android:layout_gravity="center"
-                app:layout_constraintTop_toBottomOf="@id/lastName_et"
-        />
+                android:hint="Last name"
+                android:textColor="@color/cmn_black" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:theme="@style/FormButton"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lastName_et_til" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

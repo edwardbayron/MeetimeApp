@@ -39,8 +39,8 @@ class ReservationsFragment : Fragment() {
         val intent = Intent()
 
         if(intent.extras != null) {
-            val sent = intent.extras.get("year")
-            year = intent.extras.get("year") as Int
+            val sent = intent?.extras?.get("year")
+            year = intent?.extras?.get("year") as Int
             Toast.makeText(activity, "year: " + year, Toast.LENGTH_SHORT).show()
         }
     }

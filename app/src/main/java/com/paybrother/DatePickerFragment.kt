@@ -64,7 +64,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 //        })
 
 
-        return DatePickerDialog(activity, this, year, month, day)
+        return DatePickerDialog(requireActivity(), this, year, month, day)
     }
 
 

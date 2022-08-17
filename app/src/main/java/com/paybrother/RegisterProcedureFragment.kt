@@ -19,8 +19,8 @@ class RegisterProcedureFragment : Fragment() {
 
         Log.e("TAG", "olol fragmentnkfdgjhlkdfhg")
 
-        register_year.text = arguments?.getInt("year").toString()
-        register_month.text = arguments?.getInt("month").toString()
-        register_day.text = arguments?.getInt("day").toString()
+        register_year.setText(arguments?.getInt("year").toString())
+        register_month.setText(arguments?.getInt("month").toString())
+        register_day.setText(arguments?.getInt("day").toString())
     }
 }
