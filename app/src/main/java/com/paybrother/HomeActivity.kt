@@ -27,7 +27,6 @@ import java.util.*
 
 class HomeActivity : AppCompatActivity() {
 
-
     val datePickerFragment = DatePickerFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {

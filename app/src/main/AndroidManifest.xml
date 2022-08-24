@@ -10,11 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".HomeActivity"
             android:exported="true"
             android:theme="@style/AppTheme" >

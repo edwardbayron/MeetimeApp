@@ -1,24 +1,17 @@
 package com.paybrother
 
-import android.annotation.SuppressLint
-import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.paybrother.room.Reservation
 import com.paybrother.room.database.ReservationDatabase
-import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_reservations.*
 
 class HomeFragment : Fragment() {
 
@@ -26,6 +19,15 @@ class HomeFragment : Fragment() {
 
     var reservationsAdapter : ReservationsAdapter? = null
     private var dialog : BottomSheetDialog? = null
+
+    private var roomDb : ReservationDatabase? = null
+
+    private var onItemClickListener = object : ReservationsAdapter.Callback {
+        override fun onItemClicked(item: ReservationItem) {
+            setupProcedureDetailsDialog(item, roomDb!!)
+        }
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,30 +39,28 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().title = "Home"
+        roomDb = ReservationDatabase.getInstance(requireContext())
 
-        var reservationDb : ReservationDatabase = ReservationDatabase.getInstance(requireContext())
+        setupDatabaseList(roomDb!!)
+        setupAdapter()
 
-        setupDatabaseList(reservationDb)
-
-
-        reservationsAdapter = ReservationsAdapter(reservationItems, object : ReservationsAdapter.Callback {
-            override fun onItemClicked(item: ReservationItem) {
-
-                setupProcedureDetailsDialog(item, reservationDb)
-
-            }
-        })
+        reservationsAdapter = ReservationsAdapter(reservationItems, onItemClickListener)
 
         reservations_rv.adapter = reservationsAdapter
-
     }
 
     private fun setupDatabaseList(reservationDb: ReservationDatabase){
         Thread {
-            for(i in reservationDb.reservationDao().getReservationList()){
+            for(i in roomDb?.reservationDao()?.getReservationList()!!){
                 reservationItems.add(ReservationItem(i.id!!,  i.name, i.event, i.date))
             }
         }.start()
+    }
+
+    private fun setupAdapter(){
+        reservationsAdapter = ReservationsAdapter(reservationItems, onItemClickListener)
+        reservations_rv.adapter = reservationsAdapter
     }
 
     private fun setupProcedureDetailsDialog(item: ReservationItem, reservationDb: ReservationDatabase){
@@ -86,15 +86,15 @@ class HomeFragment : Fragment() {
             Thread {
 
                 var reservation : Reservation? = null
-                val reservationsList = reservationDb.reservationDao().getReservationList()
-                for(i in reservationsList){
+                val reservationsList = roomDb?.reservationDao()?.getReservationList()
+                for(i in reservationsList!!){
                     if(i.id?.equals(item.id) == true){
                         reservation = i
                     }
                 }
 
                 if (reservation != null) {
-                    reservationDb.reservationDao().deleteReservation(reservation)
+                    roomDb?.reservationDao()?.deleteReservation(reservation)
                 }
             }.start()
             dialog?.dismiss()
