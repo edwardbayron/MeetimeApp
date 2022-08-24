@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -40,13 +42,11 @@ class HomeFragment : Fragment() {
 
         setupDatabaseList(reservationDb)
 
+
         reservationsAdapter = ReservationsAdapter(reservationItems, object : ReservationsAdapter.Callback {
             override fun onItemClicked(item: ReservationItem) {
-                Thread {
-                    reservationDb.reservationDao().deleteReservation(Reservation(item.id, item.name, "", item.event, item.date))
-                }.start()
 
-
+                setupProcedureDetailsDialog(item, reservationDb)
 
             }
         })
@@ -63,8 +63,46 @@ class HomeFragment : Fragment() {
         }.start()
     }
 
-    private fun setupProcedureDetailsDialog(){
+    private fun setupProcedureDetailsDialog(item: ReservationItem, reservationDb: ReservationDatabase){
         val dialogView = requireActivity().layoutInflater.inflate(R.layout.bottom_sheet_procedure_details, null)
+        dialog = BottomSheetDialog(requireContext())
+        dialog?.setContentView(dialogView)
+
+        val name = dialog?.findViewById<TextView>(R.id.bottom_sheet_name)
+        val event = dialog?.findViewById<TextView>(R.id.bottom_sheet_event)
+        val phoneNumber = dialog?.findViewById<TextView>(R.id.bottom_sheet_phonenumber)
+        val date = dialog?.findViewById<TextView>(R.id.bottom_sheet_date)
+
+        val editEventButton = dialog?.findViewById<Button>(R.id.bottom_sheet_details_edit_btn)
+        val deleteEventButton = dialog?.findViewById<Button>(R.id.bottom_sheet_details_delete_btn)
+
+        name?.text = item.name
+        event?.text = item.event
+        date?.text = item.date
+
+        dialog?.show()
+
+        deleteEventButton?.setOnClickListener {
+            Thread {
+
+                var reservation : Reservation? = null
+                val reservationsList = reservationDb.reservationDao().getReservationList()
+                for(i in reservationsList){
+                    if(i.id?.equals(item.id) == true){
+                        reservation = i
+                    }
+                }
+
+                if (reservation != null) {
+                    reservationDb.reservationDao().deleteReservation(reservation)
+                }
+            }.start()
+            dialog?.dismiss()
+            reservationsAdapter?.notifyDataSetChanged()
+        }
+
+
+
 
     }
 }
