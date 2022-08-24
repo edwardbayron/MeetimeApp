@@ -31,16 +31,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:textColor="@color/cmn_lightblue"
+                    android:textColor="@color/cmn_black"
                     android:textSize="14sp"
                     tools:text="Irina" />
 
             <TextView
-                    android:id="@+id/reservations_lastName"
+                    android:id="@+id/reservations_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:textColor="@color/cmn_lightblue"
+                    android:textColor="@color/cmn_black"
                     android:textSize="14sp"
                     app:layout_constraintStart_toEndOf="@id/reservations_firstName"
                     app:layout_constraintTop_toTopOf="parent"

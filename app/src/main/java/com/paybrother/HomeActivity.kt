@@ -20,12 +20,15 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.paybrother.room.Reservation
 import com.paybrother.room.database.ReservationDatabase
+import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.coroutines.launch
 import java.util.*
 
 
 class HomeActivity : AppCompatActivity() {
 
+
+    val datePickerFragment = DatePickerFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +66,8 @@ class HomeActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction().add(R.id.parent_container, HomeFragment())
             .commit()
+
+        setupClickListeners()
     }
 
 
@@ -76,5 +81,11 @@ class HomeActivity : AppCompatActivity() {
 
 
 
+    }
+
+    private fun setupClickListeners(){
+        fab.setOnClickListener {
+            this?.supportFragmentManager?.let { datePickerFragment.show(it, "datePicker") }
+        }
     }
 }

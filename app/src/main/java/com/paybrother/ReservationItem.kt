@@ -1,3 +1,3 @@
 package com.paybrother
 
-class ReservationItem (var firstName: String, var lastName: String, var date: String)
+class ReservationItem (var id: Long, var name: String, var event: String, var date: String)

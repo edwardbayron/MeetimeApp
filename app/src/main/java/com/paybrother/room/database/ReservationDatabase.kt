@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.paybrother.room.Reservation
 import com.paybrother.room.dao.ReservationDao
 
-@Database(entities = [Reservation::class], exportSchema = false, version = 1)
+@Database(entities = [Reservation::class], exportSchema = false, version = 3)
 abstract class ReservationDatabase : RoomDatabase() {
     companion object{
 

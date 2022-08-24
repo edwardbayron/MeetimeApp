@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import org.w3c.dom.Text
 
 class ReservationsAdapter(var items: List<ReservationItem>, val callback: ReservationsAdapter.Callback) : RecyclerView.Adapter<ReservationsAdapter.ReservationsViewHolder>() {
 
@@ -17,13 +18,13 @@ class ReservationsAdapter(var items: List<ReservationItem>, val callback: Reserv
     }
 
     inner class ReservationsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        private val firstName = itemView.findViewById<TextView>(R.id.reservations_firstName)
-        private val lastName = itemView.findViewById<TextView>(R.id.reservations_lastName)
+        private val name = itemView.findViewById<TextView>(R.id.reservations_firstName)
+        private val event = itemView.findViewById<TextView>(R.id.reservations_event)
         private val date = itemView.findViewById<TextView>(R.id.date)
 
         fun bind(item: ReservationItem){
-            firstName.text = item.firstName
-            lastName.text = item.lastName
+            name.text = item.name
+            event.text = item.event
             date.text = item.date
 
             itemView.setOnClickListener{
