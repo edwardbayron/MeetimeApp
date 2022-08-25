@@ -20,18 +20,22 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.paybrother.room.Reservation
 import com.paybrother.room.database.ReservationDatabase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.coroutines.launch
 import java.util.*
 
 
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
     val datePickerFragment = DatePickerFragment()
+    private var roomDb : ReservationDatabase? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        roomDb = ReservationDatabase.getInstance(this)
 
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -74,8 +78,7 @@ class HomeActivity : AppCompatActivity() {
         super.onResume()
 
         Thread {
-            var reservationDb : ReservationDatabase = ReservationDatabase.getInstance(this)
-            reservationDb.reservationDao().getReservationList()
+            roomDb?.reservationDao()?.getReservationList()
         }.start()
 
 
@@ -84,7 +87,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setupClickListeners(){
         fab.setOnClickListener {
-            this?.supportFragmentManager?.let { datePickerFragment.show(it, "datePicker") }
+            this.supportFragmentManager.let { datePickerFragment.show(it, "datePicker") }
         }
     }
 }

@@ -15,6 +15,7 @@ class RegisterProcedureFragment : Fragment() {
 
 
     var reservationsList = emptyList<Reservation>()
+    private var roomDb : ReservationDatabase? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.register_procedure_fragment, container, false)
@@ -23,10 +24,11 @@ class RegisterProcedureFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var reservationDb : ReservationDatabase = ReservationDatabase.getInstance(requireContext())
-
         Thread {
-            reservationsList = reservationDb.reservationDao().getReservationList()
+            roomDb?.reservationDao()?.getReservationList()?.let{
+                reservationsList = it
+            }
+
         }.start()
 
         register_year.setText(arguments?.getInt("year").toString())
@@ -38,10 +40,15 @@ class RegisterProcedureFragment : Fragment() {
         btn_register.setOnClickListener {
             Log.e("DAO", "i: "+number_et.text+" "+name_et.text+" "+event_et.text)
             Thread {
-                reservationDb.reservationDao().insertReservation(Reservation(null, name_et.text.toString(), number_et.text.toString(), event_et.text.toString(), date))
+                roomDb?.reservationDao()?.insertReservation(Reservation(null, name_et.text.toString(), number_et.text.toString(), event_et.text.toString(), date))
             }.start()
             requireActivity().onBackPressed()
         }
 
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        roomDb = ReservationDatabase.getInstance(requireContext())
     }
 }

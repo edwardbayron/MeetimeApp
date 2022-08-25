@@ -8,25 +8,33 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.paybrother.databinding.FragmentHomeBinding
 import com.paybrother.room.Reservation
 import com.paybrother.room.database.ReservationDatabase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     val reservationItems = arrayListOf<ReservationItem>()
 
-    var reservationsAdapter : ReservationsAdapter? = null
-    private var dialog : BottomSheetDialog? = null
+    var reservationsAdapter: ReservationsAdapter? = null
+    private var dialog: BottomSheetDialog? = null
 
-    private var roomDb : ReservationDatabase? = null
+    private var roomDb: ReservationDatabase? = null
+
+    lateinit var binding : FragmentHomeBinding
+    private val viewModel by viewModels<HomeFragmentViewModel>()
 
     private var onItemClickListener = object : ReservationsAdapter.Callback {
         override fun onItemClicked(item: ReservationItem) {
-            setupProcedureDetailsDialog(item, roomDb!!)
+            roomDb?.let {
+                setupProcedureDetailsDialog(item, it)
+            }
         }
-
     }
 
     override fun onCreateView(
@@ -34,7 +42,15 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewmodel = viewModel
+        }
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,29 +58,33 @@ class HomeFragment : Fragment() {
         requireActivity().title = "Home"
         roomDb = ReservationDatabase.getInstance(requireContext())
 
-        setupDatabaseList(roomDb!!)
+        setupDatabaseList()
         setupAdapter()
-
-        reservationsAdapter = ReservationsAdapter(reservationItems, onItemClickListener)
-
-        reservations_rv.adapter = reservationsAdapter
     }
 
-    private fun setupDatabaseList(reservationDb: ReservationDatabase){
+    private fun setupDataListeners(){
+
+    }
+
+    private fun setupDatabaseList() {
         Thread {
-            for(i in roomDb?.reservationDao()?.getReservationList()!!){
-                reservationItems.add(ReservationItem(i.id!!,  i.name, i.event, i.date))
+            for (i in roomDb?.reservationDao()?.getReservationList()!!) {
+                reservationItems.add(ReservationItem(i.id!!, i.name, i.event, i.date))
             }
         }.start()
     }
 
-    private fun setupAdapter(){
+    private fun setupAdapter() {
         reservationsAdapter = ReservationsAdapter(reservationItems, onItemClickListener)
         reservations_rv.adapter = reservationsAdapter
     }
 
-    private fun setupProcedureDetailsDialog(item: ReservationItem, reservationDb: ReservationDatabase){
-        val dialogView = requireActivity().layoutInflater.inflate(R.layout.bottom_sheet_procedure_details, null)
+    private fun setupProcedureDetailsDialog(
+        item: ReservationItem,
+        reservationDb: ReservationDatabase
+    ) {
+        val dialogView =
+            requireActivity().layoutInflater.inflate(R.layout.bottom_sheet_procedure_details, null)
         dialog = BottomSheetDialog(requireContext())
         dialog?.setContentView(dialogView)
 
@@ -85,10 +105,10 @@ class HomeFragment : Fragment() {
         deleteEventButton?.setOnClickListener {
             Thread {
 
-                var reservation : Reservation? = null
+                var reservation: Reservation? = null
                 val reservationsList = roomDb?.reservationDao()?.getReservationList()
-                for(i in reservationsList!!){
-                    if(i.id?.equals(item.id) == true){
+                for (i in reservationsList!!) {
+                    if (i.id?.equals(item.id) == true) {
                         reservation = i
                     }
                 }
@@ -100,8 +120,6 @@ class HomeFragment : Fragment() {
             dialog?.dismiss()
             reservationsAdapter?.notifyDataSetChanged()
         }
-
-
 
 
     }
