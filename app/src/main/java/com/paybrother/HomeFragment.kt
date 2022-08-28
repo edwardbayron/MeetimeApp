@@ -81,7 +81,7 @@ class HomeFragment : Fragment() {
 
     private fun setupAdapter() {
         reservationsAdapter = ReservationsAdapter(reservationItems, onItemClickListener)
-        reservations_rv.adapter = reservationsAdapter
+        binding.reservationsRv.adapter = reservationsAdapter
     }
 
     private fun setupProcedureDetailsDialog(

@@ -38,29 +38,15 @@ class RegisterProcedureFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        register_year.setText(arguments?.getInt("year").toString())
-        register_month.setText(arguments?.getInt("month").toString())
-        register_day.setText(arguments?.getInt("day").toString())
+        binding.registerYear.setText(arguments?.getInt("year").toString())
+        binding.registerMonth.setText(arguments?.getInt("month").toString())
+        binding.registerDay.setText(arguments?.getInt("day").toString())
 
-        val date = "" + register_month.text + " "+register_day.text+ " "+ register_year.text
+        val date = "" + binding.registerMonth.text + " "+binding.registerDay.text+ " "+ binding.registerYear.text
 
-        btn_register.setOnClickListener {
-//            Log.e("DAO", "i: "+number_et.text+" "+name_et.text+" "+event_et.text)
-//            Thread {
-//                roomDb?.reservationDao()?.insertReservation(Reservation(null, name_et.text.toString(), number_et.text.toString(), event_et.text.toString(), date))
-//            }.start()
-            viewModel.insertProcedure(Reservation(null, name_et.text.toString(), number_et.text.toString(), event_et.text.toString(), date))
+        binding.btnRegister.setOnClickListener {
+            viewModel.insertProcedure(Reservation(null, binding.nameEt.text.toString(), binding.numberEt.text.toString(), binding.eventEt.text.toString(), date))
             requireActivity().onBackPressed()
-
         }
-
-        viewModel.proceduresList.observe(viewLifecycleOwner){
-            for(i in it){
-                Log.wtf("TAG", "register i: "+i.name)
-            }
-
-        }
-
     }
-
 }
