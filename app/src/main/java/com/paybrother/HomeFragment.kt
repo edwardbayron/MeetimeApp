@@ -63,7 +63,6 @@ class HomeFragment : Fragment() {
         requireActivity().title = "Home"
         roomDb = ReservationDatabase.getInstance(requireContext())
 
-        //setupDatabaseList()
         setupAdapter()
         setupDataListeners()
 

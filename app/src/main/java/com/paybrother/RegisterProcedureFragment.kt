@@ -37,6 +37,7 @@ class RegisterProcedureFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().title = "Create new procedure"
 
         binding.registerYear.setText(arguments?.getInt("year").toString())
         binding.registerMonth.setText(arguments?.getInt("month").toString())
