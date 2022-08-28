@@ -1,31 +1,67 @@
 package com.paybrother
 
-import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.orhanobut.logger.Logger
+import com.paybrother.room.Reservation
 import com.paybrother.room.database.ReservationDatabase
-import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.android.synthetic.main.register_procedure_fragment.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeFragmentViewModel @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext val applicationContext: Context
 ) : ViewModel() {
-
 
     private var roomDb: ReservationDatabase? = null
 
-    private val _proceduresList : MutableLiveData<List<ReservationItem>> = MutableLiveData()
-    val proceduresList : LiveData<List<ReservationItem>> get() = _proceduresList
+    private val _proceduresList: MutableLiveData<ArrayList<ReservationItem>> = MutableLiveData()
+    val proceduresList: LiveData<ArrayList<ReservationItem>> get() = _proceduresList
 
-    init{
-        roomDb = ReservationDatabase.getInstance(context)
+
+    private val list = arrayListOf<ReservationItem>()
+
+    init {
+        Log.wtf("TAG: ", "wtf viewModel: ")
+        roomDb = ReservationDatabase.getInstance(applicationContext)
+        initProceduresList()
     }
 
+    private fun initProceduresList() {
+        CoroutineScope(Dispatchers.IO).launch {
+            for (i in roomDb?.reservationDao()?.getReservationList()!!) {
+                list.add(ReservationItem(i.id!!, i.name, i.event, i.date))
+            }
+
+            withContext(Dispatchers.Main) {
+                _proceduresList.value = list
+            }
+        }
+    }
+
+    fun insertProcedure(reservation: Reservation){
+        CoroutineScope(Dispatchers.IO).launch {
+
+            roomDb?.reservationDao()?.insertReservation(reservation)
+
+            withContext(Dispatchers.Main) {
+                Log.e("DAO", "i: "+reservation.name)
+                list.add(ReservationItem(0, reservation.name, reservation.event, reservation.date))
+                _proceduresList.value = list
+
+            }
+        }
+    }
 
 
 }

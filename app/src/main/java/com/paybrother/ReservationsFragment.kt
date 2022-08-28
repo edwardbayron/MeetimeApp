@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_reservations.*
 
+@AndroidEntryPoint
 class ReservationsFragment : Fragment() {
 
     var year : Int = 0

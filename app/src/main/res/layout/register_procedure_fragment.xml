@@ -1,156 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/register_fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+                name="viewmodel"
+                type="com.paybrother.HomeFragmentViewModel" />
+    </data>
 
 
-    <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:id="@+id/register_year_til"
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/register_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:endIconMode="password_toggle"
-            android:textColorHint="@color/cmn_black"
-            android:hint="Year"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:theme="@style/Theme.MaterialComponents"
+            android:layout_height="match_parent">
 
-            app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/register_year"
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/register_year_til"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
                 android:hint="Year"
-                android:textColor="@color/cmn_black" />
+                android:textColorHint="@color/cmn_black"
+                android:theme="@style/Theme.MaterialComponents"
+                app:endIconMode="password_toggle"
 
-    </com.google.android.material.textfield.TextInputLayout>
+                app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/register_year"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Year"
+                    android:textColor="@color/cmn_black" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/register_month_til"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/cmn_black"
-            android:hint="Month"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            app:endIconMode="password_toggle"
-            app:layout_constraintTop_toBottomOf="@id/register_year_til"
-            app:shapeAppearance="@style/Rounded">
-
-        <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/register_month"
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/register_month_til"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/cmn_black" />
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="Month"
+                android:textColorHint="@color/cmn_black"
+                app:endIconMode="password_toggle"
+                app:layout_constraintTop_toBottomOf="@id/register_year_til"
+                app:shapeAppearance="@style/Rounded">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/register_month"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/cmn_black" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/register_day_til"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/cmn_black"
-            android:hint="Day"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            app:endIconMode="password_toggle"
-            app:layout_constraintTop_toBottomOf="@id/register_month_til"
-            app:shapeAppearance="@style/Rounded">
-
-        <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/register_day"
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/register_day_til"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/cmn_black" />
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="Day"
+                android:textColorHint="@color/cmn_black"
+                app:endIconMode="password_toggle"
+                app:layout_constraintTop_toBottomOf="@id/register_month_til"
+                app:shapeAppearance="@style/Rounded">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/register_day"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/cmn_black" />
 
-    <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/number_et_til"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:endIconMode="password_toggle"
-            android:textColorHint="@color/cmn_black"
-            android:hint="Your phone number"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/register_day_til"
-            app:shapeAppearance="@style/Rounded">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/number_et"
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/number_et_til"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/cmn_black" />
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="Your phone number"
+                android:textColorHint="@color/cmn_black"
+                app:endIconMode="password_toggle"
+                app:layout_constraintTop_toBottomOf="@id/register_day_til"
+                app:shapeAppearance="@style/Rounded">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/number_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/cmn_black" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/name_et_til"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:endIconMode="password_toggle"
-            android:textColorHint="@color/cmn_black"
-            android:hint="Name of client"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/number_et_til"
-            app:shapeAppearance="@style/Rounded">
-
-        <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/name_et"
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name_et_til"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/cmn_black" />
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="Name of client"
+                android:textColorHint="@color/cmn_black"
+                app:endIconMode="password_toggle"
+                app:layout_constraintTop_toBottomOf="@id/number_et_til"
+                app:shapeAppearance="@style/Rounded">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/name_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/cmn_black" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/event_et_til"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/cmn_black"
-            android:hint="Event"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            app:endIconMode="password_toggle"
-            app:layout_constraintTop_toBottomOf="@id/name_et_til"
-            app:shapeAppearance="@style/Rounded">
-
-        <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/event_et"
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/event_et_til"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/cmn_black" />
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="Event"
+                android:textColorHint="@color/cmn_black"
+                app:endIconMode="password_toggle"
+                app:layout_constraintTop_toBottomOf="@id/name_et_til"
+                app:shapeAppearance="@style/Rounded">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/event_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/cmn_black" />
 
-    <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Register"
-            android:theme="@style/FormButton"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-            android:layout_marginTop="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/event_et_til" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Register"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                android:theme="@style/FormButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/event_et_til" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.w3c.dom.Text
 
-class ReservationsAdapter(var items: List<ReservationItem>, val callback: ReservationsAdapter.Callback) : RecyclerView.Adapter<ReservationsAdapter.ReservationsViewHolder>() {
+class ReservationsAdapter(var items: List<ReservationItem> = emptyList(), val callback: ReservationsAdapter.Callback) : RecyclerView.Adapter<ReservationsAdapter.ReservationsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ReservationsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.listitem_reservations, parent, false))
 
@@ -35,6 +35,11 @@ class ReservationsAdapter(var items: List<ReservationItem>, val callback: Reserv
 
     interface Callback{
         fun onItemClicked(item: ReservationItem)
+    }
+
+    fun setData(data: List<ReservationItem>){
+        items = data
+        notifyDataSetChanged()
     }
 
 }
