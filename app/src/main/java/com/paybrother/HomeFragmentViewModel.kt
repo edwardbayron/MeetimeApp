@@ -14,6 +14,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.android.synthetic.main.register_procedure_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -27,6 +28,9 @@ class HomeFragmentViewModel @Inject constructor(
 
     private val _proceduresList: MutableLiveData<ArrayList<ReservationItem>> = MutableLiveData()
     val proceduresList: LiveData<ArrayList<ReservationItem>> get() = _proceduresList
+
+    val procedureChangedIndex = MutableLiveData<Int>()
+
 
     private val list = arrayListOf<ReservationItem>()
 
@@ -79,8 +83,34 @@ class HomeFragmentViewModel @Inject constructor(
         }
     }
 
-    fun editProcedure(){
+    fun editProcedure(reservation: Reservation){
+        CoroutineScope(Dispatchers.IO).launch {
+            val dbList = roomDb?.reservationDao()?.getReservationList()
+            for(i in dbList!!){
+                if(reservation.id == i.id){
+                    roomDb?.reservationDao()?.updateReservation(reservation)
+                }
+            }
 
+            withContext(Dispatchers.Main){
+                var index: Int = 0
+                for(i in list){
+                    if(reservation.id == i.id){
+                        index = list.indexOf(i)
+                        list.set(index, i)
+                        procedureChangedIndex.value = index
+                        Log.wtf("TAG: ", "wtf viewModel index: "+index)
+                        Log.wtf("TAG: ", "wtf viewModel reservation: "+i.id)
+                        Log.wtf("TAG: ", "wtf viewModel i: "+reservation.id)
+                    }
+                }
+
+
+                _proceduresList.value = list
+
+            }
+
+        }
     }
 
 

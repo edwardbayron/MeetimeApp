@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.paybrother.databinding.FragmentProcedureEditBinding
+import com.paybrother.room.Reservation
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,6 +33,7 @@ class ProcedureEditFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().title = "Edit procedure"
 
+        val id = arguments?.getLong("id")
         val name = arguments?.getString("name")
         val event = arguments?.getString("event")
         //val phoneNumber = dialog?.findViewById<TextView>(R.id.bottom_sheet_phonenumber)
@@ -42,8 +44,16 @@ class ProcedureEditFragment : Fragment() {
         binding?.procedureEditEventEt?.setText(event)
         binding?.procedureEditDateEt?.setText(date)
 
+
+
+
         binding?.procedureEditConfirmBtn?.setOnClickListener {
-            viewModel.editProcedure()
+            val editedName : String = binding?.procedureEditNameEt?.text.toString()
+            val editedEvent : String = binding?.procedureEditEventEt?.text.toString()
+            val editedDate : String = binding?.procedureEditDateEt?.text.toString()
+            val reservation = Reservation(id, editedName, "", editedEvent, editedDate)
+            viewModel.editProcedure(reservation)
+            requireActivity().onBackPressed()
         }
 
         binding?.procedureEditCancelBtn?.setOnClickListener {

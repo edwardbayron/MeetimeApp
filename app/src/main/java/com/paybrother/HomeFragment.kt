@@ -74,8 +74,14 @@ class HomeFragment : Fragment() {
                 Log.wtf("TAG: ", "observer i: "+i.name)
             }
             reservationsAdapter?.setData(it)
+            Log.wtf("TAG: ", "observer init: ")
 
         })
+
+        viewModel.procedureChangedIndex.observe(viewLifecycleOwner, Observer{
+            reservationsAdapter?.notifyItemChanged(it)
+        })
+
     }
 
     private fun setupAdapter() {
@@ -114,6 +120,7 @@ class HomeFragment : Fragment() {
         editEventButton?.setOnClickListener{
             val editFragment = ProcedureEditFragment()
             val args = Bundle()
+            args.putLong("id", item.id)
             args.putString("name", name?.text.toString())
             args.putString("event", event?.text.toString())
             args.putString("date", date?.text.toString())
@@ -125,5 +132,12 @@ class HomeFragment : Fragment() {
         }
 
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(reservationsAdapter != null) {
+            reservationsAdapter?.notifyDataSetChanged()
+        }
     }
 }
