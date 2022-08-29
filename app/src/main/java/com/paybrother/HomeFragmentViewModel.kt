@@ -27,8 +27,7 @@ class HomeFragmentViewModel @Inject constructor(
 
     private val _proceduresList: MutableLiveData<ArrayList<ReservationItem>> = MutableLiveData()
     val proceduresList: LiveData<ArrayList<ReservationItem>> get() = _proceduresList
-
-
+    
     private val list = arrayListOf<ReservationItem>()
 
     init {
@@ -51,14 +50,31 @@ class HomeFragmentViewModel @Inject constructor(
 
     fun insertProcedure(reservation: Reservation){
         CoroutineScope(Dispatchers.IO).launch {
-
             roomDb?.reservationDao()?.insertReservation(reservation)
 
             withContext(Dispatchers.Main) {
-                Log.e("DAO", "i: "+reservation.name)
                 list.add(ReservationItem(0, reservation.name, reservation.event, reservation.date))
                 _proceduresList.value = list
 
+            }
+        }
+    }
+
+    fun deleteProcedure(id: Long){
+        CoroutineScope(Dispatchers.IO).launch{
+            val dbList = roomDb?.reservationDao()?.getReservationList()
+            for(i in dbList!!){
+                if(id == i.id){
+                    roomDb?.reservationDao()?.deleteReservation(i)
+                }
+            }
+            withContext(Dispatchers.Main){
+                for(i in list){
+                    if(id == i.id){
+                        list.remove(i)
+                    }
+                }
+                _proceduresList.value = list
             }
         }
     }
