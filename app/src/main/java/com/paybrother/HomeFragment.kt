@@ -106,21 +106,6 @@ class HomeFragment : Fragment() {
         dialog?.show()
 
         deleteEventButton?.setOnClickListener {
-//            Thread {
-//
-//                var reservation: Reservation? = null
-//                val reservationsList = roomDb?.reservationDao()?.getReservationList()
-//                for (i in reservationsList!!) {
-//                    if (i.id?.equals(item.id) == true) {
-//                        reservation = i
-//                    }
-//                }
-//
-//                if (reservation != null) {
-//                    roomDb?.reservationDao()?.deleteReservation(reservation)
-//                }
-//            }.start()
-
             viewModel.deleteProcedure(item.id)
             dialog?.dismiss()
             reservationsAdapter?.notifyDataSetChanged()
