@@ -49,5 +49,7 @@ class RegisterProcedureFragment : Fragment() {
             viewModel.insertProcedure(Reservation(null, binding.nameEt.text.toString(), binding.numberEt.text.toString(), binding.eventEt.text.toString(), date))
             requireActivity().onBackPressed()
         }
+
+        // test commit through gitkraken
     }
 }
