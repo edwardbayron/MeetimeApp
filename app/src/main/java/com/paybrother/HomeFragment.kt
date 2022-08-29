@@ -126,6 +126,19 @@ class HomeFragment : Fragment() {
             reservationsAdapter?.notifyDataSetChanged()
         }
 
+        editEventButton?.setOnClickListener{
+            val editFragment = ProcedureEditFragment()
+            val args = Bundle()
+            args.putString("name", name?.text.toString())
+            args.putString("event", event?.text.toString())
+            args.putString("date", date?.text.toString())
+
+            editFragment.arguments = args
+
+            requireActivity().supportFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.parent_container, editFragment).commit()
+            dialog?.dismiss()
+        }
+
 
     }
 }

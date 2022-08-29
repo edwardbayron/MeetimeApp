@@ -27,7 +27,7 @@ class HomeFragmentViewModel @Inject constructor(
 
     private val _proceduresList: MutableLiveData<ArrayList<ReservationItem>> = MutableLiveData()
     val proceduresList: LiveData<ArrayList<ReservationItem>> get() = _proceduresList
-    
+
     private val list = arrayListOf<ReservationItem>()
 
     init {
@@ -77,6 +77,10 @@ class HomeFragmentViewModel @Inject constructor(
                 _proceduresList.value = list
             }
         }
+    }
+
+    fun editProcedure(){
+
     }
 
 
