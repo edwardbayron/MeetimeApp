@@ -79,7 +79,7 @@ class HomeFragment : Fragment() {
         })
 
         viewModel.procedureChangedIndex.observe(viewLifecycleOwner, Observer{
-            reservationsAdapter?.notifyItemChanged(it)
+            reservationsAdapter?.notifyDataSetChanged()
         })
 
     }

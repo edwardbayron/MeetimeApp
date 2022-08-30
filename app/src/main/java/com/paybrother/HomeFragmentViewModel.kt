@@ -84,6 +84,7 @@ class HomeFragmentViewModel @Inject constructor(
     }
 
     fun editProcedure(reservation: Reservation){
+        var index: Int = 0
         CoroutineScope(Dispatchers.IO).launch {
             val dbList = roomDb?.reservationDao()?.getReservationList()
             for(i in dbList!!){
@@ -93,23 +94,17 @@ class HomeFragmentViewModel @Inject constructor(
             }
 
             withContext(Dispatchers.Main){
-                var index: Int = 0
+
                 for(i in list){
                     if(reservation.id == i.id){
                         index = list.indexOf(i)
-                        list.set(index, i)
-                        procedureChangedIndex.value = index
-                        Log.wtf("TAG: ", "wtf viewModel index: "+index)
-                        Log.wtf("TAG: ", "wtf viewModel reservation: "+i.id)
-                        Log.wtf("TAG: ", "wtf viewModel i: "+reservation.id)
+                        list.set(index, ReservationItem(reservation.id!!, reservation.name, reservation.event, reservation.date))
                     }
                 }
-
-
-                _proceduresList.value = list
-
             }
 
+            procedureChangedIndex.postValue(index)
+            _proceduresList.postValue(list)
         }
     }
 
