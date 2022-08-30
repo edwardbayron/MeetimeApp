@@ -7,19 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.orhanobut.logger.Logger
 import com.paybrother.databinding.FragmentHomeBinding
-import com.paybrother.room.Reservation
 import com.paybrother.room.database.ReservationDatabase
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_home.*
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
