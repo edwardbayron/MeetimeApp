@@ -53,6 +53,9 @@ class HomeActivity : AppCompatActivity() {
                 PrimaryDrawerItem().withName(R.string.drawer_item_reservations).withIcon(FontAwesome.Icon.faw_eye).withBadge(
                     "6"
                 ).withIdentifier(2),
+                PrimaryDrawerItem().withName(R.string.drawer_item_contacts).withIcon(FontAwesome.Icon.faw_eye).withBadge(
+                    "6"
+                ).withIdentifier(3),
                 SectionDrawerItem().withName(R.string.drawer_item_settings),
                 SecondaryDrawerItem().withName(R.string.drawer_item_settings).withIcon(FontAwesome.Icon.faw_cog),
                 DividerDrawerItem(),
@@ -62,6 +65,7 @@ class HomeActivity : AppCompatActivity() {
                     when(drawerItem?.identifier){
                         1 -> supportFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.parent_container, HomeFragment()).commit()
                         2 -> supportFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.parent_container, ReservationsFragment()).commit()
+                        3 -> supportFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.parent_container, ContactsFragment()).commit()
                     }
                 }
             })
