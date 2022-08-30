@@ -1,6 +1,8 @@
 package com.paybrother
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
@@ -147,8 +149,24 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
         cursorAdapter?.swapCursor(null)
     }
 
-    override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        TODO("Not yet implemented")
+    override fun onItemClick(adapterView: AdapterView<*>?, view: View?, position: Int, adapterItemId: Long) {
+        setupContactClickDialog()
+    }
+
+    private fun setupContactClickDialog(){
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Chosen contact")
+        builder.setItems(arrayOf("Open contact profile", "Create an event"), object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, elementNumber: Int) {
+                when(elementNumber){
+                    0 -> { }
+                    1 -> { }
+                }
+            }
+
+        })
+        val dialog = builder.create()
+        dialog.show()
     }
 
 
