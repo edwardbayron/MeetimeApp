@@ -7,20 +7,20 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.paybrother.databinding.FragmentContactsBinding
-import dagger.hilt.android.AndroidEntryPoint
-import android.provider.ContactsContract
-import android.widget.AdapterView
-import android.widget.ListView
-import android.widget.SimpleCursorAdapter
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
+import com.paybrother.databinding.FragmentContactsBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
@@ -154,17 +154,17 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
     }
 
     private fun setupContactClickDialog(){
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialog)
         builder.setTitle("Chosen contact")
-        builder.setItems(arrayOf("Open contact profile", "Create an event"), object : DialogInterface.OnClickListener {
-            override fun onClick(dialog: DialogInterface?, elementNumber: Int) {
-                when(elementNumber){
-                    0 -> { }
-                    1 -> { }
-                }
-            }
 
-        })
+        var items = arrayOf("Open contact profile", "Create an event")
+        builder.setItems(items
+        ) { dialog, elementNumber ->
+            when (elementNumber) {
+                0 -> {}
+                1 -> {}
+            }
+        }
         val dialog = builder.create()
         dialog.show()
     }
