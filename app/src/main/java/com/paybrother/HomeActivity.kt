@@ -1,28 +1,23 @@
 package com.paybrother
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ListView
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.lifecycleScope
 import com.mikepenz.iconics.typeface.FontAwesome
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
-import com.mikepenz.materialdrawer.model.DividerDrawerItem
-import com.mikepenz.materialdrawer.model.SectionDrawerItem
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.Drawer
-import com.mikepenz.materialdrawer.model.interfaces.Badgeable;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.Nameable;
-import com.paybrother.room.Reservation
+import com.mikepenz.materialdrawer.model.DividerDrawerItem
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
+import com.mikepenz.materialdrawer.model.SectionDrawerItem
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.paybrother.room.database.ReservationDatabase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -31,6 +26,9 @@ class HomeActivity : AppCompatActivity() {
 
     val datePickerFragment = DatePickerFragment()
     private var roomDb : ReservationDatabase? = null
+
+    // Request code for READ_CONTACTS. It can be any number > 0.
+    private val PERMISSIONS_REQUEST_READ_CONTACTS = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +73,7 @@ class HomeActivity : AppCompatActivity() {
             .commit()
 
         setupClickListeners()
+        permissionsContacts()
     }
 
 
@@ -92,6 +91,15 @@ class HomeActivity : AppCompatActivity() {
     private fun setupClickListeners(){
         fab.setOnClickListener {
             this.supportFragmentManager.let { datePickerFragment.show(it, "datePicker") }
+        }
+    }
+
+
+
+    private fun permissionsContacts(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), PERMISSIONS_REQUEST_READ_CONTACTS);
+            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
         }
     }
 }
