@@ -1,4 +1,4 @@
-package com.paybrother
+package com.paybrother.contacts
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

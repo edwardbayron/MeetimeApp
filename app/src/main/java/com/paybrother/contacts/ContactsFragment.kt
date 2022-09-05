@@ -1,4 +1,4 @@
-package com.paybrother
+package com.paybrother.contacts
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -20,6 +20,9 @@ import androidx.fragment.app.viewModels
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
+import com.paybrother.R
+import com.paybrother.ReservationItem
+import com.paybrother.ReservationsAdapter
 import com.paybrother.databinding.FragmentContactsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -130,23 +133,36 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
          * Makes search string into pattern and
          * stores it in the selection array
          */
+        val content_uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
         selectionArgs[0] = "%$searchString%"
         // Starts the query
         return activity?.let {
             return CursorLoader(
                 it,
-                ContactsContract.Contacts.CONTENT_URI,
-                PROJECTION,
-                SELECTION,
-                selectionArgs,
+                content_uri,
+                null,
+                null,
+                null,
                 null
             )
         } ?: throw IllegalStateException()
     }
 
+    var DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME
+    var NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER
+
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
         // Put the result Cursor in the adapter for the ListView
         cursorAdapter?.swapCursor(data)
+
+        val sb = StringBuilder()
+        data?.moveToFirst()
+        while(data?.isAfterLast == false){
+            sb.append("\n" + data.getString(data.getColumnIndex(DISPLAY_NAME)!!))
+            sb.append(":" + data.getString(data.getColumnIndex(NUMBER)!!))
+            data?.moveToNext();
+        }
+        Log.wtf("TAG:","string builder: "+sb)
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {

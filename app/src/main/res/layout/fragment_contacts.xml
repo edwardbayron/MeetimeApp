@@ -7,7 +7,7 @@
 
         <variable
                 name="viewmodel"
-                type="com.paybrother.ContactsFragmentViewModel" />
+                type="com.paybrother.contacts.ContactsFragmentViewModel" />
     </data>
 
 

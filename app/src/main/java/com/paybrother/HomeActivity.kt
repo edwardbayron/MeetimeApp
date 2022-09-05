@@ -15,10 +15,11 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
 import com.mikepenz.materialdrawer.model.SectionDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
+import com.paybrother.contacts.ContactsFragment
+import com.paybrother.contacts.ContactsFragmentV2
 import com.paybrother.room.database.ReservationDatabase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home.*
-import java.util.*
 
 
 @AndroidEntryPoint
@@ -63,7 +64,7 @@ class HomeActivity : AppCompatActivity() {
                     when(drawerItem?.identifier){
                         1 -> supportFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.parent_container, HomeFragment()).commit()
                         2 -> supportFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.parent_container, ReservationsFragment()).commit()
-                        3 -> supportFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.parent_container, ContactsFragment()).commit()
+                        3 -> supportFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.parent_container, ContactsFragmentV2()).commit()
                     }
                 }
             })

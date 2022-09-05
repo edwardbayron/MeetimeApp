@@ -1,4 +1,4 @@
-package com.paybrother
+package com.paybrother.contacts
 
 data class ContactItem (
     val firstName: String,

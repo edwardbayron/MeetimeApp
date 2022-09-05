@@ -1,15 +1,16 @@
-package com.paybrother
+package com.paybrother.contacts
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import javax.security.auth.callback.Callback
+import com.paybrother.R
 
 class ContactsAdapter(var items: List<ContactItem>, val callback: Callback) : RecyclerView.Adapter<ContactsAdapter.ContactViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ContactViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.listitem_contacts, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ContactViewHolder(LayoutInflater.from(parent.context).inflate(
+        R.layout.listitem_contacts, parent, false))
 
     override fun getItemCount() = items.size
 
