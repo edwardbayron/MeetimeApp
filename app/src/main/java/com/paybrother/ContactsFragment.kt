@@ -1,8 +1,9 @@
 package com.paybrother
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
+import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
@@ -21,6 +22,7 @@ import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import com.paybrother.databinding.FragmentContactsBinding
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
@@ -73,6 +75,7 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
     var contactUri: Uri? = null
     // An adapter that binds the result Cursor to the ListView
     private var cursorAdapter: SimpleCursorAdapter? = null
+    private var cursorAdapterV2: SimpleCursorAdapter? = null
 
     private val contactsViewModel : ContactsFragmentViewModel by viewModels()
 
@@ -96,7 +99,6 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().title = "Contacts"
-        setupAdapter()
 
 
         cursorAdapter = SimpleCursorAdapter(
@@ -109,16 +111,19 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
         // Sets the adapter for the ListView
         binding?.contactsRv?.adapter = cursorAdapter
         binding?.contactsRv?.onItemClickListener = this
+
+
         // Initializes the loader
         loaderManager.initLoader(0, null, this)
 
+        val calContctPickerIntent =
+            Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
+        calContctPickerIntent.type = ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE
+        startActivityForResult(calContctPickerIntent, 1)
+
 
     }
 
-    private fun setupAdapter() {
-//        reservationsAdapter = ReservationsAdapter(contactsList, onItemClickListener)
-//        binding?.contactsRv?.adapter = reservationsAdapter
-    }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
         /*
@@ -167,6 +172,43 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
         }
         val dialog = builder.create()
         dialog.show()
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            1 -> if (resultCode === Activity.RESULT_OK) {
+                val contctDataVar: Uri = data?.data!!
+                val contctCursorVar: Cursor = requireContext().getContentResolver().query(
+                    contctDataVar, null,
+                    null, null, null
+                )!!
+                if (contctCursorVar.count > 0) {
+                    while (contctCursorVar.moveToNext()) {
+                        val ContctUidVar = contctCursorVar.getString(
+                            contctCursorVar.getColumnIndex(ContactsContract.Contacts._ID)
+                        )
+                        val ContctNamVar = contctCursorVar.getString(
+                            contctCursorVar.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+                        )
+                        Log.i("Names", ContctNamVar)
+                        if (contctCursorVar.getString(
+                                contctCursorVar.getColumnIndex(
+                                    ContactsContract.Contacts.HAS_PHONE_NUMBER
+                                )
+                            ).toInt() > 0
+                        ) {
+                            // Query phone here. Covered next
+                            val ContctMobVar = contctCursorVar.getString(
+                                contctCursorVar.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                            )
+                            Log.i("Number", ContctMobVar)
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
