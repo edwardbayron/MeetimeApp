@@ -10,6 +10,4 @@ data class Contact(@PrimaryKey(autoGenerate = true)
                    @ColumnInfo(name = "displayName")
                     var displayName: String,
                    @ColumnInfo(name = "phoneNumber")
-                    var phoneNumber: String,
-                   @ColumnInfo(name = "organization")
-                    var organization: String)
+                    var phoneNumber: String)

@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android Studio projects/MeetimeApp/app/src/main/res/drawable/background_reservation_item.xml" value="0.214" />
+        <entry key="..\:/Android Studio projects/MeetimeApp/app/src/main/res/drawable/card_item_background.xml" value="0.257" />
         <entry key="..\:/Android Studio projects/MeetimeApp/app/src/main/res/layout/activity_contacts_picker.xml" value="0.3424540401881146" />
         <entry key="..\:/Android Studio projects/MeetimeApp/app/src/main/res/layout/activity_home.xml" value="0.2046875" />
         <entry key="..\:/Android Studio projects/MeetimeApp/app/src/main/res/layout/activity_main.xml" value="0.4171875" />
@@ -14,6 +15,7 @@
         <entry key="..\:/Android Studio projects/MeetimeApp/app/src/main/res/layout/fragment_procedure_edit.xml" value="0.3424540401881146" />
         <entry key="..\:/Android Studio projects/MeetimeApp/app/src/main/res/layout/fragment_reservations.xml" value="0.3537037037037037" />
         <entry key="..\:/Android Studio projects/MeetimeApp/app/src/main/res/layout/listitem_contacts.xml" value="0.33811734909244406" />
+        <entry key="..\:/Android Studio projects/MeetimeApp/app/src/main/res/layout/listitem_contacts_picker.xml" value="0.25" />
         <entry key="..\:/Android Studio projects/MeetimeApp/app/src/main/res/layout/listitem_reservations.xml" value="0.4171875" />
         <entry key="..\:/Android Studio projects/MeetimeApp/app/src/main/res/layout/register_procedure_fragment.xml" value="0.3424540401881146" />
         <entry key="..\:/Dev_personal/MeetimeApp/app/src/main/res/layout/fragment_reservations.xml" value="0.10260416666666666" />

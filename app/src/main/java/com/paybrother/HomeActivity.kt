@@ -1,6 +1,7 @@
 package com.paybrother
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +18,7 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.paybrother.contacts.ContactsFragment
 import com.paybrother.contacts.ContactsFragmentV2
+import com.paybrother.contacts.ContactsPickerActivity
 import com.paybrother.room.database.ReservationDatabase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home.*
@@ -55,6 +57,9 @@ class HomeActivity : AppCompatActivity() {
                 PrimaryDrawerItem().withName(R.string.drawer_item_contacts).withIcon(FontAwesome.Icon.faw_eye).withBadge(
                     "6"
                 ).withIdentifier(3),
+                PrimaryDrawerItem().withName(R.string.drawer_item_contacts_picker).withIcon(FontAwesome.Icon.faw_eye).withBadge(
+                    "6"
+                ).withIdentifier(4),
                 SectionDrawerItem().withName(R.string.drawer_item_settings),
                 SecondaryDrawerItem().withName(R.string.drawer_item_settings).withIcon(FontAwesome.Icon.faw_cog),
                 DividerDrawerItem(),
@@ -65,6 +70,12 @@ class HomeActivity : AppCompatActivity() {
                         1 -> supportFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.parent_container, HomeFragment()).commit()
                         2 -> supportFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.parent_container, ReservationsFragment()).commit()
                         3 -> supportFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.parent_container, ContactsFragmentV2()).commit()
+                        4 -> {
+                            val intent = Intent(this@HomeActivity, ContactsPickerActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+                        }
+
                     }
                 }
             })

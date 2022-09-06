@@ -9,7 +9,7 @@ import com.paybrother.room.Reservation
 import com.paybrother.room.dao.ContactsDao
 import com.paybrother.room.dao.ReservationDao
 
-@Database(entities = [Reservation::class, Contact::class], exportSchema = false, version = 4)
+@Database(entities = [Reservation::class, Contact::class], exportSchema = false, version = 5)
 abstract class ReservationDatabase : RoomDatabase() {
     companion object{
 
