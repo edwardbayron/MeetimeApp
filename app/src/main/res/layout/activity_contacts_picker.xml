@@ -18,6 +18,13 @@
             android:textSize="20sp"
             />
 
+    <Button
+            android:id="@+id/contacts_picker_upload_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Upload contacts"
+            />
+
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/contacts_picker_rv"

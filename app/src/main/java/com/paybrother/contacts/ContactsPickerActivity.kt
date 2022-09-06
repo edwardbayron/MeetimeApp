@@ -59,11 +59,9 @@ class ContactsPickerActivity : FragmentActivity(), LoaderManager.LoaderCallbacks
             0
         )
 
-        LoaderManager.getInstance(this).initLoader(0, null, this)
-
-        contacts_picker_rv?.adapter = contactsPickerAdapter
-        contacts_picker_rv.layoutManager = LinearLayoutManager(this);
-
+        contacts_picker_upload_btn?.setOnClickListener {
+            LoaderManager.getInstance(this).initLoader(0, null, this)
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
 
@@ -78,6 +76,13 @@ class ContactsPickerActivity : FragmentActivity(), LoaderManager.LoaderCallbacks
                 Log.wtf("CONTACT IO : ", "i: "+i.lastName)
             }
         }
+
+
+        contacts_picker_rv?.adapter = contactsPickerAdapter
+        contacts_picker_rv.layoutManager = LinearLayoutManager(this);
+
+
+
 
 
 
