@@ -64,12 +64,7 @@ class HomeFragment : Fragment() {
 
     private fun setupDataListeners(){
         viewModel.proceduresList.observe(viewLifecycleOwner, Observer{
-            for(i in it){
-                Log.wtf("TAG: ", "observer i: "+i.name)
-            }
             reservationsAdapter?.setData(it)
-            Log.wtf("TAG: ", "observer init: ")
-
         })
 
         viewModel.procedureChangedIndex.observe(viewLifecycleOwner, Observer{

@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.orhanobut.logger.Logger
 import com.paybrother.R
+import com.paybrother.ReservationItem
 
 class ContactsPickerAdapter(var items: List<ContactItem>, val callback: Callback) : RecyclerView.Adapter<ContactsPickerAdapter.ContactPickerViewHolder>() {
 
@@ -47,6 +48,11 @@ class ContactsPickerAdapter(var items: List<ContactItem>, val callback: Callback
 
     interface Callback{
         fun onItemClicked(item: ContactItem)
+    }
+
+    fun setData(data: List<ContactItem>){
+        items = data
+        notifyDataSetChanged()
     }
 
 }

@@ -12,6 +12,7 @@ class MeetimeApplication : Application(){
         val intent = Intent(applicationContext, HomeActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
+
     }
 
 }
