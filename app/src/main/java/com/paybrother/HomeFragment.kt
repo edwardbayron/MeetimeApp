@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.orhanobut.logger.Logger
 import com.paybrother.databinding.FragmentHomeBinding
 import com.paybrother.room.database.ReservationDatabase
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,6 +61,7 @@ class HomeFragment : Fragment() {
         setupAdapter()
         setupDataListeners()
 
+
     }
 
     private fun setupDataListeners(){
@@ -70,6 +72,7 @@ class HomeFragment : Fragment() {
         viewModel.procedureChangedIndex.observe(viewLifecycleOwner, Observer{
             reservationsAdapter?.notifyDataSetChanged()
         })
+
 
     }
 

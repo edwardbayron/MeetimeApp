@@ -22,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeFragmentViewModel @Inject constructor(
     @ApplicationContext val applicationContext: Context
+
 ) : ViewModel() {
 
     private var roomDb: ReservationDatabase? = null
