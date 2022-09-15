@@ -11,9 +11,11 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/contacts_picker_root_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
         <Button
                 android:id="@+id/contacts_picker_upload_btn"
@@ -21,6 +23,14 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:text="Upload contacts" />
+
+        <Button
+                android:id="@+id/contacts_upload_accept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/contacts_picker_upload_btn"
+                android:text="Accept contacts" />
 
 
         <androidx.recyclerview.widget.RecyclerView

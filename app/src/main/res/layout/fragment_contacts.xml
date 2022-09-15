@@ -13,54 +13,28 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/cmn_white2"
+            >
 
-        <RelativeLayout
-                app:layout_constraintTop_toTopOf="parent"
+        <Button
+                android:id="@+id/contacts_upload_selected_btn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="Upload contacts" />
 
 
-            <ListView
-                    android:id="@+id/contacts_rv"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:listitem="@layout/listitem_reservations"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:elevation="4dp">
-
-
-            </ListView>
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-                app:layout_constraintTop_toTopOf="parent"
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/contacts_upload_selected_rv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="40dp"
+                tools:listitem="@layout/listitem_contacts_picker">
 
-
-            <ListView
-                    android:id="@+id/contacts_rv2"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:listitem="@layout/listitem_reservations"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:elevation="4dp">
-
-
-            </ListView>
-
-
-        </RelativeLayout>
-
+        </androidx.recyclerview.widget.RecyclerView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

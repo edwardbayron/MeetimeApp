@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.paybrother.room.database.ReservationDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -25,14 +26,19 @@ class ContactsPickerViewModel @Inject constructor(
 
     private var contactsUploadManager : ContactsUploadManager? = null
 
+    val databaseContactsList = MutableLiveData<ArrayList<ContactItem>>()
     private val originalContactsList = mutableListOf<ContactItem>()
 
-    var contactsList = MutableLiveData<List<ContactItem>>()
+    var contactsList = MutableLiveData<MutableList<ContactItem>>()
+
+    var selectedContacts = MutableLiveData<MutableList<ContactItem>>()
 
     var list = ObservableField<List<ContactItem>>()
+    private var roomDb : ReservationDatabase? = null
 
     init {
-
+        roomDb = ReservationDatabase.getInstance(context)
+        setupDatabaseList()
     }
 
     fun initContactsUploading(activity: FragmentActivity){
@@ -43,5 +49,20 @@ class ContactsPickerViewModel @Inject constructor(
             }
             contactsList.postValue(originalContactsList)
         }
+    }
+
+    private fun setupDatabaseList(){
+        CoroutineScope(Dispatchers.IO).launch {
+
+            val list = roomDb?.contactsDao()?.getcontactList()
+
+            for(i in list!!){
+                databaseContactsList.value?.add(ContactItem(i.displayName, i.phoneNumber))
+            }
+        }
+    }
+
+    fun sendSelectedContacts(list: MutableList<ContactItem>){
+        selectedContacts.postValue(list)
     }
 }

@@ -2,7 +2,10 @@ package com.paybrother
 
 import android.app.Application
 import android.content.Intent
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.HiltAndroidApp
+
 
 @HiltAndroidApp
 class MeetimeApplication : Application(){
@@ -13,6 +16,7 @@ class MeetimeApplication : Application(){
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
 
+        Logger.addLogAdapter(AndroidLogAdapter())
     }
 
 }

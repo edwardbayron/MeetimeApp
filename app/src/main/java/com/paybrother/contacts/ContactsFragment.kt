@@ -112,8 +112,8 @@ class ContactsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
             0
         )
         // Sets the adapter for the ListView
-        binding?.contactsRv?.adapter = cursorAdapter
-        binding?.contactsRv?.onItemClickListener = this
+        //binding?.contactsRv?.adapter = cursorAdapter
+        //binding?.contactsRv?.onItemClickListener = this
 
 
         // Initializes the loader

@@ -1,17 +1,16 @@
 package com.paybrother.contacts
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.orhanobut.logger.Logger
 import com.paybrother.R
-import com.paybrother.ReservationItem
 
-class ContactsPickerAdapter(var items: List<ContactItem>, val callback: Callback) : RecyclerView.Adapter<ContactsPickerAdapter.ContactPickerViewHolder>() {
+class ContactsPickerAdapter(var items: MutableList<ContactItem>, val callback: Callback) : RecyclerView.Adapter<ContactsPickerAdapter.ContactPickerViewHolder>() {
+
+    private var selectedList = mutableListOf<ContactItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ContactPickerViewHolder(
@@ -35,9 +34,12 @@ class ContactsPickerAdapter(var items: List<ContactItem>, val callback: Callback
             contactName.text = item.firstName
             phoneNumber.text = item.lastName
 
-            //checkbox.text = items.get(position).toString()
             itemView.setOnClickListener{
                 if(adapterPosition != RecyclerView.NO_POSITION) callback.onItemClicked(items[adapterPosition])
+            }
+
+            checkbox.setOnClickListener {
+                callback.onContactChecked(item)
             }
         }
 
@@ -48,9 +50,10 @@ class ContactsPickerAdapter(var items: List<ContactItem>, val callback: Callback
 
     interface Callback{
         fun onItemClicked(item: ContactItem)
+        fun onContactChecked(item: ContactItem)
     }
 
-    fun setData(data: List<ContactItem>){
+    fun setData(data: MutableList<ContactItem>){
         items = data
         notifyDataSetChanged()
     }
