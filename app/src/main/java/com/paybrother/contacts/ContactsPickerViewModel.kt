@@ -26,7 +26,6 @@ class ContactsPickerViewModel @Inject constructor(
 
     private var contactsUploadManager : ContactsUploadManager? = null
 
-    val databaseContactsList = MutableLiveData<ArrayList<ContactItem>>()
     private val originalContactsList = mutableListOf<ContactItem>()
 
     var contactsList = MutableLiveData<MutableList<ContactItem>>()
@@ -38,7 +37,6 @@ class ContactsPickerViewModel @Inject constructor(
 
     init {
         roomDb = ReservationDatabase.getInstance(context)
-        setupDatabaseList()
     }
 
     fun initContactsUploading(activity: FragmentActivity){
@@ -48,17 +46,6 @@ class ContactsPickerViewModel @Inject constructor(
                 originalContactsList.add(ContactItem(i.firstName, i.lastName))
             }
             contactsList.postValue(originalContactsList)
-        }
-    }
-
-    private fun setupDatabaseList(){
-        CoroutineScope(Dispatchers.IO).launch {
-
-            val list = roomDb?.contactsDao()?.getcontactList()
-
-            for(i in list!!){
-                databaseContactsList.value?.add(ContactItem(i.displayName, i.phoneNumber))
-            }
         }
     }
 

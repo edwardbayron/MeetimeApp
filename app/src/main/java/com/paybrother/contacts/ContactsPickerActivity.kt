@@ -41,8 +41,6 @@ class ContactsPickerActivity : FragmentActivity(){
         }
 
         override fun onContactChecked(item: ContactItem) {
-            Logger.wtf("TEST: item: "+item.firstName)
-            Logger.wtf("TEST: item: "+item.lastName)
             checkboxTestList.add(item)
         }
 
@@ -80,11 +78,6 @@ class ContactsPickerActivity : FragmentActivity(){
     private fun setupDataListeners(){
         viewModel.contactsList.observe(this) {
             contactsPickerAdapter.setData(it)
-            Logger.wtf("YOLO: "+it)
-        }
-
-        viewModel.databaseContactsList.observe(this){
-            loadedContacts = it
         }
 
     }
