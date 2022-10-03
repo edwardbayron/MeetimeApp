@@ -1,28 +1,16 @@
 package com.paybrother.contacts
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.SimpleCursorAdapter
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.add
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.orhanobut.logger.Logger
 import com.paybrother.R
 import com.paybrother.databinding.ActivityContactsPickerBinding
-import com.paybrother.room.database.ReservationDatabase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_contacts_picker.*
-import kotlinx.android.synthetic.main.fragment_contacts.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ContactsPickerActivity : FragmentActivity(){
@@ -35,8 +23,11 @@ class ContactsPickerActivity : FragmentActivity(){
     private var loadedContacts = mutableListOf<ContactItem>()
     private var checkboxTestList = mutableListOf<ContactItem>()
 
-    val contactsPickerCallback = object : ContactsPickerAdapter.Callback{
+    private val contactsPickerCallback = object : ContactsPickerAdapter.Callback{
         override fun onItemClicked(item: ContactItem) {
+            item.id?.let {
+                viewModel.deleteContact(item.id)
+            }
 
         }
 
@@ -78,6 +69,19 @@ class ContactsPickerActivity : FragmentActivity(){
     private fun setupDataListeners(){
         viewModel.contactsList.observe(this) {
             contactsPickerAdapter.setData(it)
+        }
+
+        viewModel.databaseContacts.observe(this){
+            if(it.isNotEmpty()) {
+                loadedContacts = it
+                contactsPickerAdapter.setData(it)
+                contacts_picker_upload_btn.visibility = View.GONE
+                contacts_upload_accept.visibility = View.GONE
+            }
+            else{
+                contacts_picker_upload_btn.visibility = View.VISIBLE
+                contacts_upload_accept.visibility = View.VISIBLE
+            }
         }
 
     }

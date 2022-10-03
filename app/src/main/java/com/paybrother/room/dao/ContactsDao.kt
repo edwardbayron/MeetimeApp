@@ -1,6 +1,7 @@
 package com.paybrother.room.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.paybrother.room.Contact
@@ -12,4 +13,6 @@ interface ContactsDao {
     fun getcontactList() : List<Contact>
     @Insert
     fun insertContact(contact: Contact)
+    @Delete
+    fun deleteContact(contact: Contact)
 }

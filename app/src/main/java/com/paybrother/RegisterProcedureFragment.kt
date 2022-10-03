@@ -1,21 +1,14 @@
 package com.paybrother
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import com.paybrother.databinding.FragmentHomeBinding
-import com.paybrother.databinding.FragmentReservationsBinding
 import com.paybrother.databinding.RegisterProcedureFragmentBinding
 import com.paybrother.room.Reservation
-import com.paybrother.room.database.ReservationDatabase
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.register_procedure_fragment.*
-import kotlin.random.Random
 
 @AndroidEntryPoint
 class RegisterProcedureFragment : Fragment() {

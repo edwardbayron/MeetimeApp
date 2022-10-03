@@ -19,7 +19,7 @@ class ReservationsFragment : Fragment() {
     var month : Int = 0
     var day : Int = 0
     val datePickerFragment = DatePickerFragment()
-    val items  = listOf(ContactItem("Irina", "Kosmetolog"), ContactItem("Tanja", "Nogti"))
+    val items  = listOf(ContactItem(111, "Irina", "Kosmetolog"), ContactItem(2222, "Tanja", "Nogti"))
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_reservations, container, false)

@@ -57,7 +57,7 @@ class ContactsUploadManager(var activity: FragmentActivity) : LoaderManager.Load
             phoneNumber = data.getString(data.getColumnIndex(NUMBER))
 
             CoroutineScope(Dispatchers.Unconfined).launch {
-                contactsList.add(ContactItem(name, phoneNumber))
+                contactsList.add(ContactItem(null, name, phoneNumber))
             }
 
         }
