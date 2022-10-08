@@ -50,8 +50,8 @@ class ContactsPickerActivity : FragmentActivity(){
         contacts_upload_accept?.setOnClickListener {
             if(checkboxTestList.isNotEmpty()) {
                 viewModel.sendSelectedContacts(checkboxTestList)
-                supportFragmentManager?.beginTransaction()
-                    ?.add(R.id.contacts_picker_root_container, ContactsFragmentV2())?.commit()
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.contacts_picker_root_container, ContactsFragmentV2()).commit()
             }
             else{
                 Toast.makeText(this, "List is empty, nothing to upload", 1000).show()
@@ -81,6 +81,7 @@ class ContactsPickerActivity : FragmentActivity(){
             else{
                 contacts_picker_upload_btn.visibility = View.VISIBLE
                 contacts_upload_accept.visibility = View.VISIBLE
+
             }
         }
 

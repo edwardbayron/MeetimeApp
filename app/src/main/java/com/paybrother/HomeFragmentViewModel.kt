@@ -32,7 +32,6 @@ class HomeFragmentViewModel @Inject constructor(
 
     val procedureChangedIndex = MutableLiveData<Int>()
 
-
     private val list = arrayListOf<ReservationItem>()
 
     init {

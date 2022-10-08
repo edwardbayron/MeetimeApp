@@ -27,6 +27,7 @@ class ContactsPickerViewModel @Inject constructor(
     private val originalContactsList = mutableListOf<ContactItem>()
 
     var contactsList = MutableLiveData<MutableList<ContactItem>>()
+    val savedContacts = MutableLiveData<MutableList<Contact>>()
 
     var selectedContacts = MutableLiveData<MutableList<ContactItem>>()
 
