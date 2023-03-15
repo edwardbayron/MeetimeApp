@@ -3,46 +3,46 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+<!--    <data>-->
 
-        <variable
-                name="viewModel"
-                type="com.paybrother.contacts.ContactsPickerViewModel" />
-    </data>
+<!--        <variable-->
+<!--                name="viewModel"-->
+<!--                type="com.paybrother.contacts.ContactsPickerViewModel" />-->
+<!--    </data>-->
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/contacts_picker_root_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/contacts_picker_root_container"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical"-->
+<!--            >-->
 
-        <Button
-                android:id="@+id/contacts_picker_upload_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:text="Upload contacts" />
+<!--        <Button-->
+<!--                android:id="@+id/contacts_picker_upload_btn"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                android:text="Upload contacts" />-->
 
-        <Button
-                android:id="@+id/contacts_upload_accept"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/contacts_picker_upload_btn"
-                android:text="Accept contacts" />
+<!--        <Button-->
+<!--                android:id="@+id/contacts_upload_accept"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintBottom_toTopOf="@id/contacts_picker_upload_btn"-->
+<!--                android:text="Accept contacts" />-->
 
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/contacts_picker_rv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="40dp"
-                tools:listitem="@layout/listitem_contacts_picker">
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/contacts_picker_rv"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                android:layout_marginTop="40dp"-->
+<!--                tools:listitem="@layout/listitem_contacts_picker">-->
 
-        </androidx.recyclerview.widget.RecyclerView>
+<!--        </androidx.recyclerview.widget.RecyclerView>-->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 </layout>
