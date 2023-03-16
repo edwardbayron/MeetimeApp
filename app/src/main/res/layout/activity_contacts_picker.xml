@@ -7,7 +7,7 @@
 
 <!--        <variable-->
 <!--                name="viewModel"-->
-<!--                type="com.paybrother.contacts.ContactsPickerViewModel" />-->
+<!--                type="com.paybrother.old.contacts.ContactsPickerViewModel" />-->
 <!--    </data>-->
 
 <!--    <androidx.constraintlayout.widget.ConstraintLayout-->

@@ -21,7 +21,7 @@ import com.paybrother.viewmodels.LoanViewModel
 
 class MainActivity : ComponentActivity() {
 
-    lateinit var viewModel: LoanViewModel
+    private var viewModel: LoanViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeContainer(viewModel)
+                    HomeContainer(viewModel!!)
                 }
             }
         }
@@ -53,11 +53,10 @@ fun HomeContainer(viewModel: LoanViewModel) {
 @Composable
 fun AppBarView(){
     androidx.compose.material.TopAppBar(
-        elevation = 4.dp,
+        //elevation = 4.dp,
         title = {
             Text("I'm a TopAppBar")
         },
-        backgroundColor =  MaterialTheme.colorScheme.primary,
         navigationIcon = {
             IconButton(onClick = {/* Do Something*/ }) {
                 Icon(Icons.Filled.ArrowBack, null)

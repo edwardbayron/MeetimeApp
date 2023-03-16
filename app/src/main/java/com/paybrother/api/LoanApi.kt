@@ -1,6 +1,6 @@
 package com.paybrother.api
 
-import com.paybrother.compose.LoanData
+import com.paybrother.data.LoanData
 import com.paybrother.utils.Utils.convertStringToDate
 import java.util.*
 
