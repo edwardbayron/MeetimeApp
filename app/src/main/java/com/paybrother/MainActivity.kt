@@ -5,10 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -59,11 +58,11 @@ fun AppBarView(){
         },
         navigationIcon = {
             IconButton(onClick = {/* Do Something*/ }) {
-                Icon(Icons.Filled.ArrowBack, null)
+                Icon(Icons.Filled.Menu, null)
             }
         }, actions = {
             IconButton(onClick = {/* Do Something*/ }) {
-                Icon(Icons.Filled.Share, null)
+                Icon(Icons.Filled.Search, null)
             }
             IconButton(onClick = {/* Do Something*/ }) {
                 Icon(Icons.Filled.Settings, null)
@@ -73,10 +72,7 @@ fun AppBarView(){
 
 @Composable
 fun HomeDataContainer(viewModel: LoanViewModel){
-    Column(modifier = Modifier.fillMaxSize()) {
-
-        Text("Hello World") //TODO should be a main list of views
-
+    Column(modifier = Modifier.fillMaxSize().padding(top = 20.dp)) {
         val listLoans = viewModel.loanDataList
 
         listLoans.forEach { item ->
