@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        package="com.paybrother">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.paybrother" >
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
-            android:allowBackup="true"
-            android:dataExtractionRules="@xml/data_extraction_rules"
-            android:fullBackupContent="@xml/backup_rules"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:supportsRtl="true"
-            android:theme="@style/Theme.MeetimeApp_v3Theme"
-            tools:targetApi="31">
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MeetimeApp_v3Theme"
+        tools:targetApi="31" >
         <activity
-                android:name=".MainActivity"
-                android:exported="true"
-                android:label="@string/app_name"
-                android:theme="@style/Theme.MeetimeApp_v3Theme">
+            android:name=".compose.ReservationActivity"
+            android:exported="false"
+            android:label="@string/title_activity_reservation"
+            android:theme="@style/Theme.MeetimeApp_v3Theme" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MeetimeApp_v3Theme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

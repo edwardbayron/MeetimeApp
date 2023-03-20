@@ -1,6 +1,7 @@
 package com.paybrother.compose
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -14,7 +15,7 @@ import androidx.compose.ui.unit.sp
 import java.util.*
 
 @Composable
-fun LoanElementView(title: String, sum: Int, date: Date) {
+fun LoanElementView(title: String, sum: Int, date: Date, onCardClick: () -> Unit) {
 
         Column(
             modifier = Modifier
@@ -23,6 +24,9 @@ fun LoanElementView(title: String, sum: Int, date: Date) {
             .shadow(4.dp)
             .height(60.dp)
             .background(color = Color.White)
+            .clickable {
+                onCardClick()
+            }
 
         ) {
             Text(title, fontSize = 8.sp)
@@ -44,5 +48,5 @@ fun LoanElementView(title: String, sum: Int, date: Date) {
 @Preview
 @Composable
 fun Preview(){
-    LoanElementView("Brother", 1000, Date())
+    LoanElementView("Brother", 1000, Date(), onCardClick = {})
 }
