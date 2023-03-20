@@ -1,6 +1,7 @@
 package com.paybrother.compose
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -12,10 +13,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.paybrother.data.LoanParcelable
@@ -59,6 +61,9 @@ fun ReservationContainer(data: LoanParcelable, onBackPress: () -> Unit) {
 
 @Composable
 fun AppBarView(onBackPress: () -> Unit){
+    val mContext = LocalContext.current
+    var mDisplayMenu by remember { mutableStateOf(false) }
+
     androidx.compose.material.TopAppBar(
         //elevation = 4.dp,
         title = {
@@ -72,14 +77,35 @@ fun AppBarView(onBackPress: () -> Unit){
             }
         }, actions = {
             IconButton(onClick = {
-
-
-
+                mDisplayMenu = !mDisplayMenu
             }) {
                 Icon(Icons.Filled.MoreVert, null)
             }
+
+            DropdownMenu(
+                expanded = mDisplayMenu,
+                onDismissRequest = { mDisplayMenu = false }
+            ) {
+
+                DropdownMenuItem(text = {
+                    Text(text = "Edit")
+                }, onClick = {
+                    Toast.makeText(mContext, "Edit", Toast.LENGTH_SHORT).show()
+                })
+
+                DropdownMenuItem(text = {
+                    Text(text = "Delete")
+                }, onClick = {
+                    Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT).show()
+                })
+
+
+            }
+
+
         })
 }
+
 
 @Composable
 fun ReservationDataContainer(data: LoanParcelable){
