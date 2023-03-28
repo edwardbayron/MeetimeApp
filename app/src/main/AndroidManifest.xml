@@ -15,18 +15,18 @@
         android:theme="@style/Theme.MeetimeApp_v3Theme"
         tools:targetApi="31" >
         <activity
-            android:name=".compose.ReservationActivity"
+            android:name="com.paybrother.main.app.compose.ReservationActivity"
             android:exported="false"
             android:label="@string/title_activity_reservation"
             android:theme="@style/Theme.MeetimeApp_v3Theme" />
 
         <activity
-                android:name=".compose.ReservationEditActivity"
+                android:name="com.paybrother.main.app.compose.ReservationEditActivity"
                 android:exported="false"
                 android:label="@string/title_activity_reservation_edit"
                 android:theme="@style/Theme.MeetimeApp_v3Theme" />
         <activity
-            android:name=".MainActivity"
+            android:name=".main.app.compose.MainActivity"
             android:exported="true"
             android:label="@string/home_screen_title"
             android:theme="@style/Theme.MeetimeApp_v3Theme" >
