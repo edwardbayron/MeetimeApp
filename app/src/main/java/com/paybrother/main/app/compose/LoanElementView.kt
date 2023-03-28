@@ -1,4 +1,4 @@
-package com.paybrother.compose
+package com.paybrother.main.app.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

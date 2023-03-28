@@ -1,11 +1,10 @@
-package com.paybrother.viewmodels
+package com.paybrother.main.app.viewmodels
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.paybrother.data.LoanData
-import com.paybrother.api.LoanApi
-import com.paybrother.old.ReservationItem
+import com.paybrother.main.app.data.LoanData
+import com.paybrother.main.app.api.LoanApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

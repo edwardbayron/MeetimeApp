@@ -1,4 +1,4 @@
-package com.paybrother
+package com.paybrother.main.app.compose
 
 import android.content.Context
 import android.content.Intent
@@ -19,13 +19,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.paybrother.compose.LoanElementView
-import com.paybrother.compose.ReservationActivity
-import com.paybrother.data.LoanData
-import com.paybrother.data.LoanParcelable
+import com.paybrother.main.app.data.LoanData
+import com.paybrother.main.app.data.LoanParcelable
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
-import com.paybrother.viewmodels.LoanViewModel
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+import com.paybrother.main.app.viewmodels.LoanViewModel
 import java.io.Serializable
 
 class MainActivity : ComponentActivity() {
@@ -124,7 +121,7 @@ fun HomeDataContainer(viewModel: LoanViewModel){
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun MainPreview() {
     MeetimeApp_v3Theme {
         HomeContainer(LoanViewModel())
     }

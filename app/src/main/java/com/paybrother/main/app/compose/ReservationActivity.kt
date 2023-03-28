@@ -1,4 +1,4 @@
-package com.paybrother.compose
+package com.paybrother.main.app.compose
 
 import android.content.Context
 import android.content.Intent
@@ -10,22 +10,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.paybrother.data.LoanData
-import com.paybrother.data.LoanParcelable
+import com.paybrother.main.app.data.LoanData
+import com.paybrother.main.app.data.LoanParcelable
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
-import com.paybrother.viewmodels.LoanViewModel
 import java.io.Serializable
 import java.util.*
 
