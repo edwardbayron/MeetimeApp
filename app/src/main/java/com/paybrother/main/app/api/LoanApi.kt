@@ -1,7 +1,7 @@
-package com.paybrother.api
+package com.paybrother.main.app.api
 
-import com.paybrother.data.LoanData
-import com.paybrother.utils.Utils.convertStringToDate
+import com.paybrother.main.app.data.LoanData
+import com.paybrother.main.app.utils.Utils.convertStringToDate
 import java.util.*
 
 object LoanApi {
