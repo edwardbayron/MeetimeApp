@@ -62,10 +62,12 @@ fun HomeContainer(viewModel: LoanViewModel) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBarView(){
-    androidx.compose.material.TopAppBar(
+    TopAppBar(
         //elevation = 4.dp,
+        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
         title = {
             Text("I'm a TopAppBar")
         },
@@ -86,7 +88,9 @@ fun AppBarView(){
 @Composable
 fun HomeDataContainer(viewModel: LoanViewModel){
     val context = LocalContext.current
-    Column(modifier = Modifier.fillMaxSize().padding(top = 20.dp)) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(top = 20.dp)) {
         val listLoans = viewModel.loanDataList
 
         listLoans.forEach { item ->
@@ -98,7 +102,9 @@ fun HomeDataContainer(viewModel: LoanViewModel){
 
         Box(Modifier.fillMaxSize()){
             FloatingActionButton(
-                modifier = Modifier.align(alignment = Alignment.BottomEnd).padding(bottom = 10.dp, end = 10.dp),
+                modifier = Modifier
+                    .align(alignment = Alignment.BottomEnd)
+                    .padding(bottom = 10.dp, end = 10.dp),
                 onClick = {
                     //OnClick Method
                 },

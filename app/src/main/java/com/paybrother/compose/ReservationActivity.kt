@@ -1,5 +1,7 @@
 package com.paybrother.compose
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -20,8 +22,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.paybrother.data.LoanData
 import com.paybrother.data.LoanParcelable
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
+import com.paybrother.viewmodels.LoanViewModel
+import java.io.Serializable
 import java.util.*
 
 class ReservationActivity : ComponentActivity() {
@@ -30,7 +35,6 @@ class ReservationActivity : ComponentActivity() {
         setContent {
             val data = this.intent.extras?.getSerializable("reservationData") as LoanParcelable
             MeetimeApp_v3Theme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -52,15 +56,16 @@ class ReservationActivity : ComponentActivity() {
 @Composable
 fun ReservationContainer(data: LoanParcelable, onBackPress: () -> Unit) {
     Column {
-        AppBarView(onBackPress)
+        AppBarView(onBackPress, data)
         ReservationDataContainer(data)
 
 
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBarView(onBackPress: () -> Unit){
+fun AppBarView(onBackPress: () -> Unit, data: LoanParcelable){
     val mContext = LocalContext.current
     var mDisplayMenu by remember { mutableStateOf(false) }
 
@@ -90,7 +95,7 @@ fun AppBarView(onBackPress: () -> Unit){
                 DropdownMenuItem(text = {
                     Text(text = "Edit")
                 }, onClick = {
-                    Toast.makeText(mContext, "Edit", Toast.LENGTH_SHORT).show()
+                    openReservationEditActivity(mContext, LoanData(data.id, data.title, data.sum, data.date))
                 })
 
                 DropdownMenuItem(text = {
@@ -120,22 +125,6 @@ fun ReservationDataContainer(data: LoanParcelable){
                 Text(text = data.date.toString())
             }
 
-            FloatingActionButton(
-                modifier = Modifier
-                    .align(alignment = Alignment.BottomEnd)
-                    .padding(bottom = 10.dp, end = 10.dp),
-                onClick = {
-                    //OnClick Method
-                },
-                containerColor = Color.Red,
-                shape = RoundedCornerShape(16.dp),
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = "Add FAB",
-                    tint = Color.White,
-                )
-            }
         }
 
     }
@@ -147,4 +136,13 @@ fun DefaultPreview2() {
     MeetimeApp_v3Theme {
         ReservationContainer(LoanParcelable(", ", "", 0, Date()), {})
     }
+}
+
+private fun openReservationEditActivity(context: Context, reservation: LoanData){
+    val intent = Intent(context, ReservationEditActivity::class.java)
+    val reservationObject = LoanParcelable(reservation.id, reservation.title, reservation.sum, reservation.date)
+    intent.putExtra("reservationData", reservationObject as Serializable)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+    context.startActivity(intent)
 }

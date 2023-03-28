@@ -19,10 +19,16 @@
             android:exported="false"
             android:label="@string/title_activity_reservation"
             android:theme="@style/Theme.MeetimeApp_v3Theme" />
+
+        <activity
+                android:name=".compose.ReservationEditActivity"
+                android:exported="false"
+                android:label="@string/title_activity_reservation_edit"
+                android:theme="@style/Theme.MeetimeApp_v3Theme" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:label="@string/home_screen_title"
             android:theme="@style/Theme.MeetimeApp_v3Theme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
