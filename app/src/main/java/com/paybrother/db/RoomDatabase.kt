@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase
 abstract class RoomDatabase : RoomDatabase() {
     companion object {
 
-        private const val DB_NAME = "reservation_db"
+        private const val DB_NAME = "meetimeDb"
 
         @Volatile
         private var INSTANCE: RoomDatabase? = null
