@@ -21,8 +21,6 @@ import java.util.UUID
 
 class LoanViewModel(application: Application) : ViewModel() {
 
-    // TODO to refactor
-    val loanDataList = mutableStateListOf<LoanData>()
     private var repository: ReservationsRepository? = null
 
     var allReservations : LiveData<List<Reservations>>? = null
@@ -38,10 +36,7 @@ class LoanViewModel(application: Application) : ViewModel() {
 
         allReservations = repository?.allReservations
 
-
-        // TODO to refactor
         fetchData()
-
     }
 
     private fun fetchData(){
@@ -49,18 +44,6 @@ class LoanViewModel(application: Application) : ViewModel() {
             allReservations = repository?.allReservations
         }
     }
-
-//    fun insertProcedure(reservation: LoanData){
-//        viewModelScope.launch(Dispatchers.IO) {
-//            //roomDb?.reservationDao()?.insertReservation(reservation)
-//
-//            withContext(Dispatchers.Main) {
-//                loanDataList.add(LoanData(UUID.randomUUID().toString(), reservation.title, reservation.sum, reservation.date))
-//                //_proceduresList.value = list
-//
-//            }
-//        }
-//    }
 
     fun insertReservation(){
         repository?.insertReservation(ReservationItem(null, "Test+"+ Utils.random(), "TestEvent", "date"))
