@@ -107,10 +107,16 @@ fun HomeDataContainer(viewModel: LoanViewModel){
         val listReservations by viewModel.allReservations?.observeAsState(listOf())!!
 
         listReservations.forEach { item ->
-            ReservationElementView(title = item.name, sum = item.id?.toInt()!!, date = item.date) {
-                //openReservationActivity(context, item)
-                viewModel.deleteReservation(item.name)
-            }
+            ReservationElementView(
+                title = item.name,
+                sum = item.id?.toInt()!!,
+                date = item.date,
+                onCardClick = {
+                    //openReservationActivity(context, item)
+                },
+                onDeleteClick = {
+                    viewModel.deleteReservation(item.name)
+                })
         }
 
 
