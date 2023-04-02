@@ -21,7 +21,7 @@
 //import androidx.loader.content.CursorLoader
 //import androidx.loader.content.Loader
 //import com.paybrother.R
-//import com.paybrother.old.ReservationItem
+//import com.paybrother.main.app.data.ReservationItem
 //import com.paybrother.ReservationsAdapter
 //import com.paybrother.databinding.FragmentContactsBinding
 //import dagger.hilt.android.AndroidEntryPoint

@@ -44,6 +44,36 @@ fun LoanElementView(title: String, sum: Int, date: Date, onCardClick: () -> Unit
 
 }
 
+@Composable
+fun ReservationElementView(title: String, sum: Int, date: String, onCardClick: () -> Unit) {
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 12.dp, start = 20.dp, end = 20.dp)
+            .shadow(4.dp)
+            .height(60.dp)
+            .background(color = Color.White)
+            .clickable {
+                onCardClick()
+            }
+
+    ) {
+        Text(title, fontSize = 8.sp)
+        Text(sum.toString(), color = Color.Red)
+        Row {
+            Text("Loan taken: ", fontSize = 8.sp)
+            Text(date.toString(), fontSize = 8.sp)
+        }
+
+        Card {
+            // TODO progress bar with completed paid loan, add also percentage
+        }
+
+    }
+
+}
+
 
 @Preview
 @Composable

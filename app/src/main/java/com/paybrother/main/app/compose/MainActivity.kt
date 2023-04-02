@@ -1,5 +1,6 @@
 package com.paybrother.main.app.compose
 
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -12,27 +13,30 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.paybrother.db.Reservations
 import com.paybrother.main.app.data.LoanData
 import com.paybrother.main.app.data.LoanParcelable
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import com.paybrother.main.app.viewmodels.LoanViewModel
+import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import java.io.Serializable
+import java.util.*
 
 class MainActivity : ComponentActivity() {
-
-    private var viewModel: LoanViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            viewModel = viewModel()
             MeetimeApp_v3Theme {
 
                 // A surface container using the 'background' color from the theme
@@ -40,9 +44,20 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeContainer(viewModel!!)
 
+                    val owner = LocalViewModelStoreOwner.current
 
+                    owner?.let{
+                        val viewModel: LoanViewModel = viewModel(
+                            it,
+                            "LoanViewModel",
+                            MainViewModelFactory(
+                                LocalContext.current.applicationContext as Application
+                            )
+                        )
+
+                        HomeContainer(viewModel)
+                    }
                 }
             }
         }
@@ -88,11 +103,13 @@ fun HomeDataContainer(viewModel: LoanViewModel){
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(top = 20.dp)) {
-        val listLoans = viewModel.loanDataList
 
-        listLoans.forEach { item ->
-            LoanElementView(item.title, item.sum, item.date) {
-                openReservationActivity(context, item)
+        val listReservations by viewModel.allReservations?.observeAsState(listOf())!!
+
+        listReservations.forEach { item ->
+            ReservationElementView(title = item.name, sum = item.id?.toInt()!!, date = item.date) {
+                //openReservationActivity(context, item)
+                viewModel.deleteReservation(item.name)
             }
         }
 
@@ -103,7 +120,7 @@ fun HomeDataContainer(viewModel: LoanViewModel){
                     .align(alignment = Alignment.BottomEnd)
                     .padding(bottom = 10.dp, end = 10.dp),
                 onClick = {
-                    //OnClick Method
+                    viewModel.insertReservation()
                 },
                 containerColor = Color.Red,
                 shape = RoundedCornerShape(16.dp),
@@ -122,14 +139,15 @@ fun HomeDataContainer(viewModel: LoanViewModel){
 @Preview(showBackground = true)
 @Composable
 fun MainPreview() {
+    val context = LocalContext.current
     MeetimeApp_v3Theme {
-        HomeContainer(LoanViewModel())
+        HomeContainer(LoanViewModel(context.applicationContext as Application))
     }
 }
 
-private fun openReservationActivity(context: Context, reservation: LoanData){
+private fun openReservationActivity(context: Context, reservation: Reservations){
     val intent = Intent(context, ReservationActivity::class.java)
-    val reservationObject = LoanParcelable(reservation.id, reservation.title, reservation.sum, reservation.date)
+    val reservationObject = LoanParcelable(reservation.id.toString(), reservation.name, reservation.id?.toInt()!!, Date(reservation.date))
     intent.putExtra("reservationData", reservationObject as Serializable)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 

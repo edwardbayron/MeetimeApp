@@ -10,4 +10,9 @@ object Utils {
         return dateFormat.parse(date)
     }
 
+    fun random(): String {
+        val generator = Random()
+        return (generator.nextInt(96) + 32).toString()
+    }
+
 }
