@@ -81,7 +81,7 @@ fun AppBarView(){
         //elevation = 4.dp,
         colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
         title = {
-            Text("I'm a TopAppBar")
+            Text("Home")
         },
         navigationIcon = {
             IconButton(onClick = {/* Do Something*/ }) {
