@@ -45,8 +45,9 @@ class LoanViewModel(application: Application) : ViewModel() {
         }
     }
 
+    // TODO refactor
     fun insertReservation(){
-        repository?.insertReservation(ReservationItem(null, "Test+"+ Utils.random(), "TestEvent", "date"))
+        repository?.insertReservation(ReservationItem(null, "Test+"+ Utils.random(), "TestEvent", "2010-05-30 22:15:52"))
         fetchData()
     }
 

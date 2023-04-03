@@ -63,5 +63,5 @@ fun ReservationElementView(title: String, sum: Int, date: String, onCardClick: (
 @Composable
 fun Preview(){
     //LoanElementView("Brother", 1000, Date(), onCardClick = {})
-    ReservationElementView("Brother", 1000, "Date", onCardClick = {}, onDeleteClick = {})
+    ReservationElementView("Brother", 1000, "2010-05-30 22:15:52", onCardClick = {}, onDeleteClick = {})
 }

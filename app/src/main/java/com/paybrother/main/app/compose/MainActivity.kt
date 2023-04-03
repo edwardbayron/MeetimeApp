@@ -26,10 +26,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paybrother.db.Reservations
 import com.paybrother.main.app.data.LoanData
 import com.paybrother.main.app.data.LoanParcelable
+import com.paybrother.main.app.utils.Utils
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import com.paybrother.main.app.viewmodels.LoanViewModel
 import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import java.io.Serializable
+import java.text.DateFormat
 import java.util.*
 
 class MainActivity : ComponentActivity() {
@@ -112,7 +114,7 @@ fun HomeDataContainer(viewModel: LoanViewModel){
                 sum = item.id?.toInt()!!,
                 date = item.date,
                 onCardClick = {
-                    //openReservationActivity(context, item)
+                    openReservationActivity(context, item)
                 },
                 onDeleteClick = {
                     viewModel.deleteReservation(item.name)
@@ -153,7 +155,7 @@ fun MainPreview() {
 
 private fun openReservationActivity(context: Context, reservation: Reservations){
     val intent = Intent(context, ReservationActivity::class.java)
-    val reservationObject = LoanParcelable(reservation.id.toString(), reservation.name, reservation.id?.toInt()!!, Date(reservation.date))
+    val reservationObject = LoanParcelable(reservation.id.toString(), reservation.name, reservation.id?.toInt()!!, Utils.convertStringToDate(reservation.date)!!)
     intent.putExtra("reservationData", reservationObject as Serializable)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
