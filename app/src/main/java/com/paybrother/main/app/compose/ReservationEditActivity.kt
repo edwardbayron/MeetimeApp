@@ -1,5 +1,6 @@
 package com.paybrother.main.app.compose
 
+import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,7 +18,11 @@ import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.paybrother.main.app.data.LoanParcelable
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.paybrother.main.app.data.ReservationParcelable
+import com.paybrother.main.app.viewmodels.LoanViewModel
+import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import java.util.*
 
@@ -26,16 +31,31 @@ class ReservationEditActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val data = this.intent.extras?.getSerializable("reservationData") as LoanParcelable
+            val data = this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
             MeetimeApp_v3Theme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
+                    val owner = LocalViewModelStoreOwner.current
+
+                    owner?.let{
+                        val viewModel: LoanViewModel = viewModel(
+                            it,
+                            "LoanViewModel",
+                            MainViewModelFactory(
+                                LocalContext.current.applicationContext as Application
+                            )
+                        )
+
+                        HomeContainer(viewModel)
+                    }
+
                     ReservationEditContainer(
                         data,
                         onBackPress = {
-                            onBackPressed()
+                            finish()
                         }
                     )
                 }
@@ -47,7 +67,7 @@ class ReservationEditActivity : ComponentActivity() {
 }
 
 @Composable
-fun ReservationEditContainer(data: LoanParcelable, onBackPress: () -> Unit) {
+fun ReservationEditContainer(data: ReservationParcelable, onBackPress: () -> Unit) {
     Column {
         AppBarEditView(onBackPress)
         ReservationEditDataContainer(data)
@@ -97,7 +117,7 @@ fun AppBarEditView(onBackPress: () -> Unit){
 
 @OptIn(ExperimentalTextApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ReservationEditDataContainer(data: LoanParcelable){
+fun ReservationEditDataContainer(data: ReservationParcelable){
 
     var reservationTitleText by remember { mutableStateOf(data.title) }
     var reservationSumText by remember { mutableStateOf(data.sum.toString()) }
@@ -144,6 +164,6 @@ fun ReservationEditDataContainer(data: LoanParcelable){
 @Composable
 fun DefaultPreview() {
     MeetimeApp_v3Theme {
-        ReservationEditContainer(LoanParcelable(", ", "", 0, Date()), {})
+        ReservationEditContainer(ReservationParcelable(", ", "", 0, Date()), {})
     }
 }

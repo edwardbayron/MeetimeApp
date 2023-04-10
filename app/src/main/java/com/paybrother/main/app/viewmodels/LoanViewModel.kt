@@ -1,29 +1,25 @@
 package com.paybrother.main.app.viewmodels
 
 import android.app.Application
-import androidx.compose.runtime.mutableStateListOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.paybrother.db.Reservations
 import com.paybrother.db.MeetimeRoomDatabase
-import com.paybrother.db.ReservationsDao
-import com.paybrother.main.app.data.LoanData
-import com.paybrother.main.app.api.LoanApi
 import com.paybrother.main.app.data.ReservationItem
+import com.paybrother.main.app.data.ReservationParcelable
 import com.paybrother.main.app.repository.ReservationsRepository
 import com.paybrother.main.app.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.UUID
+import java.io.Serializable
 
 class LoanViewModel(application: Application) : ViewModel() {
 
     private var repository: ReservationsRepository? = null
 
     var allReservations : LiveData<List<Reservations>>? = null
+
+    var reservation : Reservations? = null
+
 
     private val searchResults = MutableLiveData<List<Reservations>>()
 
@@ -38,6 +34,11 @@ class LoanViewModel(application: Application) : ViewModel() {
 
         fetchData()
     }
+
+//    fun fetchReservationData(){
+//        reservation = savedStateHandle.get<Reservations>("reservationData") ?: error("reservationData")
+//    }
+
 
     private fun fetchData(){
         viewModelScope.launch(Dispatchers.IO) {

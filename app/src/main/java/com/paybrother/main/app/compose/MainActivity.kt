@@ -21,17 +21,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paybrother.db.Reservations
-import com.paybrother.main.app.data.LoanData
-import com.paybrother.main.app.data.LoanParcelable
+import com.paybrother.main.app.data.ReservationParcelable
 import com.paybrother.main.app.utils.Utils
-import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import com.paybrother.main.app.viewmodels.LoanViewModel
 import com.paybrother.main.app.viewmodels.MainViewModelFactory
+import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import java.io.Serializable
-import java.text.DateFormat
 import java.util.*
 
 class MainActivity : ComponentActivity() {
@@ -46,6 +45,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    
+
 
                     val owner = LocalViewModelStoreOwner.current
 
@@ -155,7 +156,7 @@ fun MainPreview() {
 
 private fun openReservationActivity(context: Context, reservation: Reservations){
     val intent = Intent(context, ReservationActivity::class.java)
-    val reservationObject = LoanParcelable(reservation.id.toString(), reservation.name, reservation.id?.toInt()!!, Utils.convertStringToDate(reservation.date)!!)
+    val reservationObject = ReservationParcelable(reservation.id.toString(), reservation.name, reservation.id?.toInt()!!, Utils.convertStringToDate(reservation.date)!!)
     intent.putExtra("reservationData", reservationObject as Serializable)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 

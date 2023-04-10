@@ -1,5 +1,6 @@
 package com.paybrother.main.app.compose
 
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -18,8 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.paybrother.main.app.data.LoanData
-import com.paybrother.main.app.data.LoanParcelable
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.paybrother.main.app.data.ReservationData
+import com.paybrother.main.app.data.ReservationParcelable
+import com.paybrother.main.app.viewmodels.LoanViewModel
+import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import java.io.Serializable
 import java.util.*
@@ -28,12 +34,29 @@ class ReservationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val data = this.intent.extras?.getSerializable("reservationData") as LoanParcelable
+            val data = this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
             MeetimeApp_v3Theme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val owner = LocalViewModelStoreOwner.current
+
+                    owner?.let{
+                        val viewModel: LoanViewModel = viewModel(
+                            it,
+                            "LoanViewModel",
+                            MainViewModelFactory(
+                                LocalContext.current.applicationContext as Application
+                            )
+                        )
+
+                        //viewModel.fetchReservationData()
+                        HomeContainer(viewModel)
+                    }
+
+
+
                     ReservationContainer(
                         data,
                         onBackPress = {
@@ -49,7 +72,7 @@ class ReservationActivity : ComponentActivity() {
 
 
 @Composable
-fun ReservationContainer(data: LoanParcelable, onBackPress: () -> Unit) {
+fun ReservationContainer(data: ReservationParcelable, onBackPress: () -> Unit) {
     Column {
         AppBarView(onBackPress, data)
         ReservationDataContainer(data)
@@ -60,7 +83,7 @@ fun ReservationContainer(data: LoanParcelable, onBackPress: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBarView(onBackPress: () -> Unit, data: LoanParcelable){
+fun AppBarView(onBackPress: () -> Unit, data: ReservationParcelable){
     val mContext = LocalContext.current
     var mDisplayMenu by remember { mutableStateOf(false) }
 
@@ -90,7 +113,7 @@ fun AppBarView(onBackPress: () -> Unit, data: LoanParcelable){
                 DropdownMenuItem(text = {
                     Text(text = "Edit")
                 }, onClick = {
-                    openReservationEditActivity(mContext, LoanData(data.id, data.title, data.sum, data.date))
+                    openReservationEditActivity(mContext, ReservationData(data.id, data.title, data.sum, data.date))
                 })
 
                 DropdownMenuItem(text = {
@@ -108,7 +131,7 @@ fun AppBarView(onBackPress: () -> Unit, data: LoanParcelable){
 
 
 @Composable
-fun ReservationDataContainer(data: LoanParcelable){
+fun ReservationDataContainer(data: ReservationParcelable){
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(top = 20.dp)) {
@@ -129,13 +152,13 @@ fun ReservationDataContainer(data: LoanParcelable){
 @Composable
 fun DefaultPreview2() {
     MeetimeApp_v3Theme {
-        ReservationContainer(LoanParcelable(", ", "", 0, Date()), {})
+        ReservationContainer(ReservationParcelable(", ", "", 0, Date()), {})
     }
 }
 
-private fun openReservationEditActivity(context: Context, reservation: LoanData){
+private fun openReservationEditActivity(context: Context, reservation: ReservationData){
     val intent = Intent(context, ReservationEditActivity::class.java)
-    val reservationObject = LoanParcelable(reservation.id, reservation.title, reservation.sum, reservation.date)
+    val reservationObject = ReservationParcelable(reservation.id, reservation.title, reservation.sum, reservation.date)
     intent.putExtra("reservationData", reservationObject as Serializable)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
