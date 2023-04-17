@@ -1,5 +1,6 @@
 package com.paybrother.main.app.compose
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.content.Intent
@@ -19,22 +20,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paybrother.main.app.data.ReservationData
 import com.paybrother.main.app.data.ReservationParcelable
+import com.paybrother.main.app.data.ReservationUiState
+import com.paybrother.main.app.utils.Utils
 import com.paybrother.main.app.viewmodels.LoanViewModel
 import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import java.io.Serializable
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ReservationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val data = this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
+            val data =
+                this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
             MeetimeApp_v3Theme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -42,7 +47,7 @@ class ReservationActivity : ComponentActivity() {
                 ) {
                     val owner = LocalViewModelStoreOwner.current
 
-                    owner?.let{
+                    owner?.let {
                         val viewModel: LoanViewModel = viewModel(
                             it,
                             "LoanViewModel",
@@ -52,16 +57,26 @@ class ReservationActivity : ComponentActivity() {
                         )
 
                         HomeContainer(viewModel)
-                    }
 
+                        val dataTest = remember {
+                            mutableStateOf(
+                                ReservationUiState(
+                                    title = data.title,
+                                    sum = data.sum.toString(),
+                                    date = data.date.toString()
+                                )
+                            )
 
-
-                    ReservationContainer(
-                        data,
-                        onBackPress = {
-                            onBackPressed()
                         }
-                    )
+
+
+                        ReservationContainer(
+                            dataTest
+                        ) {
+                            finish()
+                        }
+
+                    }
                 }
             }
         }
@@ -69,9 +84,8 @@ class ReservationActivity : ComponentActivity() {
 }
 
 
-
 @Composable
-fun ReservationContainer(data: ReservationParcelable, onBackPress: () -> Unit) {
+fun ReservationContainer(data: MutableState<ReservationUiState>, onBackPress: () -> Unit) {
     Column {
         AppBarView(onBackPress, data)
         ReservationDataContainer(data)
@@ -79,7 +93,7 @@ fun ReservationContainer(data: ReservationParcelable, onBackPress: () -> Unit) {
 }
 
 @Composable
-fun AppBarView(onBackPress: () -> Unit, data: ReservationParcelable){
+fun AppBarView(onBackPress: () -> Unit, data: MutableState<ReservationUiState>) {
     val mContext = LocalContext.current
     var mDisplayMenu by remember { mutableStateOf(false) }
 
@@ -108,7 +122,12 @@ fun AppBarView(onBackPress: () -> Unit, data: ReservationParcelable){
                 DropdownMenuItem(text = {
                     Text(text = "Edit")
                 }, onClick = {
-                    openReservationEditActivity(mContext, ReservationData(data.id, data.title, data.sum, data.date))
+                    openReservationEditActivity(
+                        mContext,
+                        ReservationData("", data.value.title, data.value.sum.toInt(),
+                            Date())
+
+                    )
                 })
 
                 DropdownMenuItem(text = {
@@ -126,16 +145,18 @@ fun AppBarView(onBackPress: () -> Unit, data: ReservationParcelable){
 
 
 @Composable
-fun ReservationDataContainer(data: ReservationParcelable){
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(top = 20.dp)) {
+fun ReservationDataContainer(data: MutableState<ReservationUiState>) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 20.dp)
+    ) {
 
-        Box(Modifier.fillMaxSize()){
+        Box(Modifier.fillMaxSize()) {
             Column {
-                Text(text = data.title)
-                Text(text = data.sum.toString())
-                Text(text = data.date.toString())
+                Text(text = data.value.title)
+                Text(text = data.value.sum)
+                Text(text = data.value.date)
             }
 
         }
@@ -143,17 +164,19 @@ fun ReservationDataContainer(data: ReservationParcelable){
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview2() {
     MeetimeApp_v3Theme {
-        ReservationContainer(ReservationParcelable(", ", "", 0, Date()), {})
+        ReservationContainer(mutableStateOf(ReservationUiState(", ", "", "")), {})
     }
 }
 
-private fun openReservationEditActivity(context: Context, reservation: ReservationData){
+private fun openReservationEditActivity(context: Context, reservation: ReservationData) {
     val intent = Intent(context, ReservationEditActivity::class.java)
-    val reservationObject = ReservationParcelable(reservation.id, reservation.title, reservation.sum, reservation.date)
+    val reservationObject =
+        ReservationParcelable(reservation.id, reservation.title, reservation.sum, reservation.date)
     intent.putExtra("reservationData", reservationObject as Serializable)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 

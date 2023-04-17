@@ -1,5 +1,6 @@
 package com.paybrother.main.app.compose
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paybrother.main.app.data.ReservationParcelable
+import com.paybrother.main.app.data.ReservationUiState
 import com.paybrother.main.app.viewmodels.LoanViewModel
 import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
@@ -50,15 +52,27 @@ class ReservationEditActivity : ComponentActivity() {
                         )
 
                         HomeContainer(viewModel)
+
+                        val dataTest = remember {
+                            mutableStateOf(
+                                ReservationUiState(
+                                    title = data.title,
+                                    sum = data.sum.toString(),
+                                    date = data.date.toString()
+                                )
+                            )
+
+                        }
+
+
                         ReservationEditContainer(
-                            data,
+                            dataTest,
                             onBackPress = {
                                 finish()
-                            },
-                            onSavePress = {
-                                finish()
                             }
-                        )
+                        ) {
+                            finish()
+                        }
                     }
 
 
@@ -71,7 +85,7 @@ class ReservationEditActivity : ComponentActivity() {
 }
 
 @Composable
-fun ReservationEditContainer(data: ReservationParcelable, onBackPress: () -> Unit, onSavePress: () -> Unit) {
+fun ReservationEditContainer(data: MutableState<ReservationUiState>, onBackPress: () -> Unit, onSavePress: () -> Unit) {
     Column {
         AppBarEditView(onBackPress, onSavePress)
         ReservationEditDataContainer(data)
@@ -119,11 +133,11 @@ fun AppBarEditView(onBackPress: () -> Unit, onSavePress: () -> Unit){
 
 @OptIn(ExperimentalTextApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ReservationEditDataContainer(data: ReservationParcelable){
+fun ReservationEditDataContainer(data: MutableState<ReservationUiState>){
 
-    var reservationTitleText by remember { mutableStateOf(data.title) }
-    var reservationSumText by remember { mutableStateOf(data.sum.toString()) }
-    var reservationDateText by remember { mutableStateOf(data.date.toString())}
+    var reservationTitleText = data.value.title
+    var reservationSumText = data.value.sum
+    var reservationDateText = data.value.date
 
     val gradientColors = listOf(Cyan, Color.Red, Color.Blue, Color.Yellow /*...*/)
 
@@ -162,10 +176,11 @@ fun ReservationEditDataContainer(data: ReservationParcelable){
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     MeetimeApp_v3Theme {
-        ReservationEditContainer(ReservationParcelable(", ", "", 0, Date()), {}, {})
+        ReservationEditContainer(mutableStateOf(ReservationUiState(", ", "", "")), {}) {}
     }
 }

@@ -1,6 +1,9 @@
 package com.paybrother.main.app.viewmodels
 
 import android.app.Application
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.*
 import com.paybrother.db.Reservations
 import com.paybrother.db.MeetimeRoomDatabase
@@ -15,8 +18,6 @@ class LoanViewModel(application: Application) : ViewModel() {
     private var repository: ReservationsRepository? = null
 
     var allReservations : LiveData<List<Reservations>>? = null
-
-    var reservation : Reservations? = null
 
     init {
         val roomDb = MeetimeRoomDatabase.getInstance(application)
