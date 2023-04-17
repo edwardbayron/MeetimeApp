@@ -50,14 +50,18 @@ class ReservationEditActivity : ComponentActivity() {
                         )
 
                         HomeContainer(viewModel)
+                        ReservationEditContainer(
+                            data,
+                            onBackPress = {
+                                finish()
+                            },
+                            onSavePress = {
+                                finish()
+                            }
+                        )
                     }
 
-                    ReservationEditContainer(
-                        data,
-                        onBackPress = {
-                            finish()
-                        }
-                    )
+
                 }
             }
         }
@@ -67,23 +71,20 @@ class ReservationEditActivity : ComponentActivity() {
 }
 
 @Composable
-fun ReservationEditContainer(data: ReservationParcelable, onBackPress: () -> Unit) {
+fun ReservationEditContainer(data: ReservationParcelable, onBackPress: () -> Unit, onSavePress: () -> Unit) {
     Column {
-        AppBarEditView(onBackPress)
+        AppBarEditView(onBackPress, onSavePress)
         ReservationEditDataContainer(data)
 
 
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBarEditView(onBackPress: () -> Unit){
-    val mContext = LocalContext.current
+fun AppBarEditView(onBackPress: () -> Unit, onSavePress: () -> Unit){
     var mDisplayMenu by remember { mutableStateOf(false) }
 
     androidx.compose.material.TopAppBar(
-        //elevation = 4.dp,
         title = {
             Text("Edit reservation",
                 maxLines = 1,
@@ -103,6 +104,7 @@ fun AppBarEditView(onBackPress: () -> Unit){
                 modifier = Modifier.width(50.dp),
                 onClick = {
                 mDisplayMenu = !mDisplayMenu
+                onSavePress()
             }) {
                 Text(
                     text = "Save",
@@ -164,6 +166,6 @@ fun ReservationEditDataContainer(data: ReservationParcelable){
 @Composable
 fun DefaultPreview() {
     MeetimeApp_v3Theme {
-        ReservationEditContainer(ReservationParcelable(", ", "", 0, Date()), {})
+        ReservationEditContainer(ReservationParcelable(", ", "", 0, Date()), {}, {})
     }
 }

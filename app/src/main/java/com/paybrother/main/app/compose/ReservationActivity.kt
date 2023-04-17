@@ -51,7 +51,6 @@ class ReservationActivity : ComponentActivity() {
                             )
                         )
 
-                        //viewModel.fetchReservationData()
                         HomeContainer(viewModel)
                     }
 
@@ -76,19 +75,15 @@ fun ReservationContainer(data: ReservationParcelable, onBackPress: () -> Unit) {
     Column {
         AppBarView(onBackPress, data)
         ReservationDataContainer(data)
-
-
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBarView(onBackPress: () -> Unit, data: ReservationParcelable){
     val mContext = LocalContext.current
     var mDisplayMenu by remember { mutableStateOf(false) }
 
     androidx.compose.material.TopAppBar(
-        //elevation = 4.dp,
         title = {
             Text("Reservation Details")
         },
