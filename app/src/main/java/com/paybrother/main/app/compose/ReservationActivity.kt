@@ -18,6 +18,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,44 +37,36 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ReservationActivity : ComponentActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val data =
                 this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
+
             MeetimeApp_v3Theme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val owner = LocalViewModelStoreOwner.current
 
-                    owner?.let {
-                        val viewModel: LoanViewModel = viewModel(
-                            it,
-                            "LoanViewModel",
-                            MainViewModelFactory(
-                                LocalContext.current.applicationContext as Application
-                            )
+                    val dataTest =
+                        ReservationUiState(
+                            title = data.title,
+                            sum = data.sum.toString(),
+                            date = data.date.toString()
                         )
 
-                        HomeContainer(viewModel)
-
-                        val dataTest =
-                                ReservationUiState(
-                                    title = data.title,
-                                    sum = data.sum.toString(),
-                                    date = data.date.toString()
-                                )
-
-                        ReservationContainer(
-                            dataTest
-                        ) {
-                            finish()
-                        }
+                    ReservationContainer(
+                        dataTest
+                    ) {
+                        finish()
                     }
                 }
             }
+
+
         }
     }
 }
@@ -119,8 +112,10 @@ fun AppBarView(onBackPress: () -> Unit, data: ReservationUiState) {
                 }, onClick = {
                     openReservationEditActivity(
                         mContext,
-                        ReservationData("", data.title, data.sum.toInt(),
-                            Date())
+                        ReservationData(
+                            "", data.title, data.sum.toInt(),
+                            Date()
+                        )
                     )
                 })
 

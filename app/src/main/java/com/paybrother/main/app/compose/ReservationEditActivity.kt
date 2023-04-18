@@ -34,41 +34,28 @@ class ReservationEditActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val data = this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
+            val data =
+                this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
             MeetimeApp_v3Theme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    val owner = LocalViewModelStoreOwner.current
-
-                    owner?.let{
-                        val viewModel: LoanViewModel = viewModel(
-                            it,
-                            "LoanViewModel",
-                            MainViewModelFactory(
-                                LocalContext.current.applicationContext as Application
-                            )
+                    val dataTest =
+                        ReservationUiState(
+                            title = data.title,
+                            sum = data.sum.toString(),
+                            date = data.date.toString()
                         )
 
-                        HomeContainer(viewModel)
-
-                        val dataTest =
-                                ReservationUiState(
-                                    title = data.title,
-                                    sum = data.sum.toString(),
-                                    date = data.date.toString()
-                                )
-
-                        ReservationEditContainer(
-                            dataTest,
-                            onBackPress = {
-                                finish()
-                            }
-                        ) {
+                    ReservationEditContainer(
+                        dataTest,
+                        onBackPress = {
                             finish()
                         }
+                    ) {
+                        finish()
                     }
 
 
@@ -81,24 +68,28 @@ class ReservationEditActivity : ComponentActivity() {
 }
 
 @Composable
-fun ReservationEditContainer(data: ReservationUiState, onBackPress: () -> Unit, onSavePress: () -> Unit) {
+fun ReservationEditContainer(
+    data: ReservationUiState,
+    onBackPress: () -> Unit,
+    onSavePress: () -> Unit
+) {
     Column {
         AppBarEditView(onBackPress, onSavePress)
         ReservationEditDataContainer(data)
-
-
     }
 }
 
 @Composable
-fun AppBarEditView(onBackPress: () -> Unit, onSavePress: () -> Unit){
+fun AppBarEditView(onBackPress: () -> Unit, onSavePress: () -> Unit) {
     var mDisplayMenu by remember { mutableStateOf(false) }
 
     androidx.compose.material.TopAppBar(
         title = {
-            Text("Edit reservation",
+            Text(
+                "Edit reservation",
                 maxLines = 1,
-                color = Color.White)
+                color = Color.White
+            )
         },
         navigationIcon = {
             IconButton(onClick = {
@@ -113,9 +104,9 @@ fun AppBarEditView(onBackPress: () -> Unit, onSavePress: () -> Unit){
             IconButton(
                 modifier = Modifier.width(50.dp),
                 onClick = {
-                mDisplayMenu = !mDisplayMenu
-                onSavePress()
-            }) {
+                    mDisplayMenu = !mDisplayMenu
+                    onSavePress()
+                }) {
                 Text(
                     text = "Save",
                     maxLines = 1,
@@ -129,7 +120,7 @@ fun AppBarEditView(onBackPress: () -> Unit, onSavePress: () -> Unit){
 
 @OptIn(ExperimentalTextApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ReservationEditDataContainer(data: ReservationUiState){
+fun ReservationEditDataContainer(data: ReservationUiState) {
 
     val reservationTitleText = rememberSaveable { mutableStateOf(data.title) }
     val reservationSumText = rememberSaveable { mutableStateOf(data.sum) }
@@ -143,26 +134,31 @@ fun ReservationEditDataContainer(data: ReservationUiState){
         )
     }
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(top = 20.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 20.dp)
+    ) {
 
-        Box(Modifier.fillMaxSize()){
+        Box(Modifier.fillMaxSize()) {
             Column {
                 TextField(
                     value = reservationTitleText.value,
                     onValueChange = { reservationTitleText.value = it },
-                    textStyle = TextStyle(brush = brush))
+                    textStyle = TextStyle(brush = brush)
+                )
 
                 TextField(
                     value = reservationSumText.value,
                     onValueChange = { reservationSumText.value = it },
-                    textStyle = TextStyle(brush = brush))
+                    textStyle = TextStyle(brush = brush)
+                )
 
                 TextField(
                     value = reservationDateText.value,
                     onValueChange = { reservationDateText.value = it },
-                    textStyle = TextStyle(brush = brush))
+                    textStyle = TextStyle(brush = brush)
+                )
             }
         }
     }
