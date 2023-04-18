@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,17 +59,12 @@ class ReservationActivity : ComponentActivity() {
 
                         HomeContainer(viewModel)
 
-                        val dataTest = remember {
-                            mutableStateOf(
+                        val dataTest =
                                 ReservationUiState(
                                     title = data.title,
                                     sum = data.sum.toString(),
                                     date = data.date.toString()
                                 )
-                            )
-
-                        }
-
 
                         ReservationContainer(
                             dataTest
@@ -85,7 +81,7 @@ class ReservationActivity : ComponentActivity() {
 
 
 @Composable
-fun ReservationContainer(data: MutableState<ReservationUiState>, onBackPress: () -> Unit) {
+fun ReservationContainer(data: ReservationUiState, onBackPress: () -> Unit) {
     Column {
         AppBarView(onBackPress, data)
         ReservationDataContainer(data)
@@ -93,7 +89,7 @@ fun ReservationContainer(data: MutableState<ReservationUiState>, onBackPress: ()
 }
 
 @Composable
-fun AppBarView(onBackPress: () -> Unit, data: MutableState<ReservationUiState>) {
+fun AppBarView(onBackPress: () -> Unit, data: ReservationUiState) {
     val mContext = LocalContext.current
     var mDisplayMenu by remember { mutableStateOf(false) }
 
@@ -124,7 +120,7 @@ fun AppBarView(onBackPress: () -> Unit, data: MutableState<ReservationUiState>) 
                 }, onClick = {
                     openReservationEditActivity(
                         mContext,
-                        ReservationData("", data.value.title, data.value.sum.toInt(),
+                        ReservationData("", data.title, data.sum.toInt(),
                             Date())
 
                     )
@@ -145,7 +141,12 @@ fun AppBarView(onBackPress: () -> Unit, data: MutableState<ReservationUiState>) 
 
 
 @Composable
-fun ReservationDataContainer(data: MutableState<ReservationUiState>) {
+fun ReservationDataContainer(data: ReservationUiState) {
+
+    val reservationTitle = rememberSaveable { mutableStateOf(data.title) }
+    val reservationSum = rememberSaveable { mutableStateOf(data.sum) }
+    val reservationDate = rememberSaveable { mutableStateOf(data.date) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -154,9 +155,9 @@ fun ReservationDataContainer(data: MutableState<ReservationUiState>) {
 
         Box(Modifier.fillMaxSize()) {
             Column {
-                Text(text = data.value.title)
-                Text(text = data.value.sum)
-                Text(text = data.value.date)
+                Text(text = reservationTitle.value)
+                Text(text = reservationSum.value)
+                Text(text = reservationDate.value)
             }
 
         }
@@ -169,7 +170,7 @@ fun ReservationDataContainer(data: MutableState<ReservationUiState>) {
 @Composable
 fun DefaultPreview2() {
     MeetimeApp_v3Theme {
-        ReservationContainer(mutableStateOf(ReservationUiState(", ", "", "")), {})
+        ReservationContainer(ReservationUiState(", ", "", ""), {})
     }
 }
 

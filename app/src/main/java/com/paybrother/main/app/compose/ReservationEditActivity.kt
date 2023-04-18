@@ -131,9 +131,9 @@ fun AppBarEditView(onBackPress: () -> Unit, onSavePress: () -> Unit){
 @Composable
 fun ReservationEditDataContainer(data: ReservationUiState){
 
-    var reservationTitleText = rememberSaveable { mutableStateOf(data.title) }
-    var reservationSumText = rememberSaveable { mutableStateOf(data.sum) }
-    var reservationDateText = rememberSaveable { mutableStateOf(data.date) }
+    val reservationTitleText = rememberSaveable { mutableStateOf(data.title) }
+    val reservationSumText = rememberSaveable { mutableStateOf(data.sum) }
+    val reservationDateText = rememberSaveable { mutableStateOf(data.date) }
 
     val gradientColors = listOf(Cyan, Color.Red, Color.Blue, Color.Yellow /*...*/)
 
@@ -142,7 +142,6 @@ fun ReservationEditDataContainer(data: ReservationUiState){
             colors = gradientColors
         )
     }
-
 
     Column(modifier = Modifier
         .fillMaxSize()
