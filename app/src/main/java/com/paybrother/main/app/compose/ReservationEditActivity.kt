@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -53,17 +54,12 @@ class ReservationEditActivity : ComponentActivity() {
 
                         HomeContainer(viewModel)
 
-                        val dataTest = remember {
-                            mutableStateOf(
+                        val dataTest =
                                 ReservationUiState(
                                     title = data.title,
                                     sum = data.sum.toString(),
                                     date = data.date.toString()
                                 )
-                            )
-
-                        }
-
 
                         ReservationEditContainer(
                             dataTest,
@@ -85,7 +81,7 @@ class ReservationEditActivity : ComponentActivity() {
 }
 
 @Composable
-fun ReservationEditContainer(data: MutableState<ReservationUiState>, onBackPress: () -> Unit, onSavePress: () -> Unit) {
+fun ReservationEditContainer(data: ReservationUiState, onBackPress: () -> Unit, onSavePress: () -> Unit) {
     Column {
         AppBarEditView(onBackPress, onSavePress)
         ReservationEditDataContainer(data)
@@ -133,11 +129,11 @@ fun AppBarEditView(onBackPress: () -> Unit, onSavePress: () -> Unit){
 
 @OptIn(ExperimentalTextApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ReservationEditDataContainer(data: MutableState<ReservationUiState>){
+fun ReservationEditDataContainer(data: ReservationUiState){
 
-    var reservationTitleText = data.value.title
-    var reservationSumText = data.value.sum
-    var reservationDateText = data.value.date
+    var reservationTitleText = rememberSaveable { mutableStateOf(data.title) }
+    var reservationSumText = rememberSaveable { mutableStateOf(data.sum) }
+    var reservationDateText = rememberSaveable { mutableStateOf(data.date) }
 
     val gradientColors = listOf(Cyan, Color.Red, Color.Blue, Color.Yellow /*...*/)
 
@@ -155,24 +151,21 @@ fun ReservationEditDataContainer(data: MutableState<ReservationUiState>){
         Box(Modifier.fillMaxSize()){
             Column {
                 TextField(
-                    value = reservationTitleText,
-                    onValueChange = { reservationTitleText = it },
+                    value = reservationTitleText.value,
+                    onValueChange = { reservationTitleText.value = it },
                     textStyle = TextStyle(brush = brush))
 
                 TextField(
-                    value = reservationSumText,
-                    onValueChange = { reservationSumText = it },
+                    value = reservationSumText.value,
+                    onValueChange = { reservationSumText.value = it },
                     textStyle = TextStyle(brush = brush))
 
                 TextField(
-                    value = reservationDateText,
-                    onValueChange = { reservationDateText = it },
+                    value = reservationDateText.value,
+                    onValueChange = { reservationDateText.value = it },
                     textStyle = TextStyle(brush = brush))
-
             }
-
         }
-
     }
 }
 
@@ -181,6 +174,6 @@ fun ReservationEditDataContainer(data: MutableState<ReservationUiState>){
 @Composable
 fun DefaultPreview() {
     MeetimeApp_v3Theme {
-        ReservationEditContainer(mutableStateOf(ReservationUiState(", ", "", "")), {}) {}
+        ReservationEditContainer(ReservationUiState(", ", "", ""), {}) {}
     }
 }
