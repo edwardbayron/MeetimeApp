@@ -45,9 +45,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    
-
-
                     val owner = LocalViewModelStoreOwner.current
 
                     owner?.let{
@@ -72,8 +69,6 @@ fun HomeContainer(viewModel: LoanViewModel) {
     Column {
         AppBarView()
         HomeDataContainer(viewModel)
-
-
     }
 }
 
@@ -81,7 +76,6 @@ fun HomeContainer(viewModel: LoanViewModel) {
 @Composable
 fun AppBarView(){
     TopAppBar(
-        //elevation = 4.dp,
         colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
         title = {
             Text("Home")
@@ -159,6 +153,5 @@ private fun openReservationActivity(context: Context, reservation: Reservations)
     val reservationObject = ReservationParcelable(reservation.id.toString(), reservation.name, reservation.id?.toInt()!!, Utils.convertStringToDate(reservation.date)!!)
     intent.putExtra("reservationData", reservationObject as Serializable)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-
     context.startActivity(intent)
 }

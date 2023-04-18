@@ -71,7 +71,6 @@ class ReservationActivity : ComponentActivity() {
                         ) {
                             finish()
                         }
-
                     }
                 }
             }
@@ -122,7 +121,6 @@ fun AppBarView(onBackPress: () -> Unit, data: ReservationUiState) {
                         mContext,
                         ReservationData("", data.title, data.sum.toInt(),
                             Date())
-
                     )
                 })
 
@@ -131,18 +129,13 @@ fun AppBarView(onBackPress: () -> Unit, data: ReservationUiState) {
                 }, onClick = {
                     Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT).show()
                 })
-
-
             }
-
-
         })
 }
 
 
 @Composable
 fun ReservationDataContainer(data: ReservationUiState) {
-
     val reservationTitle = rememberSaveable { mutableStateOf(data.title) }
     val reservationSum = rememberSaveable { mutableStateOf(data.sum) }
     val reservationDate = rememberSaveable { mutableStateOf(data.date) }
@@ -159,9 +152,7 @@ fun ReservationDataContainer(data: ReservationUiState) {
                 Text(text = reservationSum.value)
                 Text(text = reservationDate.value)
             }
-
         }
-
     }
 }
 
