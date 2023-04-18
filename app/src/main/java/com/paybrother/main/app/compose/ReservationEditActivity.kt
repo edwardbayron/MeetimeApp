@@ -41,21 +41,35 @@ class ReservationEditActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val owner = LocalViewModelStoreOwner.current
 
-                    val dataTest =
-                        ReservationUiState(
-                            title = data.title,
-                            sum = data.sum.toString(),
-                            date = data.date.toString()
+                    owner?.let {
+                        val viewModel: LoanViewModel = viewModel(
+                            it,
+                            "LoanViewModel",
+                            MainViewModelFactory(
+                                LocalContext.current.applicationContext as Application
+                            )
                         )
 
-                    ReservationEditContainer(
-                        dataTest,
-                        onBackPress = {
-                            finish()
-                        }
-                    ) {
-                        finish()
+                        val dataTest =
+                            ReservationUiState(
+                                title = data.title,
+                                sum = data.sum.toString(),
+                                date = data.date.toString()
+                            )
+
+                        ReservationEditContainer(
+                            dataTest,
+                            onBackPress = {
+                                finish()
+                            },
+                            onSavePress = {
+                                finish()
+                            },
+                            viewModel
+                        )
+
                     }
 
 
@@ -71,16 +85,22 @@ class ReservationEditActivity : ComponentActivity() {
 fun ReservationEditContainer(
     data: ReservationUiState,
     onBackPress: () -> Unit,
-    onSavePress: () -> Unit
+    onSavePress: () -> Unit,
+    viewModel: LoanViewModel
 ) {
     Column {
-        AppBarEditView(onBackPress, onSavePress)
+        AppBarEditView(onBackPress, onSavePress, viewModel, data)
         ReservationEditDataContainer(data)
     }
 }
 
 @Composable
-fun AppBarEditView(onBackPress: () -> Unit, onSavePress: () -> Unit) {
+fun AppBarEditView(
+    onBackPress: () -> Unit,
+    onSavePress: () -> Unit,
+    viewModel: LoanViewModel,
+    state: ReservationUiState
+) {
     var mDisplayMenu by remember { mutableStateOf(false) }
 
     androidx.compose.material.TopAppBar(
@@ -169,6 +189,9 @@ fun ReservationEditDataContainer(data: ReservationUiState) {
 @Composable
 fun DefaultPreview() {
     MeetimeApp_v3Theme {
-        ReservationEditContainer(ReservationUiState(", ", "", ""), {}) {}
+        ReservationEditContainer(ReservationUiState(", ", "", ""), {}, {}, LoanViewModel(
+            LocalContext.current.applicationContext as Application
+        )
+        )
     }
 }

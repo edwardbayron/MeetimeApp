@@ -8,6 +8,7 @@ import androidx.lifecycle.*
 import com.paybrother.db.Reservations
 import com.paybrother.db.MeetimeRoomDatabase
 import com.paybrother.main.app.data.ReservationItem
+import com.paybrother.main.app.data.ReservationUiState
 import com.paybrother.main.app.repository.ReservationsRepository
 import com.paybrother.main.app.utils.Utils
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +45,11 @@ class LoanViewModel(application: Application) : ViewModel() {
 
     fun deleteReservation(name: String){
         repository?.deleteReservation(name)
+        fetchData()
+    }
+
+    fun updateReservation(state: ReservationUiState){
+        repository?.updateReservation(state)
         fetchData()
     }
 

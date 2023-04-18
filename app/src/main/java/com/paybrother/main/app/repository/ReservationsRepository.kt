@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.paybrother.db.Reservations
 import com.paybrother.db.ReservationsDao
 import com.paybrother.main.app.data.ReservationItem
+import com.paybrother.main.app.data.ReservationUiState
 import kotlinx.coroutines.*
 import java.lang.Math.random
 import java.util.UUID
@@ -24,6 +25,12 @@ class ReservationsRepository(private val reservationsDao: ReservationsDao) {
     fun deleteReservation(name: String){
         coroutineScope.launch(Dispatchers.IO) {
             reservationsDao.deleteReservation(name)
+        }
+    }
+
+    fun updateReservation(state: ReservationUiState){
+        coroutineScope.launch(Dispatchers.IO) {
+            reservationsDao.updateReservation(Reservations(null, state.title, state.sum, state.date, state.date))
         }
     }
 
