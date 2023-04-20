@@ -117,6 +117,7 @@ fun AppBarView(onBackPress: () -> Unit, data: ReservationUiState) {
                             Date()
                         )
                     )
+                    mDisplayMenu = false
                 })
 
                 DropdownMenuItem(text = {
