@@ -65,6 +65,7 @@ class ReservationEditActivity : ComponentActivity() {
                                 finish()
                             },
                             onSavePress = {
+                                viewModel.updateReservation()
                                 finish()
                             },
                             viewModel
@@ -143,18 +144,9 @@ fun AppBarEditView(
 @OptIn(ExperimentalTextApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ReservationEditDataContainer(data: ReservationUiState) {
-
     val reservationTitleText = rememberSaveable { mutableStateOf(data.title) }
     val reservationSumText = rememberSaveable { mutableStateOf(data.sum) }
     val reservationDateText = rememberSaveable { mutableStateOf(data.date) }
-
-    val gradientColors = listOf(Cyan, Color.Red, Color.Blue, Color.Yellow /*...*/)
-
-    val brush = remember {
-        Brush.linearGradient(
-            colors = gradientColors
-        )
-    }
 
     Column(
         modifier = Modifier
