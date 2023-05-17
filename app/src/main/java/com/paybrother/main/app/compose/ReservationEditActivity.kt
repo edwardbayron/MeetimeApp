@@ -94,6 +94,7 @@ fun ReservationEditContainer(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBarEditView(
     onBackPress: () -> Unit,
@@ -103,7 +104,8 @@ fun AppBarEditView(
 ) {
     var mDisplayMenu by remember { mutableStateOf(false) }
 
-    androidx.compose.material.TopAppBar(
+    TopAppBar(
+        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
         title = {
             Text(
                 "Edit reservation",
@@ -163,21 +165,24 @@ fun ReservationEditDataContainer(data: ReservationUiState) {
         Box(Modifier.fillMaxSize()) {
             Column {
                 TextField(
+                    modifier = Modifier.fillMaxWidth().padding(10.dp),
                     value = reservationTitleText.value,
                     onValueChange = { reservationTitleText.value = it },
-                    textStyle = TextStyle(brush = brush)
+                    colors = TextFieldDefaults.textFieldColors(textColor = Color.Black, containerColor = Color.White)
                 )
 
                 TextField(
+                    modifier = Modifier.fillMaxWidth().padding(10.dp),
                     value = reservationSumText.value,
                     onValueChange = { reservationSumText.value = it },
-                    textStyle = TextStyle(brush = brush)
+                    colors = TextFieldDefaults.textFieldColors(textColor = Color.Black, containerColor = Color.White)
                 )
 
                 TextField(
+                    modifier = Modifier.fillMaxWidth().padding(10.dp),
                     value = reservationDateText.value,
                     onValueChange = { reservationDateText.value = it },
-                    textStyle = TextStyle(brush = brush)
+                    colors = TextFieldDefaults.textFieldColors(textColor = Color.Black, containerColor = Color.White)
                 )
             }
         }

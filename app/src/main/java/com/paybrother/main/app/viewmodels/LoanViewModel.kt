@@ -39,7 +39,7 @@ class LoanViewModel(application: Application) : ViewModel() {
     }
 
     fun insertReservation(){
-        repository?.insertReservation(ReservationItem(null, "Test+"+ Utils.random(), "TestEvent", "2010-05-30 22:15:52"))
+        repository?.insertReservation(ReservationItem(null, "Test+"+ Utils.random(), "TestEvent", "2010-05-30"))
         fetchData()
     }
 

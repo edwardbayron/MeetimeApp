@@ -1,35 +1,25 @@
 package com.paybrother.main.app.compose
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paybrother.main.app.data.ReservationData
 import com.paybrother.main.app.data.ReservationParcelable
 import com.paybrother.main.app.data.ReservationUiState
 import com.paybrother.main.app.utils.Utils
-import com.paybrother.main.app.viewmodels.LoanViewModel
-import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import java.io.Serializable
 import java.text.DateFormat
@@ -37,13 +27,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ReservationActivity : ComponentActivity() {
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val data =
-                this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
+            val data = this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
+
 
             MeetimeApp_v3Theme {
                 Surface(
@@ -65,8 +53,6 @@ class ReservationActivity : ComponentActivity() {
                     }
                 }
             }
-
-
         }
     }
 }
@@ -75,23 +61,28 @@ class ReservationActivity : ComponentActivity() {
 @Composable
 fun ReservationContainer(data: ReservationUiState, onBackPress: () -> Unit) {
     Column {
-        AppBarView(onBackPress, data)
-        ReservationDataContainer(data)
+        AppBarView(data, onBackPress)
+        ReservationDataScreen(data, onBackPress)
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBarView(onBackPress: () -> Unit, data: ReservationUiState) {
+fun AppBarView(data: ReservationUiState, onBackPress: () -> Unit) {
     val mContext = LocalContext.current
     var mDisplayMenu by remember { mutableStateOf(false) }
+    var editEnabled by remember { mutableStateOf(false) }
+    
 
-    androidx.compose.material.TopAppBar(
+    TopAppBar(
+        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
         title = {
             Text("Reservation Details")
         },
         navigationIcon = {
             IconButton(onClick = {
                 onBackPress()
+                editEnabled = false
             }) {
                 Icon(Icons.Filled.ArrowBack, null)
             }
@@ -110,13 +101,8 @@ fun AppBarView(onBackPress: () -> Unit, data: ReservationUiState) {
                 DropdownMenuItem(text = {
                     Text(text = "Edit")
                 }, onClick = {
-                    openReservationEditActivity(
-                        mContext,
-                        ReservationData(
-                            "", data.title, data.sum.toInt(),
-                            Date()
-                        )
-                    )
+                    editEnabled = true
+                    openReservationEditActivity(mContext, ReservationData("", data.title, data.sum.toInt(), Utils.convertStringToDate2("2010-05-30")))
                     mDisplayMenu = false
                 })
 
@@ -130,34 +116,14 @@ fun AppBarView(onBackPress: () -> Unit, data: ReservationUiState) {
 }
 
 
-@Composable
-fun ReservationDataContainer(data: ReservationUiState) {
-    val reservationTitle = rememberSaveable { mutableStateOf(data.title) }
-    val reservationSum = rememberSaveable { mutableStateOf(data.sum) }
-    val reservationDate = rememberSaveable { mutableStateOf(data.date) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 20.dp)
-    ) {
-
-        Box(Modifier.fillMaxSize()) {
-            Column {
-                Text(text = reservationTitle.value)
-                Text(text = reservationSum.value)
-                Text(text = reservationDate.value)
-            }
-        }
-    }
-}
 
 @SuppressLint("UnrememberedMutableState")
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview2() {
     MeetimeApp_v3Theme {
-        ReservationContainer(ReservationUiState(", ", "", ""), {})
+        ReservationContainer(ReservationUiState("title", "sum", "date"), {})
     }
 }
 
