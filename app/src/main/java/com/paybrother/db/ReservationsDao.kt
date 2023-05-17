@@ -13,8 +13,8 @@ interface ReservationsDao {
     @Insert
     fun insertReservation(reservation: Reservations)
 
-    @Update
-    fun updateReservation(reservation: Reservations)
+    @Query("UPDATE reservation SET name = :name")
+    fun updateReservation(name: String)
 
     @Query("SELECT * FROM reservation WHERE name = :name")
     fun findReservation(name: String): List<Reservations>

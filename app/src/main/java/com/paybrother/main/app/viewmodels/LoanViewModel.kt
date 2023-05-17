@@ -32,7 +32,7 @@ class LoanViewModel(application: Application) : ViewModel() {
     }
 
 
-    private fun fetchData(){
+    fun fetchData(){
         viewModelScope.launch(Dispatchers.IO) {
             allReservations = repository?.allReservations
         }
@@ -40,17 +40,14 @@ class LoanViewModel(application: Application) : ViewModel() {
 
     fun insertReservation(){
         repository?.insertReservation(ReservationItem(null, "Test+"+ Utils.random(), "TestEvent", "2010-05-30"))
-        fetchData()
     }
 
     fun deleteReservation(name: String){
         repository?.deleteReservation(name)
-        fetchData()
     }
 
     fun updateReservation(state: ReservationUiState){
         repository?.updateReservation(state)
-        fetchData()
     }
 
 }

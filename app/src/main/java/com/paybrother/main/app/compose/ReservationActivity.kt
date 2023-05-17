@@ -115,9 +115,6 @@ fun AppBarView(data: ReservationUiState, onBackPress: () -> Unit) {
         })
 }
 
-
-
-
 @SuppressLint("UnrememberedMutableState")
 @Preview(showBackground = true)
 @Composable

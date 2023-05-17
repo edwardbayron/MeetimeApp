@@ -30,7 +30,7 @@ class ReservationsRepository(private val reservationsDao: ReservationsDao) {
 
     fun updateReservation(state: ReservationUiState){
         coroutineScope.launch(Dispatchers.IO) {
-            reservationsDao.updateReservation(Reservations(null, state.title, state.sum, state.date, state.date))
+            reservationsDao.updateReservation(state.title)
         }
     }
 
