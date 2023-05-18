@@ -1,20 +1,16 @@
 package com.paybrother.main.app.compose
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.paybrother.main.app.data.ReservationUiState
 
@@ -38,6 +34,7 @@ fun ReservationDataContainer(data: ReservationUiState) {
 
         Box(Modifier.fillMaxSize()) {
             Column {
+                Text(text = data.id.toString())
                 Text(text = reservationTitle.value)
                 Text(text = reservationSum.value)
                 Text(text = reservationDate.value)
@@ -68,5 +65,5 @@ fun EditAppBarView(data: ReservationUiState, onBackPress: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewReservationDataScreen(){
-    ReservationDataContainer(ReservationUiState("test", "test", "test"))
+    ReservationDataContainer(ReservationUiState(1234567890L,"test", "test", "test"))
 }

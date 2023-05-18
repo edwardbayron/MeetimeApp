@@ -50,6 +50,7 @@ class ReservationEditActivity : ComponentActivity() {
 
                         val dataTest =
                             ReservationUiState(
+                                id = data.id,
                                 title = data.title,
                                 sum = data.sum.toString(),
                                 date = data.date.toString()
@@ -65,16 +66,11 @@ class ReservationEditActivity : ComponentActivity() {
                                 finish()
                             }
                         )
-
                     }
-
-
                 }
             }
         }
     }
-
-
 }
 
 @Composable
@@ -126,8 +122,6 @@ fun AppBarEditView(
                     color = Color.White
                 )
             }
-
-
         })
 }
 
@@ -186,6 +180,7 @@ fun ReservationEditDataContainer(
                 )
 
                 val savedData = ReservationUiState(
+                    data.id,
                     reservationTitleText.value,
                     reservationSumText.value,
                     reservationDateText.value
@@ -209,6 +204,6 @@ fun ReservationEditDataContainer(
 @Composable
 fun DefaultPreview() {
     MeetimeApp_v3Theme {
-        ReservationEditContainer(ReservationUiState("Title", "Sum", "2010-05-30"), {}, {})
+        ReservationEditContainer(ReservationUiState(1234567890L,"Title", "Sum", "2010-05-30"), {}, {})
     }
 }

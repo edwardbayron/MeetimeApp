@@ -13,6 +13,7 @@ import com.paybrother.main.app.repository.ReservationsRepository
 import com.paybrother.main.app.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class LoanViewModel(application: Application) : ViewModel() {
 
@@ -32,7 +33,7 @@ class LoanViewModel(application: Application) : ViewModel() {
     }
 
 
-    fun fetchData(){
+    private fun fetchData(){
         viewModelScope.launch(Dispatchers.IO) {
             allReservations = repository?.allReservations
         }

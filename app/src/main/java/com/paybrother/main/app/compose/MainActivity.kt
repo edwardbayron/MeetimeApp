@@ -146,7 +146,7 @@ fun MainPreview() {
 
 private fun openReservationActivity(context: Context, reservation: Reservations){
     val intent = Intent(context, ReservationActivity::class.java)
-    val reservationObject = ReservationParcelable(reservation.id.toString(), reservation.name, reservation.id?.toInt()!!, Utils.convertStringToDate(reservation.date)!!)
+    val reservationObject = ReservationParcelable(reservation.id!!, reservation.name, reservation.id?.toInt()!!, Utils.convertStringToDate(reservation.date)!!)
     intent.putExtra("reservationData", reservationObject as Serializable)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
     context.startActivity(intent)

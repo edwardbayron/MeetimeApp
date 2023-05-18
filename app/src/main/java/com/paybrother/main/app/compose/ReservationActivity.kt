@@ -22,8 +22,6 @@ import com.paybrother.main.app.data.ReservationUiState
 import com.paybrother.main.app.utils.Utils
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import java.io.Serializable
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 class ReservationActivity : ComponentActivity() {
@@ -31,8 +29,7 @@ class ReservationActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val data = this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
-
-
+            
             MeetimeApp_v3Theme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -41,6 +38,7 @@ class ReservationActivity : ComponentActivity() {
 
                     val dataTest =
                         ReservationUiState(
+                            id = data.id,
                             title = data.title,
                             sum = data.sum.toString(),
                             date = data.date.toString()
@@ -102,7 +100,7 @@ fun AppBarView(data: ReservationUiState, onBackPress: () -> Unit) {
                     Text(text = "Edit")
                 }, onClick = {
                     editEnabled = true
-                    openReservationEditActivity(mContext, ReservationData("", data.title, data.sum.toInt(), Utils.convertStringToDate2("2010-05-30")))
+                    openReservationEditActivity(mContext, ReservationData(data.id!!, data.title, data.sum.toInt(), Utils.convertStringToDate2("2010-05-30")))
                     mDisplayMenu = false
                 })
 
@@ -120,7 +118,7 @@ fun AppBarView(data: ReservationUiState, onBackPress: () -> Unit) {
 @Composable
 fun DefaultPreview2() {
     MeetimeApp_v3Theme {
-        ReservationContainer(ReservationUiState("title", "sum", "date"), {})
+        ReservationContainer(ReservationUiState(1234567890L, "title", "sum", "date"), {})
     }
 }
 
