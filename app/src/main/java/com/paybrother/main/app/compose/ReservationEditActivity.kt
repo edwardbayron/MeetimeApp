@@ -1,8 +1,13 @@
 package com.paybrother.main.app.compose
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
 import android.app.Application
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -23,6 +28,7 @@ import com.paybrother.main.app.data.ReservationUiState
 import com.paybrother.main.app.viewmodels.LoanViewModel
 import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
+import java.io.Serializable
 import java.util.*
 
 class ReservationEditActivity : ComponentActivity() {
@@ -56,21 +62,34 @@ class ReservationEditActivity : ComponentActivity() {
                                 date = data.date.toString()
                             )
 
-                        ReservationEditContainer(
-                            dataTest,
-                            onBackPress = {
-                                finish()
-                            },
-                            onSavePress = { state ->
-                                viewModel.updateReservation(state = state)
-                                finish()
-                            }
-                        )
+                        openEditContainer(dataTest, this, viewModel)
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+fun openEditContainer(dataTest: ReservationUiState, activity: ComponentActivity, viewModel: LoanViewModel){
+    ReservationEditContainer(
+        dataTest,
+        onBackPress = {
+            activity.setResult(RESULT_CANCELED)
+            activity.finish()
+        },
+        onSavePress = { state ->
+            Log.e("TEST", "onSavePress state title: "+state?.title)
+            viewModel.updateReservation(state = state)
+            val intent = Intent()
+            intent.putExtra("id", state.id)
+            intent.putExtra("title", state.title)
+            intent.putExtra("sum", state.sum)
+            intent.putExtra("date", state.date)
+            activity.setResult(RESULT_OK, intent)
+            activity.finish()
+        }
+    )
 }
 
 @Composable

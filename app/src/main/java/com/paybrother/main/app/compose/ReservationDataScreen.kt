@@ -20,11 +20,12 @@ fun ReservationDataScreen(data: ReservationUiState, onBackPress: () -> Unit) {
     EditAppBarView(data, onBackPress)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReservationDataContainer(data: ReservationUiState) {
-    val reservationTitle = rememberSaveable { mutableStateOf(data.title) }
-    val reservationSum = rememberSaveable { mutableStateOf(data.sum) }
-    val reservationDate = rememberSaveable { mutableStateOf(data.date) }
+    var reservationTitle = remember { mutableStateOf(data.title) }
+    var reservationSum = remember { mutableStateOf(data.sum) }
+    var reservationDate = remember { mutableStateOf(data.date) }
 
     Column(
         modifier = Modifier
@@ -34,11 +35,22 @@ fun ReservationDataContainer(data: ReservationUiState) {
 
         Box(Modifier.fillMaxSize()) {
             Column {
-                Text(text = data.id.toString())
+                Text(
+                    text = data.id.toString())
                 Text(text = reservationTitle.value)
                 Text(text = reservationSum.value)
                 Text(text = reservationDate.value)
+
+                OutlinedTextField(
+                    value = reservationTitle.value,
+                    onValueChange = {
+                        reservationTitle.value = it
+                    },
+                    label = { Text(reservationTitle.value)}
+                )
+
             }
+
         }
     }
 }

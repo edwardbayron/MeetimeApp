@@ -1,12 +1,16 @@
 package com.paybrother.main.app.compose
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
@@ -25,109 +29,150 @@ import java.io.Serializable
 import java.util.*
 
 class ReservationActivity : ComponentActivity() {
+
+
+    var dataTest : ReservationUiState? = null
+    var state: ReservationUiState? = null
+
+    private var openEditReservationActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        val resultCode = it.resultCode
+        val data = it.data
+
+        when (resultCode) {
+            Activity.RESULT_OK -> {
+
+                state = ReservationUiState(
+                    data?.getLongExtra("id", 0L),
+                    data?.getStringExtra("title").toString(),
+                    data?.getStringExtra("sum").toString(),
+                    data?.getStringExtra("date").toString()
+                )
+            }
+
+            Activity.RESULT_CANCELED -> {
+                state = dataTest
+            }
+            else -> {
+                Toast.makeText(this, "Edit Cancelled", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val data = this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
-            
+            val data =
+                this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
+
             MeetimeApp_v3Theme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    val dataTest =
-                        ReservationUiState(
+                    dataTest = ReservationUiState(
                             id = data.id,
                             title = data.title,
                             sum = data.sum.toString(),
                             date = data.date.toString()
                         )
 
-                    ReservationContainer(
-                        dataTest
-                    ) {
-                        finish()
-                    }
+                    OpenContainer(data = dataTest!!)
                 }
             }
         }
     }
-}
 
-
-@Composable
-fun ReservationContainer(data: ReservationUiState, onBackPress: () -> Unit) {
-    Column {
-        AppBarView(data, onBackPress)
-        ReservationDataScreen(data, onBackPress)
+    @Composable
+    fun OpenContainer(data: ReservationUiState) {
+        ReservationContainer(
+            data
+        ) {
+            finish()
+        }
     }
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AppBarView(data: ReservationUiState, onBackPress: () -> Unit) {
-    val mContext = LocalContext.current
-    var mDisplayMenu by remember { mutableStateOf(false) }
-    var editEnabled by remember { mutableStateOf(false) }
-    
-
-    TopAppBar(
-        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
-        title = {
-            Text("Reservation Details")
-        },
-        navigationIcon = {
-            IconButton(onClick = {
-                onBackPress()
-                editEnabled = false
-            }) {
-                Icon(Icons.Filled.ArrowBack, null)
-            }
-        }, actions = {
-            IconButton(onClick = {
-                mDisplayMenu = !mDisplayMenu
-            }) {
-                Icon(Icons.Filled.MoreVert, null)
-            }
-
-            DropdownMenu(
-                expanded = mDisplayMenu,
-                onDismissRequest = { mDisplayMenu = false }
-            ) {
-
-                DropdownMenuItem(text = {
-                    Text(text = "Edit")
-                }, onClick = {
-                    editEnabled = true
-                    openReservationEditActivity(mContext, ReservationData(data.id!!, data.title, data.sum.toInt(), Utils.convertStringToDate2("2010-05-30")))
-                    mDisplayMenu = false
-                })
-
-                DropdownMenuItem(text = {
-                    Text(text = "Delete")
-                }, onClick = {
-                    Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT).show()
-                })
-            }
-        })
-}
-
-@SuppressLint("UnrememberedMutableState")
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview2() {
-    MeetimeApp_v3Theme {
-        ReservationContainer(ReservationUiState(1234567890L, "title", "sum", "date"), {})
+    @Composable
+    fun ReservationContainer(data: ReservationUiState, onBackPress: () -> Unit) {
+        Column {
+            AppBarView(data, onBackPress)
+            ReservationDataScreen(data, onBackPress)
+        }
     }
-}
 
-private fun openReservationEditActivity(context: Context, reservation: ReservationData) {
-    val intent = Intent(context, ReservationEditActivity::class.java)
-    val reservationObject =
-        ReservationParcelable(reservation.id, reservation.title, reservation.sum, reservation.date)
-    intent.putExtra("reservationData", reservationObject as Serializable)
-    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun AppBarView(data: ReservationUiState, onBackPress: () -> Unit) {
+        val mContext = LocalContext.current
+        var mDisplayMenu by remember { mutableStateOf(false) }
+        var editEnabled by remember { mutableStateOf(false) }
 
-    context.startActivity(intent)
+
+        TopAppBar(
+            colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
+            title = {
+                Text("Reservation Details")
+            },
+            navigationIcon = {
+                IconButton(onClick = {
+                    onBackPress()
+                    editEnabled = false
+                }) {
+                    Icon(Icons.Filled.ArrowBack, null)
+                }
+            }, actions = {
+                IconButton(onClick = {
+                    mDisplayMenu = !mDisplayMenu
+                }) {
+                    Icon(Icons.Filled.MoreVert, null)
+                }
+
+                DropdownMenu(
+                    expanded = mDisplayMenu,
+                    onDismissRequest = { mDisplayMenu = false }
+                ) {
+
+                    DropdownMenuItem(text = {
+                        Text(text = "Edit")
+                    }, onClick = {
+                        editEnabled = true
+
+                        val intent = Intent(this@ReservationActivity, ReservationEditActivity::class.java)
+
+                        val reservationData = ReservationData(
+                            data.id!!,
+                            data.title,
+                            data.sum.toInt(),
+                            Utils.convertStringToDate2("2010-05-30"))
+
+                        var reservationObject = ReservationParcelable(
+                                reservationData.id,
+                        reservationData.title,
+                        reservationData.sum,
+                        reservationData.date
+                        )
+                        intent.putExtra("reservationData", reservationObject as Serializable)
+
+                        openEditReservationActivityLauncher.launch(intent)
+
+                        mDisplayMenu = false
+                    })
+
+                    DropdownMenuItem(text = {
+                        Text(text = "Delete")
+                    }, onClick = {
+                        Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT).show()
+                    })
+                }
+            })
+    }
+
+    @SuppressLint("UnrememberedMutableState")
+    @Preview(showBackground = true)
+    @Composable
+    fun DefaultPreview2() {
+        MeetimeApp_v3Theme {
+            ReservationContainer(ReservationUiState(1234567890L, "title", "sum", "date"), {})
+        }
+    }
 }
