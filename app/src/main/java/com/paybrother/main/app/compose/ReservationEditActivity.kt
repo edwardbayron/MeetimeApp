@@ -70,6 +70,7 @@ class ReservationEditActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("ComposableNaming")
 @Composable
 fun openEditContainer(dataTest: ReservationUiState, activity: ComponentActivity, viewModel: LoanViewModel){
     ReservationEditContainer(

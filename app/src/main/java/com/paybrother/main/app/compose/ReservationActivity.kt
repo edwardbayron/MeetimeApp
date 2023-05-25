@@ -2,6 +2,7 @@ package com.paybrother.main.app.compose
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -17,40 +18,48 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paybrother.main.app.data.ReservationData
 import com.paybrother.main.app.data.ReservationParcelable
 import com.paybrother.main.app.data.ReservationUiState
 import com.paybrother.main.app.utils.Utils
+import com.paybrother.main.app.viewmodels.LoanViewModel
+import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import java.io.Serializable
 import java.util.*
 
 class ReservationActivity : ComponentActivity() {
 
+    private lateinit var dataReceived: ReservationUiState
+    private lateinit var viewModel : LoanViewModel
 
-    var dataTest : ReservationUiState? = null
-    var state: ReservationUiState? = null
-
-    private var openEditReservationActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+    private val openEditReservationActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         val resultCode = it.resultCode
         val data = it.data
 
         when (resultCode) {
             Activity.RESULT_OK -> {
 
-                state = ReservationUiState(
+                dataReceived = ReservationUiState(
                     data?.getLongExtra("id", 0L),
                     data?.getStringExtra("title").toString(),
                     data?.getStringExtra("sum").toString(),
                     data?.getStringExtra("date").toString()
                 )
+
+                viewModel.selectedReservation(dataReceived)
+
             }
 
             Activity.RESULT_CANCELED -> {
-                state = dataTest
+                viewModel.selectedReservation(dataReceived)
             }
             else -> {
                 Toast.makeText(this, "Edit Cancelled", Toast.LENGTH_SHORT).show()
@@ -60,37 +69,43 @@ class ReservationActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             val data =
                 this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
+
+            val owner = LocalViewModelStoreOwner.current
+            owner?.let {
+                viewModel = viewModel(
+                    it,
+                    "LoanViewModel",
+                    MainViewModelFactory(
+                        LocalContext.current.applicationContext as Application
+                    )
+                )
+            }
+
+            viewModel.selectedReservation(
+                ReservationUiState(
+                    id = data.id,
+                    title = data.title,
+                    sum = data.sum.toString(),
+                    date = data.date.toString()
+                ))
+
+            val uiState = viewModel.uiState.observeAsState()
 
             MeetimeApp_v3Theme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
-                    dataTest = ReservationUiState(
-                            id = data.id,
-                            title = data.title,
-                            sum = data.sum.toString(),
-                            date = data.date.toString()
-                        )
-
-                    OpenContainer(data = dataTest!!)
+                    ReservationContainer(data = uiState.value!!, { finish() })
                 }
             }
         }
     }
 
-    @Composable
-    fun OpenContainer(data: ReservationUiState) {
-        ReservationContainer(
-            data
-        ) {
-            finish()
-        }
-    }
 
     @Composable
     fun ReservationContainer(data: ReservationUiState, onBackPress: () -> Unit) {
@@ -137,19 +152,21 @@ class ReservationActivity : ComponentActivity() {
                     }, onClick = {
                         editEnabled = true
 
-                        val intent = Intent(this@ReservationActivity, ReservationEditActivity::class.java)
+                        val intent =
+                            Intent(this@ReservationActivity, ReservationEditActivity::class.java)
 
                         val reservationData = ReservationData(
                             data.id!!,
                             data.title,
                             data.sum.toInt(),
-                            Utils.convertStringToDate2("2010-05-30"))
+                            Utils.convertStringToDate2("2010-05-30")
+                        )
 
                         var reservationObject = ReservationParcelable(
-                                reservationData.id,
-                        reservationData.title,
-                        reservationData.sum,
-                        reservationData.date
+                            reservationData.id,
+                            reservationData.title,
+                            reservationData.sum,
+                            reservationData.date
                         )
                         intent.putExtra("reservationData", reservationObject as Serializable)
 

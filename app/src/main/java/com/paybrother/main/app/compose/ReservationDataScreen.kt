@@ -23,9 +23,10 @@ fun ReservationDataScreen(data: ReservationUiState, onBackPress: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReservationDataContainer(data: ReservationUiState) {
-    var reservationTitle = remember { mutableStateOf(data.title) }
-    var reservationSum = remember { mutableStateOf(data.sum) }
-    var reservationDate = remember { mutableStateOf(data.date) }
+    //var reservationUiState = remember { mutableStateOf(data) }
+//    var reservationTitle = remember { mutableStateOf(data.title) }
+//    var reservationSum = remember { mutableStateOf(data.sum) }
+//    var reservationDate = remember { mutableStateOf(data.date) }
 
     Column(
         modifier = Modifier
@@ -37,16 +38,16 @@ fun ReservationDataContainer(data: ReservationUiState) {
             Column {
                 Text(
                     text = data.id.toString())
-                Text(text = reservationTitle.value)
-                Text(text = reservationSum.value)
-                Text(text = reservationDate.value)
+                Text(text = data.title)
+                Text(text = data.sum)
+                Text(text = data.date)
 
                 OutlinedTextField(
-                    value = reservationTitle.value,
+                    value = data.title,
                     onValueChange = {
-                        reservationTitle.value = it
+                        data.title = it
                     },
-                    label = { Text(reservationTitle.value)}
+                    label = { Text(data.title)}
                 )
 
             }
