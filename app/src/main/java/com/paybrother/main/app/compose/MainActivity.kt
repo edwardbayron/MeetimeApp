@@ -1,26 +1,35 @@
 package com.paybrother.main.app.compose
 
+import android.R
 import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paybrother.db.Reservations
@@ -30,6 +39,7 @@ import com.paybrother.main.app.viewmodels.LoanViewModel
 import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import java.io.Serializable
+import java.time.format.TextStyle
 import java.util.*
 
 class MainActivity : ComponentActivity() {
@@ -42,6 +52,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
+
                     val owner = LocalViewModelStoreOwner.current
 
                     owner?.let{
@@ -99,6 +111,7 @@ fun HomeDataContainer(viewModel: LoanViewModel){
         .padding(top = 20.dp)) {
 
         val listReservations by viewModel.allReservations?.observeAsState(listOf())!!
+        val addReservation = remember { mutableStateOf(false)}
 
         listReservations.forEach { item ->
             ReservationElementView(
@@ -120,7 +133,12 @@ fun HomeDataContainer(viewModel: LoanViewModel){
                     .align(alignment = Alignment.BottomEnd)
                     .padding(bottom = 10.dp, end = 10.dp),
                 onClick = {
-                    viewModel.insertReservation()
+                    //viewModel.insertReservation()
+
+                    addReservation.value = true
+
+
+
                 },
                 containerColor = Color.Red,
                 shape = RoundedCornerShape(16.dp),
@@ -130,6 +148,133 @@ fun HomeDataContainer(viewModel: LoanViewModel){
                     contentDescription = "Add FAB",
                     tint = Color.White,
                 )
+            }
+        }
+
+        if(addReservation.value){
+            AddReservationDialog()
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddReservationDialog(){
+    val txtFieldError = remember { mutableStateOf("") }
+    val reservationTitle = remember { mutableStateOf("") }
+    val reservationSum = remember { mutableStateOf("") }
+    val reservationDate = remember { mutableStateOf("") }
+
+    Dialog(onDismissRequest = { /*TODO*/ }) {
+        Surface(shape = RoundedCornerShape(16.dp),
+            color = Color.White) {
+            Box(contentAlignment = Alignment.Center){
+                Column(modifier = Modifier.padding(20.dp)) {
+                    Text(
+                        text = "Add reservation",
+                        style = androidx.compose.ui.text.TextStyle(
+                            fontSize = 24.sp,
+                            fontFamily = FontFamily.Default,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                BorderStroke(
+                                    width = 2.dp,
+                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.holo_green_light else R.color.holo_red_dark)
+                                ),
+                                shape = RoundedCornerShape(50)
+                            ),
+                        colors = TextFieldDefaults.textFieldColors(
+                            containerColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+                        ),
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Money,
+                                contentDescription = "",
+                                tint = colorResource(android.R.color.holo_green_light),
+                                modifier = Modifier
+                                    .width(20.dp)
+                                    .height(20.dp)
+                            )
+                        },
+                        placeholder = { Text(text = "Enter title") },
+                        value = reservationTitle.value,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        onValueChange = {
+                            reservationTitle.value = it.take(10)
+                        })
+
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                BorderStroke(
+                                    width = 2.dp,
+                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.holo_green_light else R.color.holo_red_dark)
+                                ),
+                                shape = RoundedCornerShape(50)
+                            ),
+                        colors = TextFieldDefaults.textFieldColors(
+                            containerColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+                        ),
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Money,
+                                contentDescription = "",
+                                tint = colorResource(android.R.color.holo_green_light),
+                                modifier = Modifier
+                                    .width(20.dp)
+                                    .height(20.dp)
+                            )
+                        },
+                        placeholder = { Text(text = "Enter sum") },
+                        value = reservationSum.value,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        onValueChange = {
+                            reservationSum.value = it.take(10)
+                        })
+
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                BorderStroke(
+                                    width = 2.dp,
+                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.holo_green_light else R.color.holo_red_dark)
+                                ),
+                                shape = RoundedCornerShape(50)
+                            ),
+                        colors = TextFieldDefaults.textFieldColors(
+                            containerColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+                        ),
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Money,
+                                contentDescription = "",
+                                tint = colorResource(android.R.color.holo_green_light),
+                                modifier = Modifier
+                                    .width(20.dp)
+                                    .height(20.dp)
+                            )
+                        },
+                        placeholder = { Text(text = "Enter date") },
+                        value = reservationDate.value,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        onValueChange = {
+                            reservationDate.value = it.take(10)
+                        })
+                }
             }
         }
     }
