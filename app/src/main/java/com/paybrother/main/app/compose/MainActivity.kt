@@ -164,8 +164,9 @@ fun HomeDataContainer(viewModel: LoanViewModel) {
 @Composable
 fun AddReservationDialog(viewModel: LoanViewModel) {
     val txtFieldError = remember { mutableStateOf("") }
-    val reservationTitle = remember { mutableStateOf("") }
-    val reservationSum = remember { mutableStateOf("") }
+    val reservationName = remember { mutableStateOf("") }
+    val reservationPhoneNumber = remember { mutableStateOf("") }
+    val reservationEvent = remember { mutableStateOf("") }
     val reservationDate = remember { mutableStateOf("") }
     val shouldDismiss = remember { mutableStateOf(false) }
 
@@ -211,11 +212,11 @@ fun AddReservationDialog(viewModel: LoanViewModel) {
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
-                        placeholder = { Text(text = "Enter title") },
-                        value = reservationTitle.value,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        placeholder = { Text(text = "Enter name") },
+                        value = reservationName.value,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         onValueChange = {
-                            reservationTitle.value = it.take(10)
+                            reservationName.value = it.take(10)
                         })
 
                     TextField(
@@ -234,11 +235,34 @@ fun AddReservationDialog(viewModel: LoanViewModel) {
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
-                        placeholder = { Text(text = "Enter sum") },
-                        value = reservationSum.value,
+                        placeholder = { Text(text = "Enter phoneNumber") },
+                        value = reservationPhoneNumber.value,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = {
-                            reservationSum.value = it.take(10)
+                            reservationPhoneNumber.value = it.take(10)
+                        })
+
+                    TextField(
+                        modifier = Modifier
+                            .padding(top = 12.dp)
+                            .fillMaxWidth()
+                            .border(
+                                BorderStroke(
+                                    width = 2.dp,
+                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.holo_red_dark)
+                                ),
+                                shape = RoundedCornerShape(10)
+                            ),
+                        colors = TextFieldDefaults.textFieldColors(
+                            containerColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+                        ),
+                        placeholder = { Text(text = "Enter event") },
+                        value = reservationEvent.value,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                        onValueChange = {
+                            reservationEvent.value = it.take(10)
                         })
 
                     TextField(
@@ -268,8 +292,9 @@ fun AddReservationDialog(viewModel: LoanViewModel) {
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             viewModel.insertReservation(
-                                reservationTitle.value,
-                                reservationSum.value,
+                                reservationName.value,
+                                reservationPhoneNumber.value,
+                                reservationEvent.value,
                                 reservationDate.value
                             )
 
