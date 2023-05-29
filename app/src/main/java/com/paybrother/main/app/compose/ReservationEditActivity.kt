@@ -81,7 +81,6 @@ fun openEditContainer(dataTest: ReservationUiState, activity: ComponentActivity,
             activity.finish()
         },
         onSavePress = { state ->
-            Log.e("TEST", "onSavePress state title: "+state.name)
             viewModel.updateReservation(state = state)
             val intent = Intent()
             intent.putExtra("id", state.id)
