@@ -49,8 +49,9 @@ class ReservationActivity : ComponentActivity() {
 
                 dataReceived = ReservationUiState(
                     data?.getLongExtra("id", 0L),
-                    data?.getStringExtra("title").toString(),
-                    data?.getStringExtra("sum").toString(),
+                    data?.getStringExtra("name").toString(),
+                    data?.getStringExtra("phoneNumber").toString(),
+                    data?.getStringExtra("event").toString(),
                     data?.getStringExtra("date").toString()
                 )
 
@@ -88,8 +89,9 @@ class ReservationActivity : ComponentActivity() {
             viewModel.selectedReservation(
                 ReservationUiState(
                     id = data.id,
-                    title = data.title,
-                    sum = data.sum.toString(),
+                    name = data.name,
+                    phoneNumber = data.phoneNumber,
+                    event = data.event,
                     date = data.date.toString()
                 ))
 
@@ -157,15 +159,17 @@ class ReservationActivity : ComponentActivity() {
 
                         val reservationData = ReservationData(
                             data.id!!,
-                            data.title,
-                            data.sum.toInt(),
+                            data.name,
+                            data.phoneNumber,
+                            data.event,
                             Utils.convertStringToDate2("2010-05-30")
                         )
 
                         var reservationObject = ReservationParcelable(
                             reservationData.id,
-                            reservationData.title,
-                            reservationData.sum,
+                            reservationData.name,
+                            reservationData.phoneNumber,
+                            reservationData.event,
                             reservationData.date
                         )
                         intent.putExtra("reservationData", reservationObject as Serializable)
@@ -189,7 +193,7 @@ class ReservationActivity : ComponentActivity() {
     @Composable
     fun DefaultPreview2() {
         MeetimeApp_v3Theme {
-            ReservationContainer(ReservationUiState(1234567890L, "title", "sum", "date"), {})
+            ReservationContainer(ReservationUiState(1234567890L, "title", "58053317", "event", "1992-07-15"), {})
         }
     }
 }

@@ -36,18 +36,17 @@ fun ReservationDataContainer(data: ReservationUiState) {
 
         Box(Modifier.fillMaxSize()) {
             Column {
-                Text(
-                    text = data.id.toString())
-                Text(text = data.title)
-                Text(text = data.sum)
+                Text(text = data.name)
+                Text(text = data.phoneNumber)
+                Text(text = data.event)
                 Text(text = data.date)
 
                 OutlinedTextField(
-                    value = data.title,
+                    value = data.name,
                     onValueChange = {
-                        data.title = it
+                        data.name = it
                     },
-                    label = { Text(data.title)}
+                    label = { Text(data.name)}
                 )
 
             }
@@ -78,5 +77,5 @@ fun EditAppBarView(data: ReservationUiState, onBackPress: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewReservationDataScreen(){
-    ReservationDataContainer(ReservationUiState(1234567890L,"test", "test", "test"))
+    ReservationDataContainer(ReservationUiState(1234567890L,"test", "test", "test", "1992-07-15"))
 }

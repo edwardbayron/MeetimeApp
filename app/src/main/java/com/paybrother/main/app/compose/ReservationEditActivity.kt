@@ -57,8 +57,9 @@ class ReservationEditActivity : ComponentActivity() {
                         val dataTest =
                             ReservationUiState(
                                 id = data.id,
-                                title = data.title,
-                                sum = data.sum.toString(),
+                                name = data.name,
+                                phoneNumber = data.phoneNumber,
+                                event = data.event,
                                 date = data.date.toString()
                             )
 
@@ -80,12 +81,13 @@ fun openEditContainer(dataTest: ReservationUiState, activity: ComponentActivity,
             activity.finish()
         },
         onSavePress = { state ->
-            Log.e("TEST", "onSavePress state title: "+state?.title)
+            Log.e("TEST", "onSavePress state title: "+state.name)
             viewModel.updateReservation(state = state)
             val intent = Intent()
             intent.putExtra("id", state.id)
-            intent.putExtra("title", state.title)
-            intent.putExtra("sum", state.sum)
+            intent.putExtra("name", state.name)
+            intent.putExtra("phoneNumber", state.phoneNumber)
+            intent.putExtra("event", state.event)
             intent.putExtra("date", state.date)
             activity.setResult(RESULT_OK, intent)
             activity.finish()
@@ -151,8 +153,9 @@ fun ReservationEditDataContainer(
     data: ReservationUiState,
     onSavePress: (state: ReservationUiState) -> Unit
 ) {
-    val reservationTitleText = rememberSaveable { mutableStateOf(data.title) }
-    val reservationSumText = rememberSaveable { mutableStateOf(data.sum) }
+    val reservationTitleText = rememberSaveable { mutableStateOf(data.name) }
+    val reservationPhoneNumberText = rememberSaveable { mutableStateOf(data.phoneNumber) }
+    val reservationEventText = rememberSaveable { mutableStateOf(data.event)}
     val reservationDateText = rememberSaveable { mutableStateOf(data.date) }
 
     Column(
@@ -179,8 +182,20 @@ fun ReservationEditDataContainer(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp),
-                    value = reservationSumText.value,
-                    onValueChange = { reservationSumText.value = it },
+                    value = reservationPhoneNumberText.value,
+                    onValueChange = { reservationPhoneNumberText.value = it },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        containerColor = Color.White
+                    )
+                )
+
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    value = reservationEventText.value,
+                    onValueChange = { reservationEventText.value = it },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.Black,
                         containerColor = Color.White
@@ -202,7 +217,8 @@ fun ReservationEditDataContainer(
                 val savedData = ReservationUiState(
                     data.id,
                     reservationTitleText.value,
-                    reservationSumText.value,
+                    reservationPhoneNumberText.value,
+                    reservationEventText.value,
                     reservationDateText.value
                 )
 
@@ -224,6 +240,6 @@ fun ReservationEditDataContainer(
 @Composable
 fun DefaultPreview() {
     MeetimeApp_v3Theme {
-        ReservationEditContainer(ReservationUiState(1234567890L,"Title", "Sum", "2010-05-30"), {}, {})
+        ReservationEditContainer(ReservationUiState(1234567890L,"Title", "Sum", "event","2010-05-30"), {}, {})
     }
 }

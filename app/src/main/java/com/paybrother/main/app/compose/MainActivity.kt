@@ -325,7 +325,8 @@ private fun openReservationActivity(context: Context, reservation: Reservations)
     val reservationObject = ReservationParcelable(
         reservation.id!!,
         reservation.name,
-        reservation.id?.toInt()!!,
+        reservation.phoneNumber,
+        reservation.event,
         Utils.convertStringToDate(reservation.date)!!
     )
     intent.putExtra("reservationData", reservationObject as Serializable)

@@ -28,7 +28,7 @@ class ReservationsRepository(private val reservationsDao: ReservationsDao) {
 
     fun updateReservation(state: ReservationUiState){
         coroutineScope.launch(Dispatchers.IO) {
-            reservationsDao.updateReservation(state.id, state.title)
+            reservationsDao.updateReservation(state.id, state.name)
         }
     }
 
