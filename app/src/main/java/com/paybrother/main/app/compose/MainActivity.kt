@@ -12,6 +12,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.Add
@@ -30,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paybrother.db.Reservations
@@ -56,7 +58,7 @@ class MainActivity : ComponentActivity() {
 
                     val owner = LocalViewModelStoreOwner.current
 
-                    owner?.let{
+                    owner?.let {
                         val viewModel: LoanViewModel = viewModel(
                             it,
                             "LoanViewModel",
@@ -83,7 +85,7 @@ fun HomeContainer(viewModel: LoanViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBarView(){
+fun AppBarView() {
     TopAppBar(
         colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
         title = {
@@ -104,14 +106,16 @@ fun AppBarView(){
 }
 
 @Composable
-fun HomeDataContainer(viewModel: LoanViewModel){
+fun HomeDataContainer(viewModel: LoanViewModel) {
     val context = LocalContext.current
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(top = 20.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 20.dp)
+    ) {
 
         val listReservations by viewModel.allReservations?.observeAsState(listOf())!!
-        val addReservation = remember { mutableStateOf(false)}
+        val addReservation = remember { mutableStateOf(false) }
 
         listReservations.forEach { item ->
             ReservationElementView(
@@ -127,7 +131,7 @@ fun HomeDataContainer(viewModel: LoanViewModel){
         }
 
 
-        Box(Modifier.fillMaxSize()){
+        Box(Modifier.fillMaxSize()) {
             FloatingActionButton(
                 modifier = Modifier
                     .align(alignment = Alignment.BottomEnd)
@@ -136,7 +140,6 @@ fun HomeDataContainer(viewModel: LoanViewModel){
                     //viewModel.insertReservation()
 
                     addReservation.value = true
-
 
 
                 },
@@ -151,24 +154,37 @@ fun HomeDataContainer(viewModel: LoanViewModel){
             }
         }
 
-        if(addReservation.value){
-            AddReservationDialog()
+        if (addReservation.value) {
+            AddReservationDialog(viewModel)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddReservationDialog(){
+fun AddReservationDialog(viewModel: LoanViewModel) {
     val txtFieldError = remember { mutableStateOf("") }
     val reservationTitle = remember { mutableStateOf("") }
     val reservationSum = remember { mutableStateOf("") }
     val reservationDate = remember { mutableStateOf("") }
+    val shouldDismiss = remember { mutableStateOf(false) }
 
-    Dialog(onDismissRequest = { /*TODO*/ }) {
-        Surface(shape = RoundedCornerShape(16.dp),
-            color = Color.White) {
-            Box(contentAlignment = Alignment.Center){
+    if (shouldDismiss.value) return
+
+    Dialog(
+        onDismissRequest = {
+            shouldDismiss.value = true
+        },
+        properties = DialogProperties(
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true,
+        )
+        ) {
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = Color.White
+        ) {
+            Box(contentAlignment = Alignment.Center) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
                         text = "Add reservation",
@@ -181,29 +197,20 @@ fun AddReservationDialog(){
 
                     TextField(
                         modifier = Modifier
+                            .padding(top = 12.dp)
                             .fillMaxWidth()
                             .border(
                                 BorderStroke(
                                     width = 2.dp,
-                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.holo_green_light else R.color.holo_red_dark)
+                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.holo_red_dark)
                                 ),
-                                shape = RoundedCornerShape(50)
+                                shape = RoundedCornerShape(10)
                             ),
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Filled.Money,
-                                contentDescription = "",
-                                tint = colorResource(android.R.color.holo_green_light),
-                                modifier = Modifier
-                                    .width(20.dp)
-                                    .height(20.dp)
-                            )
-                        },
                         placeholder = { Text(text = "Enter title") },
                         value = reservationTitle.value,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -213,29 +220,20 @@ fun AddReservationDialog(){
 
                     TextField(
                         modifier = Modifier
+                            .padding(top = 12.dp)
                             .fillMaxWidth()
                             .border(
                                 BorderStroke(
                                     width = 2.dp,
-                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.holo_green_light else R.color.holo_red_dark)
+                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.holo_red_dark)
                                 ),
-                                shape = RoundedCornerShape(50)
+                                shape = RoundedCornerShape(10)
                             ),
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Filled.Money,
-                                contentDescription = "",
-                                tint = colorResource(android.R.color.holo_green_light),
-                                modifier = Modifier
-                                    .width(20.dp)
-                                    .height(20.dp)
-                            )
-                        },
                         placeholder = { Text(text = "Enter sum") },
                         value = reservationSum.value,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -245,35 +243,43 @@ fun AddReservationDialog(){
 
                     TextField(
                         modifier = Modifier
+                            .padding(top = 12.dp)
                             .fillMaxWidth()
                             .border(
                                 BorderStroke(
                                     width = 2.dp,
-                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.holo_green_light else R.color.holo_red_dark)
+                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.holo_red_dark)
                                 ),
-                                shape = RoundedCornerShape(50)
+                                shape = RoundedCornerShape(10)
                             ),
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Filled.Money,
-                                contentDescription = "",
-                                tint = colorResource(android.R.color.holo_green_light),
-                                modifier = Modifier
-                                    .width(20.dp)
-                                    .height(20.dp)
-                            )
-                        },
                         placeholder = { Text(text = "Enter date") },
                         value = reservationDate.value,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = {
                             reservationDate.value = it.take(10)
                         })
+
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            viewModel.insertReservation(
+                                reservationTitle.value,
+                                reservationSum.value,
+                                reservationDate.value
+                            )
+
+                            shouldDismiss.value = true
+                        },
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
+                    ) {
+                        Text("Save")
+                    }
                 }
             }
         }
@@ -289,9 +295,14 @@ fun MainPreview() {
     }
 }
 
-private fun openReservationActivity(context: Context, reservation: Reservations){
+private fun openReservationActivity(context: Context, reservation: Reservations) {
     val intent = Intent(context, ReservationActivity::class.java)
-    val reservationObject = ReservationParcelable(reservation.id!!, reservation.name, reservation.id?.toInt()!!, Utils.convertStringToDate(reservation.date)!!)
+    val reservationObject = ReservationParcelable(
+        reservation.id!!,
+        reservation.name,
+        reservation.id?.toInt()!!,
+        Utils.convertStringToDate(reservation.date)!!
+    )
     intent.putExtra("reservationData", reservationObject as Serializable)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
     context.startActivity(intent)

@@ -32,8 +32,6 @@ class ReservationsRepository(private val reservationsDao: ReservationsDao) {
 
     fun updateReservation(state: ReservationUiState){
         coroutineScope.launch(Dispatchers.IO) {
-            Log.e("TEST", "id: "+state.id)
-            Log.e("TEST", "id db: "+allReservations.value?.get(0)?.id)
             reservationsDao.updateReservation(state.id, state.title)
         }
     }
