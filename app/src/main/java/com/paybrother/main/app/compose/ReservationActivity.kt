@@ -60,7 +60,6 @@ class ReservationActivity : ComponentActivity() {
             }
 
             Activity.RESULT_CANCELED -> {
-                viewModel.selectedReservation(dataReceived)
             }
             else -> {
                 Toast.makeText(this, "Edit Cancelled", Toast.LENGTH_SHORT).show()

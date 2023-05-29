@@ -43,6 +43,7 @@ fun ReservationDataContainer(data: ReservationUiState) {
 
                 OutlinedTextField(
                     value = data.name,
+                    enabled = false,
                     onValueChange = {
                         data.name = it
                     },
