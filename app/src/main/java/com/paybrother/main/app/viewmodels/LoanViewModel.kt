@@ -47,8 +47,8 @@ class LoanViewModel(application: Application) : ViewModel() {
         uiState.value = state
     }
 
-    fun insertReservation(title: String, sum: String, date: String){
-        repository?.insertReservation(ReservationItem(null, title, sum, date))
+    fun insertReservation(name: String, phoneNumber: String, event: String, date: String){
+        repository?.insertReservation(ReservationItem(name, phoneNumber, event, date))
     }
 
     fun deleteReservation(name: String){

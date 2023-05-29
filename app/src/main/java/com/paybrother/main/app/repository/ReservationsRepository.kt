@@ -1,6 +1,5 @@
 package com.paybrother.main.app.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.paybrother.db.Reservations
@@ -8,9 +7,6 @@ import com.paybrother.db.ReservationsDao
 import com.paybrother.main.app.data.ReservationItem
 import com.paybrother.main.app.data.ReservationUiState
 import kotlinx.coroutines.*
-import java.lang.Math.random
-import java.util.UUID
-import kotlin.random.Random
 
 class ReservationsRepository(private val reservationsDao: ReservationsDao) {
 
@@ -20,7 +16,7 @@ class ReservationsRepository(private val reservationsDao: ReservationsDao) {
 
     fun insertReservation(reservation: ReservationItem){
         coroutineScope.launch(Dispatchers.IO) {
-            reservationsDao.insertReservation(id = Random.nextLong(), name = reservation.name, phoneNumber = reservation.name, event = reservation.event, date = reservation.date)
+            reservationsDao.insertReservation(id = null, name = reservation.name, phoneNumber = reservation.phoneNumber, event = reservation.event, date = reservation.date)
         }
     }
 
