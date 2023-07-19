@@ -161,7 +161,7 @@ class ReservationActivity : ComponentActivity() {
                             data.name,
                             data.phoneNumber,
                             data.event,
-                            Utils.convertStringToDate2("2010-05-30")
+                            "2010-05-30"
                         )
 
                         var reservationObject = ReservationParcelable(

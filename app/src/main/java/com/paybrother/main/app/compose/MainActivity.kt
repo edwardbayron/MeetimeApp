@@ -119,8 +119,9 @@ fun HomeDataContainer(viewModel: LoanViewModel) {
 
         listReservations.forEach { item ->
             ReservationElementView(
-                title = item.name,
-                sum = item.id?.toInt()!!,
+                eventName = item.event,
+                name = item.name,
+                number = item.phoneNumber.toInt(),
                 date = item.date,
                 onCardClick = {
                     openReservationActivity(context, item)
@@ -327,7 +328,7 @@ private fun openReservationActivity(context: Context, reservation: Reservations)
         reservation.name,
         reservation.phoneNumber,
         reservation.event,
-        Utils.convertStringToDate(reservation.date)!!
+        reservation.date
     )
     intent.putExtra("reservationData", reservationObject as Serializable)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
