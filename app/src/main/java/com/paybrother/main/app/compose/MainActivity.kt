@@ -1,6 +1,6 @@
 package com.paybrother.main.app.compose
 
-import android.R
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.content.Intent
@@ -12,7 +12,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Colors
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.Add
@@ -20,10 +20,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,20 +35,35 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.paybrother.R
 import com.paybrother.db.Reservations
 import com.paybrother.main.app.data.ReservationParcelable
-import com.paybrother.main.app.utils.Utils
+import com.paybrother.main.app.navigation.BottomNavContentScreens.AddPostScreen
+import com.paybrother.main.app.navigation.BottomNavContentScreens.HomeScreen
+import com.paybrother.main.app.navigation.BottomNavContentScreens.JobScreen
+import com.paybrother.main.app.navigation.BottomNavContentScreens.NetworkScreen
+import com.paybrother.main.app.navigation.BottomNavContentScreens.NotificationScreen
+import com.paybrother.main.app.navigation.BottomNavItem
 import com.paybrother.main.app.viewmodels.LoanViewModel
 import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import java.io.Serializable
-import java.time.format.TextStyle
 import java.util.*
 
 class MainActivity : ComponentActivity() {
 
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -55,20 +73,35 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
+                    val navController = rememberNavController()
+                    val (appBarView, homeDataContainer, navigationGraph) = createRefs()
 
-                    val owner = LocalViewModelStoreOwner.current
+                    Scaffold(
+                        bottomBar = { BottomNavigation(navController = navController) }
+                    ) {
 
-                    owner?.let {
-                        val viewModel: LoanViewModel = viewModel(
-                            it,
-                            "LoanViewModel",
-                            MainViewModelFactory(
-                                LocalContext.current.applicationContext as Application
-                            )
-                        )
+                        Column {
+                            val owner = LocalViewModelStoreOwner.current
 
-                        HomeContainer(viewModel)
+                            owner?.let {
+                                val viewModel: LoanViewModel = viewModel(
+                                    it,
+                                    "LoanViewModel",
+                                    MainViewModelFactory(
+                                        LocalContext.current.applicationContext as Application
+                                    )
+                                )
+                                AppBarView()
+                                HomeContainer(viewModel)
+                                NavigationGraph(navController = navController)
+                            }
+
+
+                        }
+
                     }
+
+
                 }
             }
         }
@@ -78,7 +111,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun HomeContainer(viewModel: LoanViewModel) {
     Column {
-        AppBarView()
         HomeDataContainer(viewModel)
     }
 }
@@ -92,17 +124,81 @@ fun AppBarView() {
             Text("Home")
         },
         navigationIcon = {
-            IconButton(onClick = {/* Do Something*/ }) {
+            IconButton(onClick = {
+
+            }) {
                 Icon(Icons.Filled.Menu, null)
             }
         }, actions = {
             IconButton(onClick = {/* Do Something*/ }) {
                 Icon(Icons.Filled.Search, null)
             }
-            IconButton(onClick = {/* Do Something*/ }) {
-                Icon(Icons.Filled.Settings, null)
-            }
         })
+}
+
+@Composable
+fun NavigationGraph(navController: NavHostController) {
+    NavHost(
+        navController,
+        startDestination = BottomNavItem.Home.screen_route,
+    ) {
+        composable(BottomNavItem.Home.screen_route) {
+            HomeScreen()
+        }
+        composable(BottomNavItem.MyNetwork.screen_route) {
+            NetworkScreen()
+        }
+        composable(BottomNavItem.AddPost.screen_route) {
+            AddPostScreen()
+        }
+        composable(BottomNavItem.Notification.screen_route) {
+            NotificationScreen()
+        }
+        composable(BottomNavItem.Jobs.screen_route) {
+            JobScreen()
+        }
+    }
+}
+
+@Composable
+fun BottomNavigation(navController: NavController) {
+    val items = listOf(
+        BottomNavItem.Home,
+        BottomNavItem.MyNetwork,
+        BottomNavItem.AddPost,
+        BottomNavItem.Notification,
+        BottomNavItem.Jobs
+    )
+    androidx.compose.material.BottomNavigation(
+        backgroundColor = MaterialTheme.colorScheme.primary,
+        contentColor = Color.Black
+    ) {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route
+        items.forEach { item ->
+            BottomNavigationItem(
+                icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
+                label = { Text(text = item.title,
+                    fontSize = 9.sp) },
+                selectedContentColor = Color.Black,
+                unselectedContentColor = Color.Black.copy(0.4f),
+                alwaysShowLabel = true,
+                selected = currentRoute == item.screen_route,
+                onClick = {
+                    navController.navigate(item.screen_route) {
+
+                        navController.graph.startDestinationRoute?.let { screen_route ->
+                            popUpTo(screen_route) {
+                                saveState = true
+                            }
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+            )
+        }
+    }
 }
 
 @Composable
@@ -204,7 +300,7 @@ fun AddReservationDialog(viewModel: LoanViewModel) {
                             .border(
                                 BorderStroke(
                                     width = 2.dp,
-                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.holo_red_dark)
+                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.purple_700)
                                 ),
                                 shape = RoundedCornerShape(10)
                             ),
@@ -227,7 +323,7 @@ fun AddReservationDialog(viewModel: LoanViewModel) {
                             .border(
                                 BorderStroke(
                                     width = 2.dp,
-                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.holo_red_dark)
+                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.green_obstacle)
                                 ),
                                 shape = RoundedCornerShape(10)
                             ),
@@ -250,7 +346,7 @@ fun AddReservationDialog(viewModel: LoanViewModel) {
                             .border(
                                 BorderStroke(
                                     width = 2.dp,
-                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.holo_red_dark)
+                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.purple_500)
                                 ),
                                 shape = RoundedCornerShape(10)
                             ),
@@ -273,7 +369,7 @@ fun AddReservationDialog(viewModel: LoanViewModel) {
                             .border(
                                 BorderStroke(
                                     width = 2.dp,
-                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.holo_red_dark)
+                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.purple_700)
                                 ),
                                 shape = RoundedCornerShape(10)
                             ),
