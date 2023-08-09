@@ -112,6 +112,7 @@ class MainActivity : ComponentActivity() {
 fun HomeContainer(viewModel: LoanViewModel) {
     Column {
         HomeDataContainer(viewModel)
+
     }
 }
 
@@ -213,47 +214,46 @@ fun HomeDataContainer(viewModel: LoanViewModel) {
         val listReservations by viewModel.allReservations?.observeAsState(listOf())!!
         val addReservation = remember { mutableStateOf(false) }
 
-        listReservations.forEach { item ->
-            ReservationElementView(
-                eventName = item.event,
-                name = item.name,
-                number = item.phoneNumber.toInt(),
-                date = item.date,
-                onCardClick = {
-                    openReservationActivity(context, item)
-                },
-                onDeleteClick = {
-                    viewModel.deleteReservation(item.name)
-                })
-        }
-
-
-        Box(Modifier.fillMaxSize()) {
-            FloatingActionButton(
-                modifier = Modifier
-                    .align(alignment = Alignment.BottomEnd)
-                    .padding(bottom = 10.dp, end = 10.dp),
-                onClick = {
-                    //viewModel.insertReservation()
-
-                    addReservation.value = true
-
-
-                },
-                containerColor = Color.Red,
-                shape = RoundedCornerShape(16.dp),
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = "Add FAB",
-                    tint = Color.White,
-                )
+            listReservations.forEach { item ->
+                ReservationElementView(
+                    eventName = item.event,
+                    name = item.name,
+                    number = item.phoneNumber.toInt(),
+                    date = item.date,
+                    onCardClick = {
+                        openReservationActivity(context, item)
+                    },
+                    onDeleteClick = {
+                        viewModel.deleteReservation(item.name)
+                    })
             }
-        }
 
-        if (addReservation.value) {
-            AddReservationDialog(viewModel)
-        }
+            Box(Modifier.fillMaxSize()) {
+                FloatingActionButton(
+                    modifier = Modifier
+                        .align(alignment = Alignment.BottomEnd)
+                        .padding(bottom = 10.dp, end = 10.dp),
+                    onClick = {
+                        //viewModel.insertReservation()
+
+                        addReservation.value = true
+
+
+                    },
+                    containerColor = Color.Red,
+                    shape = RoundedCornerShape(16.dp),
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Add,
+                        contentDescription = "Add FAB",
+                        tint = Color.White,
+                    )
+                }
+            }
+
+            if (addReservation.value) {
+                AddReservationDialog(viewModel)
+            }
     }
 }
 
