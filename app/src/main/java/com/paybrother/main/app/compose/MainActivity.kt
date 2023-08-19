@@ -92,12 +92,14 @@ class MainActivity : ComponentActivity() {
                                     )
                                 )
                                 AppBarView()
-                                HomeContainer(viewModel)
-                                NavigationGraph(navController = navController)
+                                NavigationGraph(navController = navController, viewModel)
+
                             }
 
 
                         }
+
+
 
                     }
 
@@ -112,7 +114,6 @@ class MainActivity : ComponentActivity() {
 fun HomeContainer(viewModel: LoanViewModel) {
     Column {
         HomeDataContainer(viewModel)
-
     }
 }
 
@@ -138,13 +139,13 @@ fun AppBarView() {
 }
 
 @Composable
-fun NavigationGraph(navController: NavHostController) {
+fun NavigationGraph(navController: NavHostController, viewModel: LoanViewModel) {
     NavHost(
         navController,
         startDestination = BottomNavItem.Home.screen_route,
     ) {
         composable(BottomNavItem.Home.screen_route) {
-            HomeScreen()
+            HomeContainer(viewModel)
         }
         composable(BottomNavItem.MyNetwork.screen_route) {
             NetworkScreen()
