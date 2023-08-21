@@ -18,7 +18,7 @@ import com.paybrother.R
 object BottomNavContentScreens {
 
     @Composable
-    fun HomeScreen() {
+    fun EmptyScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -26,7 +26,7 @@ object BottomNavContentScreens {
                 .wrapContentSize(Alignment.Center)
         ) {
             Text(
-                text = "Home Screen",
+                text = "Empty Screen",
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -37,7 +37,7 @@ object BottomNavContentScreens {
     }
 
     @Composable
-    fun NetworkScreen() {
+    fun AddReservationScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -45,26 +45,7 @@ object BottomNavContentScreens {
                 .wrapContentSize(Alignment.Center)
         ) {
             Text(
-                text = "My Network Screen",
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp
-            )
-        }
-    }
-
-    @Composable
-    fun AddPostScreen() {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(id = R.color.white))
-                .wrapContentSize(Alignment.Center)
-        ) {
-            Text(
-                text = "Add Post Screen",
+                text = "Add Reservation Screen",
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -96,7 +77,7 @@ object BottomNavContentScreens {
 
 
     @Composable
-    fun JobScreen() {
+    fun ContactsScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -104,7 +85,7 @@ object BottomNavContentScreens {
                 .wrapContentSize(Alignment.Center)
         ) {
             Text(
-                text = "Jobs Screen",
+                text = "Contacts Screen",
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
                 modifier = Modifier.align(Alignment.CenterHorizontally),

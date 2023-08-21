@@ -49,9 +49,9 @@ import androidx.navigation.compose.rememberNavController
 import com.paybrother.R
 import com.paybrother.db.Reservations
 import com.paybrother.main.app.data.ReservationParcelable
-import com.paybrother.main.app.navigation.BottomNavContentScreens.AddPostScreen
-import com.paybrother.main.app.navigation.BottomNavContentScreens.JobScreen
-import com.paybrother.main.app.navigation.BottomNavContentScreens.NetworkScreen
+import com.paybrother.main.app.navigation.BottomNavContentScreens.AddReservationScreen
+import com.paybrother.main.app.navigation.BottomNavContentScreens.ContactsScreen
+import com.paybrother.main.app.navigation.BottomNavContentScreens.EmptyScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.NotificationScreen
 import com.paybrother.main.app.navigation.BottomNavItem
 import com.paybrother.main.app.viewmodels.LoanViewModel
@@ -140,19 +140,18 @@ fun NavigationGraph(navController: NavHostController, viewModel: LoanViewModel) 
     ) {
         composable(BottomNavItem.Home.screen_route) {
             HomeContainer(viewModel)
-
         }
         composable(BottomNavItem.MyNetwork.screen_route) {
-            NetworkScreen()
+            EmptyScreen()
         }
         composable(BottomNavItem.AddPost.screen_route) {
-            AddPostScreen()
+            AddReservationScreen()
         }
         composable(BottomNavItem.Notification.screen_route) {
             NotificationScreen()
         }
         composable(BottomNavItem.Jobs.screen_route) {
-            JobScreen()
+            ContactsScreen()
         }
     }
 }
