@@ -77,10 +77,12 @@ class MainActivity : ComponentActivity() {
                     val (appBarView, homeDataContainer, navigationGraph) = createRefs()
 
                     Scaffold(
-                        bottomBar = { BottomNavigation(navController = navController) }
+                        bottomBar = {
+                            BottomNavigation(navController = navController)
+                        }
                     ) {
 
-                        Column {
+                        Column(modifier = Modifier.navigationBarsPadding()) {
                             val owner = LocalViewModelStoreOwner.current
 
                             owner?.let {
@@ -91,8 +93,13 @@ class MainActivity : ComponentActivity() {
                                         LocalContext.current.applicationContext as Application
                                     )
                                 )
+
                                 AppBarView()
+
                                 NavigationGraph(navController = navController, viewModel)
+
+
+
 
                             }
 
@@ -114,6 +121,7 @@ class MainActivity : ComponentActivity() {
 fun HomeContainer(viewModel: LoanViewModel) {
     Column {
         HomeDataContainer(viewModel)
+
     }
 }
 
@@ -146,6 +154,7 @@ fun NavigationGraph(navController: NavHostController, viewModel: LoanViewModel) 
     ) {
         composable(BottomNavItem.Home.screen_route) {
             HomeContainer(viewModel)
+
         }
         composable(BottomNavItem.MyNetwork.screen_route) {
             NetworkScreen()
@@ -213,48 +222,50 @@ fun HomeDataContainer(viewModel: LoanViewModel) {
     ) {
 
         val listReservations by viewModel.allReservations?.observeAsState(listOf())!!
-        val addReservation = remember { mutableStateOf(false) }
 
-            listReservations.forEach { item ->
-                ReservationElementView(
-                    eventName = item.event,
-                    name = item.name,
-                    number = item.phoneNumber.toInt(),
-                    date = item.date,
-                    onCardClick = {
-                        openReservationActivity(context, item)
-                    },
-                    onDeleteClick = {
-                        viewModel.deleteReservation(item.name)
-                    })
-            }
-
-            Box(Modifier.fillMaxSize()) {
-                FloatingActionButton(
-                    modifier = Modifier
-                        .align(alignment = Alignment.BottomEnd)
-                        .padding(bottom = 10.dp, end = 10.dp),
-                    onClick = {
-                        //viewModel.insertReservation()
-
-                        addReservation.value = true
+        listReservations.forEach { item ->
+            ReservationElementView(
+                eventName = item.event,
+                name = item.name,
+                number = item.phoneNumber.toInt(),
+                date = item.date,
+                onCardClick = {
+                    openReservationActivity(context, item)
+                },
+                onDeleteClick = {
+                    viewModel.deleteReservation(item.name)
+                })
+        }
 
 
-                    },
-                    containerColor = Color.Red,
-                    shape = RoundedCornerShape(16.dp),
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription = "Add FAB",
-                        tint = Color.White,
-                    )
-                }
-            }
+        FloatinActionButton(viewModel)
+    }
+}
 
-            if (addReservation.value) {
-                AddReservationDialog(viewModel)
-            }
+@Composable
+fun FloatinActionButton(viewModel: LoanViewModel){
+    val addReservation = remember { mutableStateOf(false) }
+    Box(Modifier.fillMaxSize()) {
+        FloatingActionButton(
+            modifier = Modifier
+                .align(alignment = Alignment.BottomEnd)
+                .padding(bottom = 70.dp, end = 10.dp),
+            onClick = {
+                addReservation.value = true
+            },
+            containerColor = Color.Red,
+            shape = RoundedCornerShape(16.dp),
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Add,
+                contentDescription = "Add FAB",
+                tint = Color.White,
+            )
+        }
+    }
+
+    if (addReservation.value) {
+        AddReservationDialog(viewModel)
     }
 }
 
