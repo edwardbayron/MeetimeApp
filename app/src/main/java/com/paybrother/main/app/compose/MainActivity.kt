@@ -93,24 +93,11 @@ class MainActivity : ComponentActivity() {
                                         LocalContext.current.applicationContext as Application
                                     )
                                 )
-
                                 AppBarView()
-
                                 NavigationGraph(navController = navController, viewModel)
-
-
-
-
                             }
-
-
                         }
-
-
-
                     }
-
-
                 }
             }
         }
@@ -121,7 +108,6 @@ class MainActivity : ComponentActivity() {
 fun HomeContainer(viewModel: LoanViewModel) {
     Column {
         HomeDataContainer(viewModel)
-
     }
 }
 
@@ -240,9 +226,6 @@ fun HomeDataContainer(viewModel: LoanViewModel) {
         }
         FloatinActionButton(viewModel)
     }
-
-
-
 }
 
 @Composable
