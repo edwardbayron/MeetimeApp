@@ -9,9 +9,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -35,8 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -49,7 +50,6 @@ import com.paybrother.R
 import com.paybrother.db.Reservations
 import com.paybrother.main.app.data.ReservationParcelable
 import com.paybrother.main.app.navigation.BottomNavContentScreens.AddPostScreen
-import com.paybrother.main.app.navigation.BottomNavContentScreens.HomeScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.JobScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.NetworkScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.NotificationScreen
@@ -215,31 +215,34 @@ fun BottomNavigation(navController: NavController) {
 @Composable
 fun HomeDataContainer(viewModel: LoanViewModel) {
     val context = LocalContext.current
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 20.dp)
-    ) {
+    Box (modifier = Modifier.fillMaxSize()){
+        Column(
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
 
-        val listReservations by viewModel.allReservations?.observeAsState(listOf())!!
+            val listReservations by viewModel.allReservations?.observeAsState(listOf())!!
 
-        listReservations.forEach { item ->
-            ReservationElementView(
-                eventName = item.event,
-                name = item.name,
-                number = item.phoneNumber.toInt(),
-                date = item.date,
-                onCardClick = {
-                    openReservationActivity(context, item)
-                },
-                onDeleteClick = {
-                    viewModel.deleteReservation(item.name)
-                })
+            listReservations.forEach { item ->
+                ReservationElementView(
+                    eventName = item.event,
+                    name = item.name,
+                    number = item.phoneNumber.toInt(),
+                    date = item.date,
+                    onCardClick = {
+                        openReservationActivity(context, item)
+                    },
+                    onDeleteClick = {
+                        viewModel.deleteReservation(item.name)
+                    })
+            }
         }
-
-
         FloatinActionButton(viewModel)
     }
+
+
+
 }
 
 @Composable
@@ -284,6 +287,7 @@ fun AddReservationDialog(viewModel: LoanViewModel) {
     Dialog(
         onDismissRequest = {
             shouldDismiss.value = true
+
         },
         properties = DialogProperties(
             dismissOnBackPress = true,
