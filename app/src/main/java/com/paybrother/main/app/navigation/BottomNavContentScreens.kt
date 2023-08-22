@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.paybrother.R
+import com.paybrother.main.app.compose.ContactScreenContent
 
 object BottomNavContentScreens {
 
@@ -78,21 +79,7 @@ object BottomNavContentScreens {
 
     @Composable
     fun ContactsScreen() {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(id = R.color.white))
-                .wrapContentSize(Alignment.Center)
-        ) {
-            Text(
-                text = "Contacts Screen",
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp
-            )
-        }
+        ContactScreenContent()
     }
 
 }
