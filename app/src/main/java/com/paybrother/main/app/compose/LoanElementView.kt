@@ -1,5 +1,6 @@
 package com.paybrother.main.app.compose
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -54,13 +55,14 @@ fun ReservationElementView(eventName: String, name: String, number: Int, date: S
             .shadow(4.dp)
             .background(color = MaterialTheme.colors.surface)
             .clickable {
-                if(visible && arrowExpandableIcon == Icons.Filled.ArrowDropUp){
-                    visible = false
-                    arrowExpandableIcon = Icons.Filled.ArrowDropDown
-                }
-                else{
+                if(!visible){
                     visible = true
                     arrowExpandableIcon = Icons.Filled.ArrowDropUp
+                }
+
+                else if(visible){
+                    visible = false
+                    arrowExpandableIcon = Icons.Filled.ArrowDropDown
                 }
             }
 
@@ -109,9 +111,7 @@ fun ReservationElementView(eventName: String, name: String, number: Int, date: S
                         }
                     }
                 }
-
             }
-
         }
 
         Box(Modifier.fillMaxWidth()) {
