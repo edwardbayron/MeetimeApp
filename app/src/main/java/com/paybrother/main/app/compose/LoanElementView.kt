@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
 fun ReservationElementView(eventName: String, name: String, number: Int, date: String, onCardClick: () -> Unit, onDeleteClick: () -> Unit) {
@@ -52,6 +53,16 @@ fun ReservationElementView(eventName: String, name: String, number: Int, date: S
             .padding(bottom = 12.dp, start = 20.dp, end = 20.dp)
             .shadow(4.dp)
             .background(color = MaterialTheme.colors.surface)
+            .clickable {
+                if(visible && arrowExpandableIcon == Icons.Filled.ArrowDropUp){
+                    visible = false
+                    arrowExpandableIcon = Icons.Filled.ArrowDropDown
+                }
+                else{
+                    visible = true
+                    arrowExpandableIcon = Icons.Filled.ArrowDropUp
+                }
+            }
 
     ) {
 
@@ -73,7 +84,7 @@ fun ReservationElementView(eventName: String, name: String, number: Int, date: S
                 // Fade in with the initial alpha of 0.3f.
                 initialAlpha = 0.3f
             ),
-            exit = slideOutVertically() + shrinkVertically() + fadeOut()
+            exit = slideOutVertically() + shrinkVertically() + fadeOut(),
         ) {
             Column {
                 Text(modifier = Modifier.padding(10.dp), text = name, fontSize = 14.sp)
@@ -107,7 +118,6 @@ fun ReservationElementView(eventName: String, name: String, number: Int, date: S
             IconButton(
                 modifier = Modifier.align(alignment = Alignment.CenterEnd),
                 onClick = {
-
                     if(visible && arrowExpandableIcon == Icons.Filled.ArrowDropUp){
                         visible = false
                         arrowExpandableIcon = Icons.Filled.ArrowDropDown
@@ -116,7 +126,6 @@ fun ReservationElementView(eventName: String, name: String, number: Int, date: S
                         visible = true
                         arrowExpandableIcon = Icons.Filled.ArrowDropUp
                     }
-
                 }) {
                 Icon(arrowExpandableIcon, null)
             }
@@ -124,7 +133,6 @@ fun ReservationElementView(eventName: String, name: String, number: Int, date: S
     }
 
 }
-
 
 @Preview
 @Composable
