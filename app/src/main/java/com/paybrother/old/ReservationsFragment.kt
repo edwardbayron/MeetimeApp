@@ -7,7 +7,7 @@ package com.paybrother.old//package com.paybrother
 //import android.view.ViewGroup
 //import android.widget.Toast
 //import androidx.fragment.app.Fragment
-//import com.paybrother.old.contacts.ContactItem
+//import com.paybrother.main.app.data.ContactItem
 //import com.paybrother.old.contacts.ContactsAdapter
 //import dagger.hilt.android.AndroidEntryPoint
 //import kotlinx.android.synthetic.main.fragment_reservations.*
