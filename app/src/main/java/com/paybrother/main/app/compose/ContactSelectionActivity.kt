@@ -9,14 +9,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -24,16 +25,50 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.paybrother.old.contacts.ContactItem
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import com.paybrother.main.app.viewmodels.ContactSelectionViewModel
+import com.paybrother.main.app.data.ContactItem
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 
-class ContactsPickerActivity : ComponentActivity(){
+class ContactsSelectionActivity : ComponentActivity() {
 
     //private val viewModel: ContactsPickerViewModel by viewModels()
 
     private var loadedContacts = mutableListOf<ContactItem>()
     private var checkboxTestList = mutableListOf<ContactItem>()
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            MeetimeApp_v3Theme {
+
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+
+                    Scaffold {
+                        ContactsUploadContainer(this)
+                    }
+                }
+
+
+
+
+            }
+        }
+
+    }
+
+}
 
 //    private val contactsPickerCallback = object : ContactsPickerAdapter.Callback{
 //        override fun onItemClicked(item: ContactItem) {
@@ -49,17 +84,7 @@ class ContactsPickerActivity : ComponentActivity(){
 //
 //    }
 
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        setContent {
-            MeetimeApp_v3Theme {
-                ContactsUploadContainer()
-            }
-        }
-
-    }
 
     fun oldOnCreate(){
 //        setupDataListeners()
@@ -102,17 +127,19 @@ class ContactsPickerActivity : ComponentActivity(){
 //
 //    }
 
-}
+
 
 @Composable
-fun ContactsUploadContainer(){
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+fun ContactsUploadContainer(activity: ComponentActivity){
+        //viewModel.initContactsUploading(activity)
 
         Column {
             ContactsAppBarView()
+
+            Column {
+
+
+            }
 
             Box(modifier = Modifier.fillMaxSize()) {
                 Row (modifier = Modifier.align(Alignment.BottomCenter)){
@@ -129,7 +156,7 @@ fun ContactsUploadContainer(){
             }
 
         }
-    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -144,7 +171,7 @@ fun ContactsAppBarView() {
             IconButton(onClick = {
 
             }) {
-                Icon(Icons.Filled.Menu, null)
+                Icon(Icons.Filled.ArrowBack, null)
             }
         }, actions = {
             IconButton(onClick = {/* Do Something*/ }) {
@@ -156,5 +183,5 @@ fun ContactsAppBarView() {
 @Preview
 @Composable
 fun PreviewContactSelectionActivity(){
-    ContactsUploadContainer()
+    ContactsUploadContainer(ComponentActivity())
 }

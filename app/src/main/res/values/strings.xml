@@ -3,4 +3,5 @@
     <string name="home_screen_title">Main</string>
     <string name="title_activity_reservation">ReservationActivity</string>
     <string name="title_activity_reservation_edit">ReservationEditActivity</string>
+    <string name="title_activity_contact_selection">ContactSelectionActivity</string>
 </resources>

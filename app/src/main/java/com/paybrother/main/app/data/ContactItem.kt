@@ -1,4 +1,4 @@
-package com.paybrother.old.contacts
+package com.paybrother.main.app.data
 
 data class ContactItem (
     val id: Long?,

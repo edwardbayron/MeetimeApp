@@ -34,6 +34,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+                android:name=".main.app.compose.ContactsSelectionActivity"
+                android:exported="true"
+                android:label="@string/title_activity_contact_selection"
+                android:theme="@style/Theme.MeetimeApp_v3Theme" />
+
     </application>
 
 </manifest>
