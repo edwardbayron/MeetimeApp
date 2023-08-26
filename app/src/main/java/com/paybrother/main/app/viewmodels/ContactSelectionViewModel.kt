@@ -1,5 +1,6 @@
 package com.paybrother.main.app.viewmodels
 
+import android.app.Application
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,14 +9,14 @@ import com.paybrother.main.app.compose.contacts.ContactsUploadHandler
 import com.paybrother.main.app.data.ContactItem
 import kotlinx.coroutines.launch
 
-class ContactSelectionViewModel : ViewModel() {
+class ContactSelectionViewModel(application: Application) : ViewModel() {
 
     private var contactsUploadManager: ContactsUploadHandler? = null
     private val originalContactsList = mutableListOf<ContactItem>()
     var contactsList = MutableLiveData<MutableList<ContactItem>>()
 
     init {
-
+//        initContactsUploading()
     }
 
     fun initContactsUploading(activity: ComponentActivity) {

@@ -1,9 +1,17 @@
 package com.paybrother.main.app.compose
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Application
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,16 +31,25 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.paybrother.main.app.compose.contacts.ContactItemUI
+import com.paybrother.main.app.data.ContactData
 import com.paybrother.main.app.viewmodels.ContactSelectionViewModel
 import com.paybrother.main.app.data.ContactItem
+import com.paybrother.main.app.viewmodels.ContactViewModelFactory
+import com.paybrother.main.app.viewmodels.LoanViewModel
+import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 
 class ContactsSelectionActivity : ComponentActivity() {
@@ -49,25 +66,31 @@ class ContactsSelectionActivity : ComponentActivity() {
 
         setContent {
             MeetimeApp_v3Theme {
-
+                val owner = LocalViewModelStoreOwner.current
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
 
                     Scaffold {
-                        ContactsUploadContainer(this)
+
+                        owner?.let {
+                            val viewModel: ContactSelectionViewModel = viewModel(
+                                it,
+                                "ContactViewModel",
+                                ContactViewModelFactory(
+                                    LocalContext.current.applicationContext as Application
+                                )
+                            )
+                            ContactsUploadContainer(viewModel, this)
+                        }
+
+
                     }
                 }
-
-
-
-
             }
         }
-
     }
-
 }
 
 //    private val contactsPickerCallback = object : ContactsPickerAdapter.Callback{
@@ -127,36 +150,65 @@ class ContactsSelectionActivity : ComponentActivity() {
 //
 //    }
 
-
-
 @Composable
-fun ContactsUploadContainer(activity: ComponentActivity){
-        //viewModel.initContactsUploading(activity)
+fun ContactsUploadContainer(viewModel: ContactSelectionViewModel, activity: ComponentActivity){
+    val contactsDownloadedList by viewModel.contactsList.observeAsState(listOf())
 
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Permission Accepted: Do something
+            Log.d("ExampleScreen","PERMISSION GRANTED")
+
+        } else {
+            // Permission Denied: Do something
+            Log.d("ExampleScreen","PERMISSION DENIED")
+            Toast.makeText(activity, "Denied", LENGTH_LONG).show()
+        }
+    }
+    
+    Column {
+        ContactsAppBarView()
         Column {
-            ContactsAppBarView()
-
-            Column {
-
-
+            contactsDownloadedList.forEach {item ->
+                ContactItemUI(
+                    contact = ContactData(
+                        contactName = item.firstName,
+                        contactPhoneNumber = item.lastName)
+                )
             }
-
-            Box(modifier = Modifier.fillMaxSize()) {
-                Row (modifier = Modifier.align(Alignment.BottomCenter)){
-                    Button(
-                        onClick = { /*TODO*/ }) {
-                        Text(text = "Upload contacts")
-                    }
-
-                    Button(
-                        onClick = { /*TODO*/ }) {
-                        Text(text = "Accept contacts")
-                    }
-                }
-            }
-
         }
 
+        Box(modifier = Modifier.fillMaxSize()) {
+            Row (modifier = Modifier.align(Alignment.BottomCenter)){
+                Button(
+                    onClick = {
+                        when (PackageManager.PERMISSION_GRANTED) {
+                            ContextCompat.checkSelfPermission(
+                                activity,
+                                Manifest.permission.READ_CONTACTS
+                            ) -> {
+                                // Some works that require permission
+                                viewModel.initContactsUploading(activity)
+                                Log.d("ExampleScreen","Code requires permission")
+                            }
+                            else -> {
+                                // Asking for permission
+                                launcher.launch(Manifest.permission.READ_CONTACTS)
+                            }
+                        }
+                    }) {
+                    Text(text = "Upload contacts")
+                }
+
+                Button(
+                    onClick = { /*TODO*/ }) {
+                    Text(text = "Accept contacts")
+                }
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -183,5 +235,6 @@ fun ContactsAppBarView() {
 @Preview
 @Composable
 fun PreviewContactSelectionActivity(){
-    ContactsUploadContainer(ComponentActivity())
+    val context = LocalContext.current
+    ContactsUploadContainer(ContactSelectionViewModel(context.applicationContext as Application), ComponentActivity())
 }
