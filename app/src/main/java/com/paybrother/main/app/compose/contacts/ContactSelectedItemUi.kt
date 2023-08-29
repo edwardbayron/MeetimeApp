@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.paybrother.main.app.data.ContactData
 
 @Composable
-fun ContactItemUI(contact: ContactData, onContactSelected: () -> Unit) {
+fun ContactSelectedItemUi(contact: ContactData, onContactSelected: () -> Unit) {
 
     Box(modifier = Modifier.padding(top = 5.dp, start = 8.dp, end = 8.dp)) {
         Row(
@@ -44,25 +44,20 @@ fun ContactItemUI(contact: ContactData, onContactSelected: () -> Unit) {
                 textAlign = TextAlign.Center,
                 fontSize = 20.sp
             )
-
-            Text(
-                text = contact.contactPhoneNumber,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(start = 10.dp),
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp
-            )
-
         }
+        Checkbox(
+            modifier = Modifier.align(Alignment.CenterEnd),
+            checked = false,
+            onCheckedChange = {
+                onContactSelected()
+                check(true)
+            })
     }
 
 }
 
 @Preview
 @Composable
-fun ContactItemUiPreview(){
-    ContactItemUI(ContactData("Alok Ojha", "58053317"), {})
+fun ContactSelectedItemUiPreview() {
+    ContactSelectedItemUi(ContactData("Alok Ojha", "58053317"), {})
 }

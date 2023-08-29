@@ -44,7 +44,7 @@ fun ContactScreenContent(){
                     .background(colorResource(id = R.color.white))
             ) {
                 listItemContact.value.forEach { item ->
-                    ContactItemUI(item)
+                    ContactItemUI(item, {})
                 }
 
             }
