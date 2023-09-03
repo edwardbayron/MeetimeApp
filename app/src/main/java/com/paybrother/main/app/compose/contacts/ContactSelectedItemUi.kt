@@ -10,6 +10,8 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -23,6 +25,9 @@ import com.paybrother.main.app.data.ContactData
 
 @Composable
 fun ContactSelectedItemUi(contact: ContactData, onContactSelected: () -> Unit) {
+    val selectedItem = remember { mutableStateOf(false) }
+
+
 
     Box(modifier = Modifier.padding(top = 5.dp, start = 8.dp, end = 8.dp)) {
         Row(
@@ -47,10 +52,11 @@ fun ContactSelectedItemUi(contact: ContactData, onContactSelected: () -> Unit) {
         }
         Checkbox(
             modifier = Modifier.align(Alignment.CenterEnd),
-            checked = false,
+            checked = selectedItem.value,
             onCheckedChange = {
                 onContactSelected()
                 check(true)
+                selectedItem.value = it
             })
     }
 
