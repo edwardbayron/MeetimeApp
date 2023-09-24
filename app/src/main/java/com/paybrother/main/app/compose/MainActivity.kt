@@ -1,7 +1,6 @@
 package com.paybrother.main.app.compose
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +8,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +20,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -38,8 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -49,17 +47,19 @@ import androidx.navigation.compose.rememberNavController
 import com.paybrother.R
 import com.paybrother.db.Reservations
 import com.paybrother.main.app.data.ReservationParcelable
+import com.paybrother.main.app.data.ReservationUiState
 import com.paybrother.main.app.navigation.BottomNavContentScreens.AddReservationScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.ContactsScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.EmptyScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.NotificationScreen
 import com.paybrother.main.app.navigation.BottomNavItem
 import com.paybrother.main.app.viewmodels.LoanViewModel
-import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 import java.util.*
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -69,6 +69,10 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MeetimeApp_v3Theme {
+                val viewModel = hiltViewModel<LoanViewModel>()
+                val uiState = viewModel.uiState.observeAsState()
+                val listReservations = viewModel.allReservations?.observeAsState()
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -84,19 +88,27 @@ class MainActivity : ComponentActivity() {
                     ) {
 
                         Column(modifier = Modifier.navigationBarsPadding()) {
-                            val owner = LocalViewModelStoreOwner.current
 
-                            owner?.let {
-                                val viewModel: LoanViewModel = viewModel(
-                                    it,
-                                    "LoanViewModel",
-                                    MainViewModelFactory(
-                                        LocalContext.current.applicationContext as Application
-                                    )
-                                )
-                                AppBarView()
-                                NavigationGraph(navController = navController, viewModel)
-                            }
+                            //val owner = LocalViewModelStoreOwner.current
+
+//                            owner?.let {
+//                                val viewModel: LoanViewModel = viewModel(
+//                                    it,
+//                                    "LoanViewModel",
+//                                    MainViewModelFactory(
+//                                        LocalContext.current.applicationContext as Application
+//                                    )
+//                                )
+//
+//                            }
+
+                            AppBarView()
+                            NavigationGraph(
+                                uiState = uiState.value,
+                                navController = navController,
+                                listReservations?.value,
+                                deleteReservation = { viewModel.deleteReservation(uiState.value) }, insertReservation = { viewModel.insertReservation(uiState.value) })
+
                         }
                     }
                 }
@@ -106,9 +118,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomeContainer(viewModel: LoanViewModel) {
+fun HomeContainer(
+    uiState: ReservationUiState?,
+    allReservations: List<Reservations>?,
+    deleteReservation: (uiState: ReservationUiState?) -> Unit,
+    insertReservation: (uiState: ReservationUiState?) -> Unit) {
+
     Column {
-        HomeDataContainer(viewModel)
+        HomeDataContainer(uiState, allReservations, deleteReservation, insertReservation)
     }
 }
 
@@ -134,13 +151,24 @@ fun AppBarView() {
 }
 
 @Composable
-fun NavigationGraph(navController: NavHostController, viewModel: LoanViewModel) {
+fun NavigationGraph(
+    uiState: ReservationUiState?,
+    navController: NavHostController,
+    allReservations: List<Reservations>?,
+    deleteReservation: (uiState: ReservationUiState?) -> Unit,
+    insertReservation: (uiState: ReservationUiState?) -> Unit) {
+
     NavHost(
         navController,
         startDestination = BottomNavItem.Home.screen_route,
     ) {
         composable(BottomNavItem.Home.screen_route) {
-            HomeContainer(viewModel)
+            HomeContainer(
+                uiState = uiState,
+                allReservations,
+                deleteReservation,
+                insertReservation
+            )
         }
         composable(BottomNavItem.MyNetwork.screen_route) {
             EmptyScreen()
@@ -199,7 +227,11 @@ fun BottomNavigation(navController: NavController) {
 }
 
 @Composable
-fun HomeDataContainer(viewModel: LoanViewModel) {
+fun HomeDataContainer(
+    uiState: ReservationUiState?,
+    allReservations: List<Reservations>?,
+    deleteReservation: (uiState: ReservationUiState?) -> Unit,
+    insertReservation: (uiState: ReservationUiState?) -> Unit) {
     val context = LocalContext.current
     Box (modifier = Modifier.fillMaxSize()){
         Column(
@@ -208,9 +240,9 @@ fun HomeDataContainer(viewModel: LoanViewModel) {
                 .verticalScroll(rememberScrollState())
         ) {
 
-            val listReservations by viewModel.allReservations?.observeAsState(listOf())!!
+//            val listReservations by allReservations.observeAsState(listOf())!!
 
-            listReservations.forEach { item ->
+            allReservations?.forEach { item ->
                 ReservationElementView(
                     eventName = item.event,
                     name = item.name,
@@ -220,16 +252,17 @@ fun HomeDataContainer(viewModel: LoanViewModel) {
                         openReservationActivity(context, item)
                     },
                     onDeleteClick = {
-                        viewModel.deleteReservation(item.name)
+                        deleteReservation(uiState)
                     })
             }
         }
-        FloatinActionButton(viewModel)
+        FloatinActionButton(uiState, insertReservation)
     }
 }
 
 @Composable
-fun FloatinActionButton(viewModel: LoanViewModel){
+fun FloatinActionButton(uiState: ReservationUiState?, insertReservation: (uiState: ReservationUiState?) -> Unit){
+
     val addReservation = remember { mutableStateOf(false) }
     Box(Modifier.fillMaxSize()) {
         FloatingActionButton(
@@ -251,13 +284,14 @@ fun FloatinActionButton(viewModel: LoanViewModel){
     }
 
     if (addReservation.value) {
-        AddReservationDialog(viewModel)
+        AddReservationDialog(uiState, insertReservation)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddReservationDialog(viewModel: LoanViewModel) {
+fun AddReservationDialog(uiState: ReservationUiState?, insertReservation: (uiState: ReservationUiState?) -> Unit) {
+
     val txtFieldError = remember { mutableStateOf("") }
     val reservationName = remember { mutableStateOf("") }
     val reservationPhoneNumber = remember { mutableStateOf("") }
@@ -387,12 +421,7 @@ fun AddReservationDialog(viewModel: LoanViewModel) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            viewModel.insertReservation(
-                                reservationName.value,
-                                reservationPhoneNumber.value,
-                                reservationEvent.value,
-                                reservationDate.value
-                            )
+                            insertReservation(uiState)
 
                             shouldDismiss.value = true
                         },
@@ -410,9 +439,8 @@ fun AddReservationDialog(viewModel: LoanViewModel) {
 @Preview(showBackground = true)
 @Composable
 fun MainPreview() {
-    val context = LocalContext.current
     MeetimeApp_v3Theme {
-        HomeContainer(LoanViewModel(context.applicationContext as Application))
+        HomeContainer(ReservationUiState(1, ", ", "", "", ""), listOf(), {}, {})
     }
 }
 

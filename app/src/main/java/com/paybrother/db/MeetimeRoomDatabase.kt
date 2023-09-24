@@ -13,24 +13,24 @@ abstract class MeetimeRoomDatabase : RoomDatabase() {
     companion object {
         private const val DB_NAME = "meetimeDb"
 
-        @Volatile
-        private var INSTANCE: MeetimeRoomDatabase? = null
+//        @Volatile
+//        private var INSTANCE: MeetimeRoomDatabase? = null
 
-        fun getInstance(context: Context): MeetimeRoomDatabase {
-            synchronized(this) {
-                var instance = INSTANCE
-
-                if (instance == null) {
-                    instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        MeetimeRoomDatabase::class.java,
-                        DB_NAME
-                    ).fallbackToDestructiveMigration().build()
-
-                    INSTANCE = instance
-                }
-                return instance
-            }
-        }
+//        fun getInstance(context: Context): MeetimeRoomDatabase {
+//            synchronized(this) {
+//                var instance = INSTANCE
+//
+//                if (instance == null) {
+//                    instance = Room.databaseBuilder(
+//                        context.applicationContext,
+//                        MeetimeRoomDatabase::class.java,
+//                        DB_NAME
+//                    ).fallbackToDestructiveMigration().build()
+//
+//                    INSTANCE = instance
+//                }
+//                return instance
+//            }
+//        }
     }
 }

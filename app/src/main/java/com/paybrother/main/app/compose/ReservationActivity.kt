@@ -30,11 +30,12 @@ import com.paybrother.main.app.data.ReservationParcelable
 import com.paybrother.main.app.data.ReservationUiState
 import com.paybrother.main.app.utils.Utils
 import com.paybrother.main.app.viewmodels.LoanViewModel
-import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 import java.util.*
 
+@AndroidEntryPoint
 class ReservationActivity : ComponentActivity() {
 
     private lateinit var dataReceived: ReservationUiState
@@ -74,16 +75,16 @@ class ReservationActivity : ComponentActivity() {
             val data =
                 this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
 
-            val owner = LocalViewModelStoreOwner.current
-            owner?.let {
-                viewModel = viewModel(
-                    it,
-                    "LoanViewModel",
-                    MainViewModelFactory(
-                        LocalContext.current.applicationContext as Application
-                    )
-                )
-            }
+//            val owner = LocalViewModelStoreOwner.current
+//            owner?.let {
+//                viewModel = viewModel(
+//                    it,
+//                    "LoanViewModel",
+//                    MainViewModelFactory(
+//                        LocalContext.current.applicationContext as Application
+//                    )
+//                )
+//            }
 
             viewModel.selectedReservation(
                 ReservationUiState(

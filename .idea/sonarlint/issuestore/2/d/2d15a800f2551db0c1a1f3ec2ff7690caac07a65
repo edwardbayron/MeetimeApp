@@ -1,0 +1,9 @@
+
+^kotlin:S1172j"?Use "_" instead of this unused lambda parameter "reservations".(Á•‰ç8„ô¼À©1
+=kotlin:S125^"Remove this commented out code.(ƒ°¼±8˜ô¼À©1
+>kotlin:S125ô"Remove this commented out code.(ùË¸î8™ô¼À©1
+rkotlin:S117Ø"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(‹Æ’±úÿÿÿÿ8¯ô¼À©1
+Xkotlin:S1481P"4Remove this unused "navigationGraph" local variable.(Í¼Çüÿÿÿÿ8âô¼À©1
+Zkotlin:S1481P"6Remove this unused "homeDataContainer" local variable.(Í¼Çüÿÿÿÿ8âô¼À©1
+Skotlin:S1481P"/Remove this unused "appBarView" local variable.(Í¼Çüÿÿÿÿ8âô¼À©1
+qkotlin:S3776¦"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(Ş‰¿(8‰õ¼À©1

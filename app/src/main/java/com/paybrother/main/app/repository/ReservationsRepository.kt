@@ -8,34 +8,48 @@ import com.paybrother.main.app.data.ReservationItem
 import com.paybrother.main.app.data.ReservationUiState
 import kotlinx.coroutines.*
 
-class ReservationsRepository(private val reservationsDao: ReservationsDao) {
+interface ReservationsRepository {
+    fun insertReservation(reservation: ReservationItem)
+    fun deleteReservation(name: String)
+    fun updateReservation(state: ReservationUiState)
+    fun findReservation(name: String)
+    fun fetchReservations(): List<Reservations>
 
-    val allReservations: LiveData<List<Reservations>> = reservationsDao.getReservationList()
+}
+
+class ReservationsRepositoryImpl(
+    private val reservationsDao: ReservationsDao
+) : ReservationsRepository{
+
     val searchResults = MutableLiveData<List<Reservations>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    fun insertReservation(reservation: ReservationItem){
+    override fun insertReservation(reservation: ReservationItem) {
         coroutineScope.launch(Dispatchers.IO) {
             reservationsDao.insertReservation(id = null, name = reservation.name, phoneNumber = reservation.phoneNumber, event = reservation.event, date = reservation.date)
         }
     }
 
-    fun deleteReservation(name: String){
+    override fun deleteReservation(name: String){
         coroutineScope.launch(Dispatchers.IO) {
             reservationsDao.deleteReservation(name)
         }
     }
 
-    fun updateReservation(state: ReservationUiState){
+    override fun updateReservation(state: ReservationUiState){
         coroutineScope.launch(Dispatchers.IO) {
             reservationsDao.updateReservation(state.id, state.name)
         }
     }
 
-    fun findReservation(name: String){
+    override fun findReservation(name: String){
         coroutineScope.launch(Dispatchers.Main) {
             searchResults.value = asyncFind(name).await()
         }
+    }
+
+    override fun fetchReservations(): List<Reservations> {
+        return reservationsDao.getReservationList()
     }
 
     private fun asyncFind(name: String): Deferred<List<Reservations>?> =

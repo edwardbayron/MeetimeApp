@@ -1,62 +1,60 @@
 package com.paybrother.main.app.viewmodels
 
-import android.app.Application
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.paybrother.db.Reservations
-import com.paybrother.db.MeetimeRoomDatabase
 import com.paybrother.main.app.data.ReservationItem
 import com.paybrother.main.app.data.ReservationUiState
 import com.paybrother.main.app.repository.ReservationsRepository
-import com.paybrother.main.app.utils.Utils
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.launch
-import java.util.UUID
+import javax.inject.Inject
 
-class LoanViewModel(application: Application) : ViewModel() {
+@HiltViewModel
+class LoanViewModel @Inject constructor(
+    private val reservationsRepository: ReservationsRepository,
+) : ViewModel() {
 
-    private var repository: ReservationsRepository? = null
+    private var _allReservations : MutableLiveData<List<Reservations>> = MutableLiveData(listOf())
+    val allReservations : LiveData<List<Reservations>> get() = _allReservations
 
-    var allReservations : LiveData<List<Reservations>>? = null
-
-    var uiState = MutableLiveData<ReservationUiState>()
+    private var _uiState : MutableLiveData<ReservationUiState> = MutableLiveData<ReservationUiState>()
+    val uiState: LiveData<ReservationUiState> get() = _uiState
 
     init {
-        val roomDb = MeetimeRoomDatabase.getInstance(application)
-        val reservationsDao = roomDb.reservationsDao()
-
-        repository = ReservationsRepository(reservationsDao)
-
-        allReservations = repository?.allReservations
-
         fetchData()
     }
 
 
     private fun fetchData(){
         viewModelScope.launch(Dispatchers.IO) {
-            allReservations = repository?.allReservations
+            _allReservations.postValue(reservationsRepository.fetchReservations())
         }
     }
 
     fun selectedReservation(state: ReservationUiState){
-        uiState.value = state
+        _uiState.postValue(state)
     }
 
-    fun insertReservation(name: String, phoneNumber: String, event: String, date: String){
-        repository?.insertReservation(ReservationItem(name, phoneNumber, event, date))
+    fun insertReservation(uiState: ReservationUiState?){
+        uiState?.let {
+            reservationsRepository.insertReservation(ReservationItem(it.name, it.phoneNumber, it.event, it.date))
+        }
     }
 
-    fun deleteReservation(name: String){
-        repository?.deleteReservation(name)
+    fun deleteReservation(uiState: ReservationUiState?){
+        uiState?.let {
+            reservationsRepository.deleteReservation(it.name)
+        }
     }
 
     fun updateReservation(state: ReservationUiState){
-        repository?.updateReservation(state)
+        reservationsRepository.updateReservation(state)
     }
 
 }

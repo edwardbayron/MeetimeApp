@@ -26,11 +26,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paybrother.main.app.data.ReservationParcelable
 import com.paybrother.main.app.data.ReservationUiState
 import com.paybrother.main.app.viewmodels.LoanViewModel
-import com.paybrother.main.app.viewmodels.MainViewModelFactory
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 import java.util.*
 
+@AndroidEntryPoint
 class ReservationEditActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,26 +46,26 @@ class ReservationEditActivity : ComponentActivity() {
                 ) {
                     val owner = LocalViewModelStoreOwner.current
 
-                    owner?.let {
-                        val viewModel: LoanViewModel = viewModel(
-                            it,
-                            "LoanViewModel",
-                            MainViewModelFactory(
-                                LocalContext.current.applicationContext as Application
-                            )
-                        )
-
-                        val dataTest =
-                            ReservationUiState(
-                                id = data.id,
-                                name = data.name,
-                                phoneNumber = data.phoneNumber,
-                                event = data.event,
-                                date = data.date.toString()
-                            )
-
-                        openEditContainer(dataTest, this, viewModel)
-                    }
+//                    owner?.let {
+//                        val viewModel: LoanViewModel = viewModel(
+//                            it,
+//                            "LoanViewModel",
+//                            MainViewModelFactory(
+//                                LocalContext.current.applicationContext as Application
+//                            )
+//                        )
+//
+//                        val dataTest =
+//                            ReservationUiState(
+//                                id = data.id,
+//                                name = data.name,
+//                                phoneNumber = data.phoneNumber,
+//                                event = data.event,
+//                                date = data.date.toString()
+//                            )
+//
+//                        openEditContainer(dataTest, this, viewModel)
+//                    }
                 }
             }
         }
