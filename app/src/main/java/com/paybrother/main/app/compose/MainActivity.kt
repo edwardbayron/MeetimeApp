@@ -70,8 +70,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             MeetimeApp_v3Theme {
                 val viewModel = hiltViewModel<LoanViewModel>()
-                val uiState = viewModel.uiState.observeAsState()
-                val listReservations = viewModel.allReservations?.observeAsState()
+                val uiState by viewModel.uiState.observeAsState()
+                val listReservations by viewModel.allReservations.observeAsState()
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -104,10 +104,10 @@ class MainActivity : ComponentActivity() {
 
                             AppBarView()
                             NavigationGraph(
-                                uiState = uiState.value,
+                                uiState = uiState,
                                 navController = navController,
-                                listReservations?.value,
-                                deleteReservation = { viewModel.deleteReservation(uiState.value) }, insertReservation = { viewModel.insertReservation(uiState.value) })
+                                listReservations,
+                                deleteReservation = { viewModel.deleteReservation(uiState) }, insertReservation = { viewModel.insertReservation(uiState) })
 
                         }
                     }
