@@ -79,7 +79,6 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     val navController = rememberNavController()
-                    val (appBarView, homeDataContainer, navigationGraph) = createRefs()
 
                     Scaffold(
                         bottomBar = {
@@ -88,20 +87,6 @@ class MainActivity : ComponentActivity() {
                     ) {
 
                         Column(modifier = Modifier.navigationBarsPadding()) {
-
-                            //val owner = LocalViewModelStoreOwner.current
-
-//                            owner?.let {
-//                                val viewModel: LoanViewModel = viewModel(
-//                                    it,
-//                                    "LoanViewModel",
-//                                    MainViewModelFactory(
-//                                        LocalContext.current.applicationContext as Application
-//                                    )
-//                                )
-//
-//                            }
-
                             AppBarView()
                             NavigationGraph(
                                 uiState = uiState,
