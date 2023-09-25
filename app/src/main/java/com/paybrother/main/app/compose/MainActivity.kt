@@ -70,8 +70,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             MeetimeApp_v3Theme {
                 val viewModel = hiltViewModel<LoanViewModel>()
-                val uiState by viewModel.uiState.observeAsState()
-                val listReservations by viewModel.allReservations.observeAsState()
+                val uiState by viewModel.uiState.observeAsState(
+                    initial = ReservationUiState(0L, "ll", "ll", "ll", "ll")
+                )
+                val listReservations by viewModel.allReservations.observeAsState(initial = listOf())
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -92,7 +94,12 @@ class MainActivity : ComponentActivity() {
                                 uiState = uiState,
                                 navController = navController,
                                 listReservations,
-                                deleteReservation = { viewModel.deleteReservation(uiState) }, insertReservation = { viewModel.insertReservation(uiState) })
+                                deleteReservation = {
+                                    viewModel.deleteReservation(uiState)
+                                },
+                                insertReservation = {
+                                    viewModel.insertReservation(uiState)
+                                })
 
                         }
                     }
@@ -104,10 +111,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun HomeContainer(
-    uiState: ReservationUiState?,
+    uiState: ReservationUiState,
     allReservations: List<Reservations>?,
-    deleteReservation: (uiState: ReservationUiState?) -> Unit,
-    insertReservation: (uiState: ReservationUiState?) -> Unit) {
+    deleteReservation: (uiState: ReservationUiState) -> Unit,
+    insertReservation: (uiState: ReservationUiState) -> Unit) {
 
     Column {
         HomeDataContainer(uiState, allReservations, deleteReservation, insertReservation)
@@ -137,11 +144,11 @@ fun AppBarView() {
 
 @Composable
 fun NavigationGraph(
-    uiState: ReservationUiState?,
+    uiState: ReservationUiState,
     navController: NavHostController,
     allReservations: List<Reservations>?,
-    deleteReservation: (uiState: ReservationUiState?) -> Unit,
-    insertReservation: (uiState: ReservationUiState?) -> Unit) {
+    deleteReservation: (uiState: ReservationUiState) -> Unit,
+    insertReservation: (uiState: ReservationUiState) -> Unit) {
 
     NavHost(
         navController,
@@ -213,10 +220,10 @@ fun BottomNavigation(navController: NavController) {
 
 @Composable
 fun HomeDataContainer(
-    uiState: ReservationUiState?,
+    uiState: ReservationUiState,
     allReservations: List<Reservations>?,
-    deleteReservation: (uiState: ReservationUiState?) -> Unit,
-    insertReservation: (uiState: ReservationUiState?) -> Unit) {
+    deleteReservation: (uiState: ReservationUiState) -> Unit,
+    insertReservation: (uiState: ReservationUiState) -> Unit) {
     val context = LocalContext.current
     Box (modifier = Modifier.fillMaxSize()){
         Column(
@@ -231,7 +238,7 @@ fun HomeDataContainer(
                 ReservationElementView(
                     eventName = item.event,
                     name = item.name,
-                    number = item.phoneNumber.toInt(),
+                    number = item.phoneNumber,
                     date = item.date,
                     onCardClick = {
                         openReservationActivity(context, item)
@@ -246,7 +253,7 @@ fun HomeDataContainer(
 }
 
 @Composable
-fun FloatinActionButton(uiState: ReservationUiState?, insertReservation: (uiState: ReservationUiState?) -> Unit){
+fun FloatinActionButton(uiState: ReservationUiState, insertReservation: (uiState: ReservationUiState) -> Unit){
 
     val addReservation = remember { mutableStateOf(false) }
     Box(Modifier.fillMaxSize()) {
@@ -275,7 +282,7 @@ fun FloatinActionButton(uiState: ReservationUiState?, insertReservation: (uiStat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddReservationDialog(uiState: ReservationUiState?, insertReservation: (uiState: ReservationUiState?) -> Unit) {
+fun AddReservationDialog(uiState: ReservationUiState, insertReservation: (uiState: ReservationUiState) -> Unit) {
 
     val txtFieldError = remember { mutableStateOf("") }
     val reservationName = remember { mutableStateOf("") }

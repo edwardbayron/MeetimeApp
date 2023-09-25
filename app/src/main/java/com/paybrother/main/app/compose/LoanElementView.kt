@@ -43,7 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
-fun ReservationElementView(eventName: String, name: String, number: Int, date: String, onCardClick: () -> Unit, onDeleteClick: () -> Unit) {
+fun ReservationElementView(eventName: String, name: String, number: String, date: String, onCardClick: () -> Unit, onDeleteClick: () -> Unit) {
     var visible by remember { mutableStateOf(false) }
     var arrowExpandableIcon by remember { mutableStateOf(Icons.Filled.ArrowDropDown)}
     val density = LocalDensity.current
@@ -137,5 +137,5 @@ fun ReservationElementView(eventName: String, name: String, number: Int, date: S
 @Preview
 @Composable
 fun Preview(){
-    ReservationElementView("Nails + Massage", "Aleksei Borovikov", 55665544, "2010-05-30 22:15:52", onCardClick = {}, onDeleteClick = {})
+    ReservationElementView("Nails + Massage", "Aleksei Borovikov", "55665544", "2010-05-30 22:15:52", onCardClick = {}, onDeleteClick = {})
 }
