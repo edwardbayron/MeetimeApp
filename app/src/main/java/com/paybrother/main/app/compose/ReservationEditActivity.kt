@@ -1,13 +1,10 @@
 package com.paybrother.main.app.compose
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
-import android.app.Application
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -18,17 +15,14 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paybrother.main.app.data.ReservationParcelable
 import com.paybrother.main.app.data.ReservationUiState
 import com.paybrother.main.app.viewmodels.LoanViewModel
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
 import java.util.*
 
 @AndroidEntryPoint

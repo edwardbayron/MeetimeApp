@@ -20,11 +20,8 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -63,16 +60,14 @@ import java.util.*
 class MainActivity : ComponentActivity() {
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             MeetimeApp_v3Theme {
                 val viewModel = hiltViewModel<LoanViewModel>()
-                val uiState by viewModel.uiState.observeAsState(
-                    initial = ReservationUiState(0L, "ll", "ll", "ll", "ll")
-                )
+                val uiState by viewModel.uiState.collectAsState()
                 val listReservations by viewModel.allReservations.observeAsState(initial = listOf())
 
                 Surface(
@@ -95,10 +90,10 @@ class MainActivity : ComponentActivity() {
                                 navController = navController,
                                 listReservations,
                                 deleteReservation = {
-                                    viewModel.deleteReservation(uiState)
+                                    viewModel.deleteReservation()
                                 },
                                 insertReservation = {
-                                    viewModel.insertReservation(uiState)
+                                    viewModel.insertReservation()
                                 })
 
                         }
@@ -113,8 +108,8 @@ class MainActivity : ComponentActivity() {
 fun HomeContainer(
     uiState: ReservationUiState,
     allReservations: List<Reservations>?,
-    deleteReservation: (uiState: ReservationUiState) -> Unit,
-    insertReservation: (uiState: ReservationUiState) -> Unit) {
+    deleteReservation: () -> Unit,
+    insertReservation: () -> Unit) {
 
     Column {
         HomeDataContainer(uiState, allReservations, deleteReservation, insertReservation)
@@ -147,8 +142,8 @@ fun NavigationGraph(
     uiState: ReservationUiState,
     navController: NavHostController,
     allReservations: List<Reservations>?,
-    deleteReservation: (uiState: ReservationUiState) -> Unit,
-    insertReservation: (uiState: ReservationUiState) -> Unit) {
+    deleteReservation: () -> Unit,
+    insertReservation: () -> Unit) {
 
     NavHost(
         navController,
@@ -222,8 +217,8 @@ fun BottomNavigation(navController: NavController) {
 fun HomeDataContainer(
     uiState: ReservationUiState,
     allReservations: List<Reservations>?,
-    deleteReservation: (uiState: ReservationUiState) -> Unit,
-    insertReservation: (uiState: ReservationUiState) -> Unit) {
+    deleteReservation: () -> Unit,
+    insertReservation: () -> Unit) {
     val context = LocalContext.current
     Box (modifier = Modifier.fillMaxSize()){
         Column(
@@ -244,7 +239,7 @@ fun HomeDataContainer(
                         openReservationActivity(context, item)
                     },
                     onDeleteClick = {
-                        deleteReservation(uiState)
+                        deleteReservation()
                     })
             }
         }
@@ -253,7 +248,7 @@ fun HomeDataContainer(
 }
 
 @Composable
-fun FloatinActionButton(uiState: ReservationUiState, insertReservation: (uiState: ReservationUiState) -> Unit){
+fun FloatinActionButton(uiState: ReservationUiState, insertReservation: () -> Unit){
 
     val addReservation = remember { mutableStateOf(false) }
     Box(Modifier.fillMaxSize()) {
@@ -276,19 +271,20 @@ fun FloatinActionButton(uiState: ReservationUiState, insertReservation: (uiState
     }
 
     if (addReservation.value) {
-        AddReservationDialog(uiState, insertReservation)
+        AddReservationDialog(uiState = uiState, insertReservation)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddReservationDialog(uiState: ReservationUiState, insertReservation: (uiState: ReservationUiState) -> Unit) {
+fun AddReservationDialog(uiState: ReservationUiState, insertReservation: () -> Unit) {
 
     val txtFieldError = remember { mutableStateOf("") }
     val reservationName = remember { mutableStateOf("") }
     val reservationPhoneNumber = remember { mutableStateOf("") }
     val reservationEvent = remember { mutableStateOf("") }
     val reservationDate = remember { mutableStateOf("") }
+
     val shouldDismiss = remember { mutableStateOf(false) }
 
     if (shouldDismiss.value) return
@@ -338,7 +334,8 @@ fun AddReservationDialog(uiState: ReservationUiState, insertReservation: (uiStat
                         value = reservationName.value,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         onValueChange = {
-                            reservationName.value = it.take(10)
+                            reservationName.value = it
+                            uiState.name = it
                         })
 
                     TextField(
@@ -361,7 +358,8 @@ fun AddReservationDialog(uiState: ReservationUiState, insertReservation: (uiStat
                         value = reservationPhoneNumber.value,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = {
-                            reservationPhoneNumber.value = it.take(10)
+                            reservationPhoneNumber.value = it
+                            uiState.phoneNumber = it
                         })
 
                     TextField(
@@ -384,7 +382,8 @@ fun AddReservationDialog(uiState: ReservationUiState, insertReservation: (uiStat
                         value = reservationEvent.value,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         onValueChange = {
-                            reservationEvent.value = it.take(10)
+                            reservationEvent.value = it
+                            uiState.event = it
                         })
 
                     TextField(
@@ -407,13 +406,14 @@ fun AddReservationDialog(uiState: ReservationUiState, insertReservation: (uiStat
                         value = reservationDate.value,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = {
-                            reservationDate.value = it.take(10)
+                            reservationDate.value = it
+                            uiState.date = it
                         })
 
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-                            insertReservation(uiState)
+                            insertReservation()
 
                             shouldDismiss.value = true
                         },

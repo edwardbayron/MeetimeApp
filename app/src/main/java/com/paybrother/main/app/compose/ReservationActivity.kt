@@ -2,15 +2,11 @@ package com.paybrother.main.app.compose
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Application
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,17 +14,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.paybrother.main.app.data.ReservationData
 import com.paybrother.main.app.data.ReservationParcelable
 import com.paybrother.main.app.data.ReservationUiState
-import com.paybrother.main.app.utils.Utils
 import com.paybrother.main.app.viewmodels.LoanViewModel
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,7 +86,7 @@ class ReservationActivity : ComponentActivity() {
                     date = data.date.toString()
                 ))
 
-            val uiState = viewModel.uiState.observeAsState()
+            val uiState = viewModel.uiState.collectAsState()
 
             MeetimeApp_v3Theme {
                 Surface(

@@ -15,11 +15,11 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 interface ReservationsRepository {
-    suspend fun insertReservation(reservation: ReservationItem)
+    fun insertReservation(reservation: ReservationItem)
     fun deleteReservation(name: String)
     fun updateReservation(state: ReservationUiState)
     suspend fun findReservation(name: String)
-    fun fetchReservations() : List<Reservations>
+    fun fetchReservations() : MutableList<Reservations>
 
 }
 
@@ -31,16 +31,12 @@ class ReservationsRepositoryImpl(
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    override suspend fun insertReservation(reservation: ReservationItem) {
-        coroutineScope.launch {
-            reservationsDao.insertReservation(id = null, name = reservation.name, phoneNumber = reservation.phoneNumber, event = reservation.event, date = reservation.date)
-        }
+    override fun insertReservation(reservation: ReservationItem) {
+        reservationsDao.insertReservation(id = null, name = reservation.name, phoneNumber = reservation.phoneNumber, event = reservation.event, date = reservation.date)
     }
 
     override fun deleteReservation(name: String){
-        coroutineScope.launch {
-            reservationsDao.deleteReservation(name)
-        }
+        reservationsDao.deleteReservation(name)
     }
 
     override fun updateReservation(state: ReservationUiState){
@@ -53,7 +49,7 @@ class ReservationsRepositoryImpl(
         searchResults.value = asyncFind(name).await()
     }
 
-    override fun fetchReservations() : List<Reservations> {
+    override fun fetchReservations() : MutableList<Reservations> {
         return reservationsDao.getReservationList()
     }
 

@@ -8,23 +8,24 @@ import com.paybrother.db.Reservations
 import com.paybrother.main.app.data.ReservationItem
 import com.paybrother.main.app.data.ReservationUiState
 import com.paybrother.main.app.repository.ReservationsInteractor
-import com.paybrother.main.app.repository.ReservationsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoanViewModel @Inject constructor(
-    private val reservationsRepository: ReservationsRepository,
     private val reservationsInteractor: ReservationsInteractor,
 ) : ViewModel() {
 
-    private var _allReservations = MutableLiveData<List<Reservations>>()
+    private var _allReservations = MutableLiveData<List<Reservations>>(emptyList())
     val allReservations : LiveData<List<Reservations>> get() = _allReservations
 
-    private var _uiState = MutableLiveData<ReservationUiState>()
-    val uiState: LiveData<ReservationUiState> get() = _uiState
+    private var _uiState = MutableStateFlow(ReservationUiState(0L, "", "", "", ""))
+    val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -35,24 +36,26 @@ class LoanViewModel @Inject constructor(
     }
 
     fun selectedReservation(state: ReservationUiState){
-        _uiState.postValue(state)
+        _uiState.value = state
     }
 
-    fun insertReservation(uiState: ReservationUiState){
-        viewModelScope.launch{
-            reservationsRepository.insertReservation(ReservationItem(uiState.name, uiState.phoneNumber, uiState.event, uiState.date))
+    fun insertReservation(){
+        viewModelScope.launch(Dispatchers.IO){
+            reservationsInteractor.insertNewReservation(ReservationItem(_uiState.value.name, _uiState.value.phoneNumber, _uiState.value.event, _uiState.value.date))
+            reservationsInteractor.fetchReservationsData()
         }
     }
 
-    fun deleteReservation(uiState: ReservationUiState){
-        viewModelScope.launch {
-            reservationsRepository.deleteReservation(uiState.name)
+    fun deleteReservation(){
+        viewModelScope.launch(Dispatchers.IO) {
+            reservationsInteractor.deleteReservation(ReservationItem(_uiState.value.name, _uiState.value.phoneNumber, _uiState.value.event, _uiState.value.date))
+            reservationsInteractor.fetchReservationsData()
         }
     }
 
     fun updateReservation(state: ReservationUiState){
         viewModelScope.launch {
-            reservationsRepository.updateReservation(state)
+            //reservationsRepository.updateReservation(state)
         }
     }
 

@@ -3,6 +3,8 @@ package com.paybrother.main.app.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.paybrother.db.Reservations
+import com.paybrother.main.app.data.ReservationItem
+import com.paybrother.main.app.data.ReservationUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,14 +16,22 @@ class ReservationsInteractor @Inject constructor(
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    private var _reservationsList = MutableLiveData<List<Reservations>>()
-    val reservationsList : LiveData<List<Reservations>> get() = _reservationsList
+    private var _reservationsList = MutableLiveData<MutableList<Reservations>>()
+    val reservationsList : LiveData<MutableList<Reservations>> get() = _reservationsList
 
     suspend fun fetchReservationsData(){
         coroutineScope.launch {
             _reservationsList.postValue(reservationsRepository.fetchReservations())
         }
 
+    }
+
+    fun insertNewReservation(reservation: ReservationItem){
+        reservationsRepository.insertReservation(reservation)
+    }
+
+    fun deleteReservation(reservation: ReservationItem){
+        reservationsRepository.deleteReservation(reservation.name)
     }
 
 }
