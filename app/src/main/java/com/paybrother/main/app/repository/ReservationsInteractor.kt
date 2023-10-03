@@ -34,14 +34,9 @@ class ReservationsInteractor @Inject constructor(
         reservationsRepository.deleteReservation(reservation.name)
     }
 
-    fun updateReservation(reservation: ReservationUiState){
+    fun updateReservation(state: ReservationUiState){
         reservationsRepository.updateReservation(
-            ReservationUiState(
-            0L,
-            reservation.name,
-            reservation.phoneNumber,
-            reservation.phoneNumber,
-            reservation.date)
+            state.id, state.name
         )
     }
 

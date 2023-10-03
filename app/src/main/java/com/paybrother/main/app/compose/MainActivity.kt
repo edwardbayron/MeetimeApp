@@ -68,6 +68,8 @@ import java.util.*
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +87,7 @@ class MainActivity : AppCompatActivity() {
                 Log.e("MEETIME", "uiState initial date: "+uiState.date)
 
 
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -100,37 +103,58 @@ class MainActivity : AppCompatActivity() {
 
                         Column(modifier = Modifier.navigationBarsPadding()) {
                             AppBarView()
-                            NavigationGraph(
-                                viewModel = viewModel,
-                                uiState = uiState,
-                                navController = navController,
-                                listReservations,
-                                deleteReservation = {
-                                    viewModel.deleteReservation()
-                                },
-                                insertReservation = {
-                                    viewModel.insertReservation()
-                                },
-                                openReservation = {
+                            Column {
+                                //HomeDataContainer(activity, viewModel, uiState, allReservations, deleteReservation, insertReservation, openReservation)
+                                Box (modifier = Modifier.fillMaxSize()){
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(top = 20.dp)
+                                            .verticalScroll(rememberScrollState())
+                                    ) {
 
-                                    Log.e("MEETIME", "uiState openReservation name: "+uiState.name)
-                                    Log.e("MEETIME", "uiState openReservation phoneNumber: "+uiState.phoneNumber)
-                                    Log.e("MEETIME", "uiState openReservation event: "+uiState.event)
-                                    Log.e("MEETIME", "uiState openReservation date: "+uiState.date)
-
-                                    val intent = Bundle()
-                                    intent.apply {
-                                        putLong("id", 0L)
-                                        putString("name", uiState?.name)
-                                        putString("phoneNumber", uiState?.phoneNumber)
-                                        putString("event", uiState?.event)
-                                        putString("date", uiState?.date)
+                                        listReservations?.forEach { item ->
+                                            ReservationElementView(
+                                                eventName = item.event,
+                                                name = item.name,
+                                                number = item.phoneNumber,
+                                                date = item.date,
+                                                onCardClick = {
+                                                    //openReservationActivity(this, item, ReservationUiState(item.id, item.name, item.phoneNumber, item.event, item.date))
+                                                    viewModel.selectedReservation(uiState.copy(item.id, item.name, item.phoneNumber, item.event, item.date))
+                                                    openReservationActivity(this@MainActivity, uiState)
+                                                },
+                                                onDeleteClick = {
+                                                    //deleteReservation()
+                                                })
+                                        }
                                     }
-                                    val reservationBottomSheet = ReservationEditBottomSheet()
-                                    reservationBottomSheet.arguments = intent
-                                    reservationBottomSheet.show(this@MainActivity.supportFragmentManager, "RESERVATION_EDIT_BOTTOM_SHEET")
+                                    //FloatinActionButton(uiState, insertReservation)
+                                }
+
+                                FloatinActionButton(uiState, {
+                                    viewModel.insertReservation()
+                                })
                             }
-                                )
+
+
+
+
+//                            NavigationGraph(
+//                                activity = this@MainActivity,
+//                                viewModel = viewModel,
+//                                uiState = uiState,
+//                                navController = navController,
+//                                listReservations,
+//                                deleteReservation = {
+//                                    viewModel.deleteReservation()
+//                                },
+//                                insertReservation = {
+//                                    viewModel.insertReservation()
+//                                },
+//                                openReservation = {
+//                                    openReservationActivity(this@MainActivity, uiState)
+//                            }
+//                                )
 
                         }
                     }
@@ -142,6 +166,7 @@ class MainActivity : AppCompatActivity() {
 
 @Composable
 fun HomeContainer(
+    activity: AppCompatActivity,
     viewModel: LoanViewModel,
     uiState: ReservationUiState,
     allReservations: List<Reservations>?,
@@ -149,9 +174,34 @@ fun HomeContainer(
     insertReservation: () -> Unit,
     openReservation: () -> Unit) {
 
-    Column {
-        HomeDataContainer(viewModel, uiState, allReservations, deleteReservation, insertReservation, openReservation)
-    }
+//    Column {
+//        //HomeDataContainer(activity, viewModel, uiState, allReservations, deleteReservation, insertReservation, openReservation)
+//        Box (modifier = Modifier.fillMaxSize()){
+//            Column(
+//                modifier = Modifier
+//                    .padding(top = 20.dp)
+//                    .verticalScroll(rememberScrollState())
+//            ) {
+//
+//                allReservations?.forEach { item ->
+//                    ReservationElementView(
+//                        eventName = item.event,
+//                        name = item.name,
+//                        number = item.phoneNumber,
+//                        date = item.date,
+//                        onCardClick = {
+//                            //openReservationActivity(this, item, ReservationUiState(item.id, item.name, item.phoneNumber, item.event, item.date))
+//                            viewModel.selectedReservation(uiState.copy(item.id, item.name, item.phoneNumber, item.event, item.date))
+//                            openReservation()
+//                        },
+//                        onDeleteClick = {
+//                            deleteReservation()
+//                        })
+//                }
+//            }
+//            FloatinActionButton(uiState, insertReservation)
+//        }
+//    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -177,6 +227,7 @@ fun AppBarView() {
 
 @Composable
 fun NavigationGraph(
+    activity: AppCompatActivity,
     viewModel: LoanViewModel,
     uiState: ReservationUiState,
     navController: NavHostController,
@@ -191,6 +242,7 @@ fun NavigationGraph(
     ) {
         composable(BottomNavItem.Home.screen_route) {
             HomeContainer(
+                activity = activity,
                 viewModel = viewModel,
                 uiState = uiState,
                 allReservations,
@@ -257,6 +309,7 @@ fun BottomNavigation(navController: NavController) {
 
 @Composable
 fun HomeDataContainer(
+    activity: AppCompatActivity,
     viewModel : LoanViewModel,
     uiState: ReservationUiState,
     allReservations: List<Reservations>?,
@@ -264,31 +317,31 @@ fun HomeDataContainer(
     insertReservation: () -> Unit,
     openReservation: () -> Unit) {
 
-    Box (modifier = Modifier.fillMaxSize()){
-        Column(
-            modifier = Modifier
-                .padding(top = 20.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-
-            allReservations?.forEach { item ->
-                ReservationElementView(
-                    eventName = item.event,
-                    name = item.name,
-                    number = item.phoneNumber,
-                    date = item.date,
-                    onCardClick = {
-                        //openReservationActivity(this, item, ReservationUiState(item.id, item.name, item.phoneNumber, item.event, item.date))
-                        viewModel.selectedReservation(uiState.copy(item.id, item.name, item.phoneNumber, item.event, item.date))
-                        openReservation()
-                    },
-                    onDeleteClick = {
-                        deleteReservation()
-                    })
-            }
-        }
-        FloatinActionButton(uiState, insertReservation)
-    }
+//    Box (modifier = Modifier.fillMaxSize()){
+//        Column(
+//            modifier = Modifier
+//                .padding(top = 20.dp)
+//                .verticalScroll(rememberScrollState())
+//        ) {
+//
+//            allReservations?.forEach { item ->
+//                ReservationElementView(
+//                    eventName = item.event,
+//                    name = item.name,
+//                    number = item.phoneNumber,
+//                    date = item.date,
+//                    onCardClick = {
+//                        //openReservationActivity(this, item, ReservationUiState(item.id, item.name, item.phoneNumber, item.event, item.date))
+//                        viewModel.selectedReservation(uiState.copy(item.id, item.name, item.phoneNumber, item.event, item.date))
+//                        openReservation()
+//                    },
+//                    onDeleteClick = {
+//                        deleteReservation()
+//                    })
+//            }
+//        }
+//        FloatinActionButton(uiState, insertReservation)
+//    }
 }
 
 @Composable
@@ -324,10 +377,10 @@ fun FloatinActionButton(uiState: ReservationUiState, insertReservation: () -> Un
 fun AddReservationDialog(uiState: ReservationUiState, insertReservation: () -> Unit) {
 
     val txtFieldError = remember { mutableStateOf("") }
-    val reservationName = remember { mutableStateOf("") }
-    val reservationPhoneNumber = remember { mutableStateOf("") }
-    val reservationEvent = remember { mutableStateOf("") }
-    val reservationDate = remember { mutableStateOf("") }
+    val reservationName = remember { mutableStateOf(uiState.name) }
+    val reservationPhoneNumber = remember { mutableStateOf(uiState.phoneNumber) }
+    val reservationEvent = remember { mutableStateOf(uiState.event) }
+    val reservationDate = remember { mutableStateOf(uiState.date) }
 
     val shouldDismiss = remember { mutableStateOf(false) }
 
@@ -379,7 +432,6 @@ fun AddReservationDialog(uiState: ReservationUiState, insertReservation: () -> U
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         onValueChange = {
                             reservationName.value = it
-                            uiState.name = it
                         })
 
                     TextField(
@@ -403,7 +455,6 @@ fun AddReservationDialog(uiState: ReservationUiState, insertReservation: () -> U
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = {
                             reservationPhoneNumber.value = it
-                            uiState.phoneNumber = it
                         })
 
                     TextField(
@@ -427,7 +478,6 @@ fun AddReservationDialog(uiState: ReservationUiState, insertReservation: () -> U
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         onValueChange = {
                             reservationEvent.value = it
-                            uiState.event = it
                         })
 
                     TextField(
@@ -451,7 +501,6 @@ fun AddReservationDialog(uiState: ReservationUiState, insertReservation: () -> U
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = {
                             reservationDate.value = it
-                            uiState.date = it
                         })
 
                     Button(
@@ -477,29 +526,32 @@ fun AddReservationDialog(uiState: ReservationUiState, insertReservation: () -> U
 fun MainPreview() {
     MeetimeApp_v3Theme {
         HomeContainer(
-            LoanViewModel(ReservationsInteractor(FakeReservationsRepository())),
-            ReservationUiState(1, ", ", "", "", ""),
-            listOf(),
-            {},
-            {},
-            {}
+            activity = AppCompatActivity(),
+            viewModel = LoanViewModel(ReservationsInteractor(FakeReservationsRepository())),
+            uiState = ReservationUiState(1, ", ", "", "", ""),
+            allReservations = listOf(),
+            deleteReservation = {},
+            insertReservation = {},
+            openReservation = {}
         )
     }
 }
 
-//private fun openReservationActivity(reservation: Reservations, uiState: ReservationUiState) {
-//    val intent = Intent(activity, ReservationEditActivity::class.java)
-//
-//    intent.putExtra("id", uiState.id)
-//    intent.putExtra("name", uiState.name)
-//    intent.putExtra("phoneNumber", uiState.phoneNumber)
-//    intent.putExtra("event", uiState.event)
-//    intent.putExtra("date", uiState.date)
-//
-//
-//    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-//    activity.startActivity(intent)
-//
-//    ReservationEditBottomSheet().show(activity, "RESERVATION_EDIT_BOTTOM_SHEET")
-//
-//}
+private fun openReservationActivity(activity: AppCompatActivity, uiState: ReservationUiState) {
+    Log.e("MEETIME", "uiState openReservation name: "+uiState.name)
+    Log.e("MEETIME", "uiState openReservation phoneNumber: "+uiState.phoneNumber)
+    Log.e("MEETIME", "uiState openReservation event: "+uiState.event)
+    Log.e("MEETIME", "uiState openReservation date: "+uiState.date)
+
+    val intent = Bundle()
+    intent.apply {
+        putLong("id", 0L)
+        putString("name", uiState?.name)
+        putString("phoneNumber", uiState?.phoneNumber)
+        putString("event", uiState?.event)
+        putString("date", uiState?.date)
+    }
+    val reservationBottomSheet = ReservationEditBottomSheet()
+    reservationBottomSheet.arguments = intent
+    reservationBottomSheet.show(activity.supportFragmentManager, "RESERVATION_EDIT_BOTTOM_SHEET")
+}

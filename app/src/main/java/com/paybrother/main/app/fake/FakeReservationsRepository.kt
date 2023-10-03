@@ -2,7 +2,6 @@ package com.paybrother.main.app.fake
 
 import com.paybrother.db.Reservations
 import com.paybrother.main.app.data.ReservationItem
-import com.paybrother.main.app.data.ReservationUiState
 import com.paybrother.main.app.repository.ReservationsRepository
 
 class FakeReservationsRepository : ReservationsRepository {
@@ -10,7 +9,7 @@ class FakeReservationsRepository : ReservationsRepository {
 
     override fun deleteReservation(name: String) {}
 
-    override fun updateReservation(state: ReservationUiState) {}
+    override fun updateReservation(id: Long?, name: String) {}
 
     override suspend fun findReservation(name: String) {}
 

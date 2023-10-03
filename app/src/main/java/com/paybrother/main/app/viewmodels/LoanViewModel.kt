@@ -59,6 +59,7 @@ class LoanViewModel @Inject constructor(
     fun updateReservation(state: ReservationUiState){
         viewModelScope.launch(Dispatchers.IO) {
             reservationsInteractor.updateReservation(state)
+            reservationsInteractor.fetchReservationsData()
         }
     }
 

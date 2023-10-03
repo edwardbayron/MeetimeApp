@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 interface ReservationsRepository {
     fun insertReservation(reservation: ReservationItem)
     fun deleteReservation(name: String)
-    fun updateReservation(state: ReservationUiState)
+    fun updateReservation(id: Long?, name: String)
     suspend fun findReservation(name: String)
     fun fetchReservations() : MutableList<Reservations>
 
@@ -39,8 +39,8 @@ class ReservationsRepositoryImpl(
         reservationsDao.deleteReservation(name)
     }
 
-    override fun updateReservation(state: ReservationUiState){
-        reservationsDao.updateReservation(state.id, state.name)
+    override fun updateReservation(id: Long?, name: String){
+        reservationsDao.updateReservation(id, name)
     }
 
     override suspend fun findReservation(name: String){
