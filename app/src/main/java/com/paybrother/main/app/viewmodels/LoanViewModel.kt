@@ -2,6 +2,7 @@ package com.paybrother.main.app.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paybrother.db.Reservations
@@ -11,7 +12,9 @@ import com.paybrother.main.app.repository.ReservationsInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,7 +39,7 @@ class LoanViewModel @Inject constructor(
     }
 
     fun selectedReservation(state: ReservationUiState){
-        _uiState.value = state
+        _uiState.update { state }
     }
 
     fun insertReservation(){
@@ -54,8 +57,8 @@ class LoanViewModel @Inject constructor(
     }
 
     fun updateReservation(state: ReservationUiState){
-        viewModelScope.launch {
-            //reservationsRepository.updateReservation(state)
+        viewModelScope.launch(Dispatchers.IO) {
+            reservationsInteractor.updateReservation(state)
         }
     }
 

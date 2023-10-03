@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.paybrother.main.app.data.ReservationParcelable
 import com.paybrother.main.app.data.ReservationUiState
@@ -31,35 +32,24 @@ class ReservationEditActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val data =
-                this.intent.extras?.getSerializable("reservationData") as ReservationParcelable
             MeetimeApp_v3Theme {
+                val viewModel = hiltViewModel<LoanViewModel>()
+
+                val testUiState = ReservationUiState(
+                    id = intent?.getLongExtra("id", 0L),
+                    name = intent?.getStringExtra("name").toString(),
+                    phoneNumber = intent?.getStringExtra("phoneNumber").toString(),
+                    event = intent?.getStringExtra("event").toString(),
+                    date = intent?.getStringExtra("date").toString()
+                )
+
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val owner = LocalViewModelStoreOwner.current
 
-//                    owner?.let {
-//                        val viewModel: LoanViewModel = viewModel(
-//                            it,
-//                            "LoanViewModel",
-//                            MainViewModelFactory(
-//                                LocalContext.current.applicationContext as Application
-//                            )
-//                        )
-//
-//                        val dataTest =
-//                            ReservationUiState(
-//                                id = data.id,
-//                                name = data.name,
-//                                phoneNumber = data.phoneNumber,
-//                                event = data.event,
-//                                date = data.date.toString()
-//                            )
-//
-//                        openEditContainer(dataTest, this, viewModel)
-//                    }
+                    ReservationEditContainer(uiState = testUiState, activity = this, viewModel = viewModel)
                 }
             }
         }
@@ -68,21 +58,17 @@ class ReservationEditActivity : ComponentActivity() {
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun openEditContainer(dataTest: ReservationUiState, activity: ComponentActivity, viewModel: LoanViewModel){
+fun ReservationEditContainer(uiState: ReservationUiState, activity: ComponentActivity, viewModel: LoanViewModel){
     ReservationEditContainer(
-        dataTest,
+        uiState,
         onBackPress = {
             activity.setResult(RESULT_CANCELED)
             activity.finish()
         },
-        onSavePress = { state ->
-            viewModel.updateReservation(state = state)
+        onSavePress = {
+            viewModel.updateReservation(state = uiState)
+            // TODO
             val intent = Intent()
-            intent.putExtra("id", state.id)
-            intent.putExtra("name", state.name)
-            intent.putExtra("phoneNumber", state.phoneNumber)
-            intent.putExtra("event", state.event)
-            intent.putExtra("date", state.date)
             activity.setResult(RESULT_OK, intent)
             activity.finish()
         }
@@ -91,13 +77,13 @@ fun openEditContainer(dataTest: ReservationUiState, activity: ComponentActivity,
 
 @Composable
 fun ReservationEditContainer(
-    data: ReservationUiState,
+    uiState: ReservationUiState,
     onBackPress: () -> Unit,
-    onSavePress: (state: ReservationUiState) -> Unit
+    onSavePress: () -> Unit
 ) {
     Column {
         AppBarEditView(onBackPress)
-        ReservationEditDataContainer(data, onSavePress)
+        ReservationEditDetails(uiState, onSavePress)
     }
 }
 
@@ -143,14 +129,16 @@ fun AppBarEditView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReservationEditDataContainer(
-    data: ReservationUiState,
-    onSavePress: (state: ReservationUiState) -> Unit
+fun ReservationEditDetails(
+    uiState: ReservationUiState,
+    onSavePress: () -> Unit
 ) {
-    val reservationTitleText = rememberSaveable { mutableStateOf(data.name) }
-    val reservationPhoneNumberText = rememberSaveable { mutableStateOf(data.phoneNumber) }
-    val reservationEventText = rememberSaveable { mutableStateOf(data.event)}
-    val reservationDateText = rememberSaveable { mutableStateOf(data.date) }
+    val reservationTitleText = remember { mutableStateOf(uiState.name) }
+    val reservationPhoneNumberText = remember { mutableStateOf(uiState.phoneNumber) }
+    val reservationEventText = remember { mutableStateOf(uiState.event)}
+    val reservationDateText = remember { mutableStateOf(uiState.date) }
+
+    val reservationDetailsUiState = remember { mutableStateOf(uiState) }
 
     Column(
         modifier = Modifier
@@ -165,7 +153,9 @@ fun ReservationEditDataContainer(
                         .fillMaxWidth()
                         .padding(10.dp),
                     value = reservationTitleText.value,
-                    onValueChange = { reservationTitleText.value = it },
+                    onValueChange = {
+                        reservationTitleText.value = it
+                    },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.Black,
                         containerColor = Color.White
@@ -177,7 +167,9 @@ fun ReservationEditDataContainer(
                         .fillMaxWidth()
                         .padding(10.dp),
                     value = reservationPhoneNumberText.value,
-                    onValueChange = { reservationPhoneNumberText.value = it },
+                    onValueChange = {
+                        reservationPhoneNumberText.value = it
+                    },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.Black,
                         containerColor = Color.White
@@ -189,7 +181,9 @@ fun ReservationEditDataContainer(
                         .fillMaxWidth()
                         .padding(10.dp),
                     value = reservationEventText.value,
-                    onValueChange = { reservationEventText.value = it },
+                    onValueChange = {
+                        reservationEventText.value = it
+                    },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.Black,
                         containerColor = Color.White
@@ -201,25 +195,20 @@ fun ReservationEditDataContainer(
                         .fillMaxWidth()
                         .padding(10.dp),
                     value = reservationDateText.value,
-                    onValueChange = { reservationDateText.value = it },
+                    onValueChange = {
+                        reservationDateText.value = it
+                    },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.Black,
                         containerColor = Color.White
                     )
                 )
 
-                val savedData = ReservationUiState(
-                    data.id,
-                    reservationTitleText.value,
-                    reservationPhoneNumberText.value,
-                    reservationEventText.value,
-                    reservationDateText.value
-                )
-
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        onSavePress(savedData)
+                        //onSavePress(uiState)
+                        onSavePress()
                     }) {
 
                     Text("Save")

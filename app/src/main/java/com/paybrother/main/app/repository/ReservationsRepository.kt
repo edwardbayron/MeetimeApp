@@ -40,9 +40,7 @@ class ReservationsRepositoryImpl(
     }
 
     override fun updateReservation(state: ReservationUiState){
-        coroutineScope.launch {
-            reservationsDao.updateReservation(state.id, state.name)
-        }
+        reservationsDao.updateReservation(state.id, state.name)
     }
 
     override suspend fun findReservation(name: String){

@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.MeetimeApp_v3Theme" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.MeetimeApp_v3Theme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:statusBarColor">@color/green_obstacle</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme.Medium" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle.Medium</item>
+        <item name="android:textColorPrimary">#273348</item>
+    </style>
+
+    <style name="AppModalStyle.Medium" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_rounded_dialog</item>
     </style>
 </resources>

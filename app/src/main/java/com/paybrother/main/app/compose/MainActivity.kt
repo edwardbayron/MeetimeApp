@@ -1,11 +1,12 @@
 package com.paybrother.main.app.compose
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -34,7 +35,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.fragment.app.FragmentManager
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -43,21 +48,25 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.paybrother.R
 import com.paybrother.db.Reservations
-import com.paybrother.main.app.data.ReservationParcelable
 import com.paybrother.main.app.data.ReservationUiState
+import com.paybrother.main.app.fake.FakeReservationsRepository
 import com.paybrother.main.app.navigation.BottomNavContentScreens.AddReservationScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.ContactsScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.EmptyScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.NotificationScreen
 import com.paybrother.main.app.navigation.BottomNavItem
+import com.paybrother.main.app.repository.ReservationsInteractor
+import com.paybrother.main.app.repository.ReservationsRepository
+import com.paybrother.main.app.repository.ReservationsRepositoryImpl
 import com.paybrother.main.app.viewmodels.LoanViewModel
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class)
@@ -69,6 +78,12 @@ class MainActivity : ComponentActivity() {
                 val viewModel = hiltViewModel<LoanViewModel>()
                 val uiState by viewModel.uiState.collectAsState()
                 val listReservations by viewModel.allReservations.observeAsState(initial = listOf())
+
+                Log.e("MEETIME", "uiState initial name: "+uiState.name)
+                Log.e("MEETIME", "uiState initial phoneNumber: "+uiState.phoneNumber)
+                Log.e("MEETIME", "uiState initial event: "+uiState.event)
+                Log.e("MEETIME", "uiState initial date: "+uiState.date)
+
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -86,6 +101,7 @@ class MainActivity : ComponentActivity() {
                         Column(modifier = Modifier.navigationBarsPadding()) {
                             AppBarView()
                             NavigationGraph(
+                                viewModel = viewModel,
                                 uiState = uiState,
                                 navController = navController,
                                 listReservations,
@@ -94,7 +110,27 @@ class MainActivity : ComponentActivity() {
                                 },
                                 insertReservation = {
                                     viewModel.insertReservation()
-                                })
+                                },
+                                openReservation = {
+
+                                    Log.e("MEETIME", "uiState openReservation name: "+uiState.name)
+                                    Log.e("MEETIME", "uiState openReservation phoneNumber: "+uiState.phoneNumber)
+                                    Log.e("MEETIME", "uiState openReservation event: "+uiState.event)
+                                    Log.e("MEETIME", "uiState openReservation date: "+uiState.date)
+
+                                    val intent = Bundle()
+                                    intent.apply {
+                                        putLong("id", 0L)
+                                        putString("name", uiState?.name)
+                                        putString("phoneNumber", uiState?.phoneNumber)
+                                        putString("event", uiState?.event)
+                                        putString("date", uiState?.date)
+                                    }
+                                    val reservationBottomSheet = ReservationEditBottomSheet()
+                                    reservationBottomSheet.arguments = intent
+                                    reservationBottomSheet.show(this@MainActivity.supportFragmentManager, "RESERVATION_EDIT_BOTTOM_SHEET")
+                            }
+                                )
 
                         }
                     }
@@ -106,13 +142,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun HomeContainer(
+    viewModel: LoanViewModel,
     uiState: ReservationUiState,
     allReservations: List<Reservations>?,
     deleteReservation: () -> Unit,
-    insertReservation: () -> Unit) {
+    insertReservation: () -> Unit,
+    openReservation: () -> Unit) {
 
     Column {
-        HomeDataContainer(uiState, allReservations, deleteReservation, insertReservation)
+        HomeDataContainer(viewModel, uiState, allReservations, deleteReservation, insertReservation, openReservation)
     }
 }
 
@@ -139,11 +177,13 @@ fun AppBarView() {
 
 @Composable
 fun NavigationGraph(
+    viewModel: LoanViewModel,
     uiState: ReservationUiState,
     navController: NavHostController,
     allReservations: List<Reservations>?,
     deleteReservation: () -> Unit,
-    insertReservation: () -> Unit) {
+    insertReservation: () -> Unit,
+    openReservation: () -> Unit) {
 
     NavHost(
         navController,
@@ -151,10 +191,12 @@ fun NavigationGraph(
     ) {
         composable(BottomNavItem.Home.screen_route) {
             HomeContainer(
+                viewModel = viewModel,
                 uiState = uiState,
                 allReservations,
                 deleteReservation,
-                insertReservation
+                insertReservation,
+                openReservation,
             )
         }
         composable(BottomNavItem.MyNetwork.screen_route) {
@@ -215,19 +257,19 @@ fun BottomNavigation(navController: NavController) {
 
 @Composable
 fun HomeDataContainer(
+    viewModel : LoanViewModel,
     uiState: ReservationUiState,
     allReservations: List<Reservations>?,
     deleteReservation: () -> Unit,
-    insertReservation: () -> Unit) {
-    val context = LocalContext.current
+    insertReservation: () -> Unit,
+    openReservation: () -> Unit) {
+
     Box (modifier = Modifier.fillMaxSize()){
         Column(
             modifier = Modifier
                 .padding(top = 20.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-
-//            val listReservations by allReservations.observeAsState(listOf())!!
 
             allReservations?.forEach { item ->
                 ReservationElementView(
@@ -236,7 +278,9 @@ fun HomeDataContainer(
                     number = item.phoneNumber,
                     date = item.date,
                     onCardClick = {
-                        openReservationActivity(context, item)
+                        //openReservationActivity(this, item, ReservationUiState(item.id, item.name, item.phoneNumber, item.event, item.date))
+                        viewModel.selectedReservation(uiState.copy(item.id, item.name, item.phoneNumber, item.event, item.date))
+                        openReservation()
                     },
                     onDeleteClick = {
                         deleteReservation()
@@ -432,20 +476,30 @@ fun AddReservationDialog(uiState: ReservationUiState, insertReservation: () -> U
 @Composable
 fun MainPreview() {
     MeetimeApp_v3Theme {
-        HomeContainer(ReservationUiState(1, ", ", "", "", ""), listOf(), {}, {})
+        HomeContainer(
+            LoanViewModel(ReservationsInteractor(FakeReservationsRepository())),
+            ReservationUiState(1, ", ", "", "", ""),
+            listOf(),
+            {},
+            {},
+            {}
+        )
     }
 }
 
-private fun openReservationActivity(context: Context, reservation: Reservations) {
-    val intent = Intent(context, ReservationActivity::class.java)
-    val reservationObject = ReservationParcelable(
-        reservation.id!!,
-        reservation.name,
-        reservation.phoneNumber,
-        reservation.event,
-        reservation.date
-    )
-    intent.putExtra("reservationData", reservationObject as Serializable)
-    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    context.startActivity(intent)
-}
+//private fun openReservationActivity(reservation: Reservations, uiState: ReservationUiState) {
+//    val intent = Intent(activity, ReservationEditActivity::class.java)
+//
+//    intent.putExtra("id", uiState.id)
+//    intent.putExtra("name", uiState.name)
+//    intent.putExtra("phoneNumber", uiState.phoneNumber)
+//    intent.putExtra("event", uiState.event)
+//    intent.putExtra("date", uiState.date)
+//
+//
+//    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//    activity.startActivity(intent)
+//
+//    ReservationEditBottomSheet().show(activity, "RESERVATION_EDIT_BOTTOM_SHEET")
+//
+//}

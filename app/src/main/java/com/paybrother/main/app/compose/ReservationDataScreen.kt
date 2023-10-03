@@ -14,14 +14,14 @@ import androidx.compose.ui.unit.dp
 import com.paybrother.main.app.data.ReservationUiState
 
 @Composable
-fun ReservationDataScreen(data: ReservationUiState, onBackPress: () -> Unit) {
-    ReservationDataContainer(data)
-    EditAppBarView(data, onBackPress)
+fun ReservationDataScreen(uiState: ReservationUiState, onBackPress: () -> Unit) {
+    ReservationDataContainer(uiState)
+    EditAppBarView(uiState, onBackPress)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReservationDataContainer(data: ReservationUiState) {
+fun ReservationDataContainer(uiState: ReservationUiState) {
     //var reservationUiState = remember { mutableStateOf(data) }
 //    var reservationTitle = remember { mutableStateOf(data.title) }
 //    var reservationSum = remember { mutableStateOf(data.sum) }
@@ -35,18 +35,18 @@ fun ReservationDataContainer(data: ReservationUiState) {
 
         Box(Modifier.fillMaxSize()) {
             Column {
-                Text(text = data.name)
-                Text(text = data.phoneNumber)
-                Text(text = data.event)
-                Text(text = data.date)
+                Text(text = uiState.name)
+                Text(text = uiState.phoneNumber)
+                Text(text = uiState.event)
+                Text(text = uiState.date)
 
                 OutlinedTextField(
-                    value = data.name,
+                    value = uiState.name,
                     enabled = false,
                     onValueChange = {
-                        data.name = it
+                        uiState.name = it
                     },
-                    label = { Text(data.name)}
+                    label = { Text(uiState.name)}
                 )
 
             }
