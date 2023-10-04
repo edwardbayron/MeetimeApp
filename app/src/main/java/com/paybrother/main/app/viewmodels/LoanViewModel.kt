@@ -49,9 +49,9 @@ class LoanViewModel @Inject constructor(
         }
     }
 
-    fun deleteReservation(){
+    fun deleteReservation(name: String){
         viewModelScope.launch(Dispatchers.IO) {
-            reservationsInteractor.deleteReservation(ReservationItem(_uiState.value.name, _uiState.value.phoneNumber, _uiState.value.event, _uiState.value.date))
+            reservationsInteractor.deleteReservation(name)
             reservationsInteractor.fetchReservationsData()
         }
     }

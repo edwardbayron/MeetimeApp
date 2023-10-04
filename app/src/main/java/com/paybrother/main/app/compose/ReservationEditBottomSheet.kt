@@ -37,12 +37,10 @@ import com.paybrother.main.app.viewmodels.LoanViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ReservationEditBottomSheet : BottomSheetDialogFragment() {
+class ReservationEditBottomSheet(val viewModel: LoanViewModel) : BottomSheetDialogFragment() {
 
     private var _binding: FragmentReservationEditBinding? = null
     private val binding: FragmentReservationEditBinding get() = _binding!!
-
-    private lateinit var behavior: BottomSheetBehavior<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,20 +61,7 @@ class ReservationEditBottomSheet : BottomSheetDialogFragment() {
             // is destroyed
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                val viewModel = hiltViewModel<LoanViewModel>()
-                val uiState = viewModel.uiState.collectAsState()
-                Log.e("MEETIME", "intent uiState.name: "+uiState.value.name)
-                Log.e("MEETIME", "intent: "+arguments?.getString("name"))
-
-                arguments?.let {
-                    viewModel.selectedReservation(uiState.value.copy(
-                        id = it.getLong("id"),
-                        name = it.getString("name").toString(),
-                        phoneNumber = it.getString("phoneNumber").toString(),
-                        event = it.getString("event").toString(),
-                        date = it.getString("date").toString()
-                    ))
-                }
+                val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
                 MaterialTheme {
                     Surface(
@@ -88,11 +73,6 @@ class ReservationEditBottomSheet : BottomSheetDialogFragment() {
                             val reservationPhoneNumberText = remember { mutableStateOf(uiState.value.phoneNumber) }
                             val reservationEventText = remember { mutableStateOf(uiState.value.event) }
                             val reservationDateText = remember { mutableStateOf(uiState.value.date) }
-
-                            Log.e("MEETIME", "intent uiState.name: "+uiState.value.name)
-                            Log.e("MEETIME", "intent uiState.phoneNumber: "+uiState.value.phoneNumber)
-                            Log.e("MEETIME", "intent uiState.event: "+uiState.value.event)
-                            Log.e("MEETIME", "intent uiState.date: "+uiState.value.date)
 
                             Column(
                                 modifier = Modifier
@@ -163,8 +143,8 @@ class ReservationEditBottomSheet : BottomSheetDialogFragment() {
                                             onClick = {
                                                 //onSavePress(uiState)
                                                 //onSavePress()
-                                                viewModel.updateReservation(state = uiState.value)
-                                                viewModel.selectedReservation(uiState.value.copy(uiState.value.id, uiState.value.name, uiState.value.phoneNumber, uiState.value.event, uiState.value.date))
+                                                viewModel.updateReservation(state = ReservationUiState(uiState.value.id, reservationTitleText.value, reservationPhoneNumberText.value, reservationEventText.value, reservationDateText.value))
+                                                viewModel.selectedReservation(uiState.value.copy(uiState.value.id, reservationTitleText.value, reservationPhoneNumberText.value, reservationEventText.value, reservationDateText.value))
                                                 this@ReservationEditBottomSheet.dismiss()
                                             }) {
 

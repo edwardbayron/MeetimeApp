@@ -30,8 +30,8 @@ class ReservationsInteractor @Inject constructor(
         reservationsRepository.insertReservation(reservation)
     }
 
-    fun deleteReservation(reservation: ReservationItem){
-        reservationsRepository.deleteReservation(reservation.name)
+    fun deleteReservation(name: String){
+        reservationsRepository.deleteReservation(name)
     }
 
     fun updateReservation(state: ReservationUiState){

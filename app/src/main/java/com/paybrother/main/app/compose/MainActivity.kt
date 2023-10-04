@@ -119,26 +119,21 @@ class MainActivity : AppCompatActivity() {
                                                 number = item.phoneNumber,
                                                 date = item.date,
                                                 onCardClick = {
-                                                    //openReservationActivity(this, item, ReservationUiState(item.id, item.name, item.phoneNumber, item.event, item.date))
                                                     viewModel.selectedReservation(uiState.copy(item.id, item.name, item.phoneNumber, item.event, item.date))
-                                                    openReservationActivity(this@MainActivity, uiState)
+                                                    openReservationActivity(this@MainActivity, viewModel)
                                                 },
                                                 onDeleteClick = {
-                                                    //deleteReservation()
+                                                    viewModel.deleteReservation(item.name)
                                                 })
                                         }
                                     }
-                                    //FloatinActionButton(uiState, insertReservation)
+                                    FloatinActionButton(uiState, {
+                                        viewModel.insertReservation()
+                                    })
                                 }
-
-                                FloatinActionButton(uiState, {
-                                    viewModel.insertReservation()
-                                })
                             }
 
-
-
-
+                            // TODO FIX THE NAVIGATION GRAPH, SOME OTHER IMPLEMENTATION OF THAT STRUCTURE
 //                            NavigationGraph(
 //                                activity = this@MainActivity,
 //                                viewModel = viewModel,
@@ -162,46 +157,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-}
-
-@Composable
-fun HomeContainer(
-    activity: AppCompatActivity,
-    viewModel: LoanViewModel,
-    uiState: ReservationUiState,
-    allReservations: List<Reservations>?,
-    deleteReservation: () -> Unit,
-    insertReservation: () -> Unit,
-    openReservation: () -> Unit) {
-
-//    Column {
-//        //HomeDataContainer(activity, viewModel, uiState, allReservations, deleteReservation, insertReservation, openReservation)
-//        Box (modifier = Modifier.fillMaxSize()){
-//            Column(
-//                modifier = Modifier
-//                    .padding(top = 20.dp)
-//                    .verticalScroll(rememberScrollState())
-//            ) {
-//
-//                allReservations?.forEach { item ->
-//                    ReservationElementView(
-//                        eventName = item.event,
-//                        name = item.name,
-//                        number = item.phoneNumber,
-//                        date = item.date,
-//                        onCardClick = {
-//                            //openReservationActivity(this, item, ReservationUiState(item.id, item.name, item.phoneNumber, item.event, item.date))
-//                            viewModel.selectedReservation(uiState.copy(item.id, item.name, item.phoneNumber, item.event, item.date))
-//                            openReservation()
-//                        },
-//                        onDeleteClick = {
-//                            deleteReservation()
-//                        })
-//                }
-//            }
-//            FloatinActionButton(uiState, insertReservation)
-//        }
-//    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -241,15 +196,15 @@ fun NavigationGraph(
         startDestination = BottomNavItem.Home.screen_route,
     ) {
         composable(BottomNavItem.Home.screen_route) {
-            HomeContainer(
-                activity = activity,
-                viewModel = viewModel,
-                uiState = uiState,
-                allReservations,
-                deleteReservation,
-                insertReservation,
-                openReservation,
-            )
+//            HomeContainer(
+//                activity = activity,
+//                viewModel = viewModel,
+//                uiState = uiState,
+//                allReservations,
+//                deleteReservation,
+//                insertReservation,
+//                openReservation,
+//            )
         }
         composable(BottomNavItem.MyNetwork.screen_route) {
             EmptyScreen()
@@ -305,43 +260,6 @@ fun BottomNavigation(navController: NavController) {
             )
         }
     }
-}
-
-@Composable
-fun HomeDataContainer(
-    activity: AppCompatActivity,
-    viewModel : LoanViewModel,
-    uiState: ReservationUiState,
-    allReservations: List<Reservations>?,
-    deleteReservation: () -> Unit,
-    insertReservation: () -> Unit,
-    openReservation: () -> Unit) {
-
-//    Box (modifier = Modifier.fillMaxSize()){
-//        Column(
-//            modifier = Modifier
-//                .padding(top = 20.dp)
-//                .verticalScroll(rememberScrollState())
-//        ) {
-//
-//            allReservations?.forEach { item ->
-//                ReservationElementView(
-//                    eventName = item.event,
-//                    name = item.name,
-//                    number = item.phoneNumber,
-//                    date = item.date,
-//                    onCardClick = {
-//                        //openReservationActivity(this, item, ReservationUiState(item.id, item.name, item.phoneNumber, item.event, item.date))
-//                        viewModel.selectedReservation(uiState.copy(item.id, item.name, item.phoneNumber, item.event, item.date))
-//                        openReservation()
-//                    },
-//                    onDeleteClick = {
-//                        deleteReservation()
-//                    })
-//            }
-//        }
-//        FloatinActionButton(uiState, insertReservation)
-//    }
 }
 
 @Composable
@@ -525,33 +443,19 @@ fun AddReservationDialog(uiState: ReservationUiState, insertReservation: () -> U
 @Composable
 fun MainPreview() {
     MeetimeApp_v3Theme {
-        HomeContainer(
-            activity = AppCompatActivity(),
-            viewModel = LoanViewModel(ReservationsInteractor(FakeReservationsRepository())),
-            uiState = ReservationUiState(1, ", ", "", "", ""),
-            allReservations = listOf(),
-            deleteReservation = {},
-            insertReservation = {},
-            openReservation = {}
-        )
+//        HomeContainer(
+//            activity = AppCompatActivity(),
+//            viewModel = LoanViewModel(ReservationsInteractor(FakeReservationsRepository())),
+//            uiState = ReservationUiState(1, ", ", "", "", ""),
+//            allReservations = listOf(),
+//            deleteReservation = {},
+//            insertReservation = {},
+//            openReservation = {}
+//        )
     }
 }
 
-private fun openReservationActivity(activity: AppCompatActivity, uiState: ReservationUiState) {
-    Log.e("MEETIME", "uiState openReservation name: "+uiState.name)
-    Log.e("MEETIME", "uiState openReservation phoneNumber: "+uiState.phoneNumber)
-    Log.e("MEETIME", "uiState openReservation event: "+uiState.event)
-    Log.e("MEETIME", "uiState openReservation date: "+uiState.date)
-
-    val intent = Bundle()
-    intent.apply {
-        putLong("id", 0L)
-        putString("name", uiState?.name)
-        putString("phoneNumber", uiState?.phoneNumber)
-        putString("event", uiState?.event)
-        putString("date", uiState?.date)
-    }
-    val reservationBottomSheet = ReservationEditBottomSheet()
-    reservationBottomSheet.arguments = intent
+private fun openReservationActivity(activity: AppCompatActivity, viewModel: LoanViewModel) {
+    val reservationBottomSheet = ReservationEditBottomSheet(viewModel)
     reservationBottomSheet.show(activity.supportFragmentManager, "RESERVATION_EDIT_BOTTOM_SHEET")
 }
