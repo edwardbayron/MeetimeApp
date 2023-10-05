@@ -127,7 +127,6 @@ fun ReservationsListContainer(
     Column(modifier = Modifier.navigationBarsPadding()) {
         AppBarView()
         Column {
-            //HomeDataContainer(activity, viewModel, uiState, allReservations, deleteReservation, insertReservation, openReservation)
             Box(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier = Modifier
@@ -158,9 +157,9 @@ fun ReservationsListContainer(
                             })
                     }
                 }
-                FloatinActionButton(uiState) {
-                    viewModel.insertReservation()
-                }
+//                FloatinActionButton(uiState) {
+//                    viewModel.insertReservation()
+//                }
             }
         }
     }
@@ -192,7 +191,7 @@ fun NavigationGraph(
             EmptyScreen()
         }
         composable(BottomNavItem.AddPost.screen_route) {
-            AddReservationScreen()
+            AddReservationScreen(viewModel, navController)
         }
         composable(BottomNavItem.Notification.screen_route) {
             NotificationScreen()
@@ -248,181 +247,39 @@ fun BottomNavigation(navController: NavController) {
     }
 }
 
-@Composable
-fun FloatinActionButton(uiState: ReservationUiState, insertReservation: () -> Unit) {
-
-    val addReservation = remember { mutableStateOf(false) }
-    Box(Modifier.fillMaxSize()) {
-        FloatingActionButton(
-            modifier = Modifier
-                .align(alignment = Alignment.BottomEnd)
-                .padding(bottom = 70.dp, end = 10.dp),
-            onClick = {
-                addReservation.value = true
-            },
-            containerColor = Color.Red,
-            shape = RoundedCornerShape(16.dp),
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.Add,
-                contentDescription = "Add FAB",
-                tint = Color.White,
-            )
-        }
-    }
-
-    if (addReservation.value) {
-        AddReservationDialog(uiState = uiState, insertReservation)
-    }
-}
+//@Composable
+//fun FloatinActionButton(uiState: ReservationUiState, insertReservation: () -> Unit) {
+//    val addReservation = remember { mutableStateOf(false) }
+//
+//    Box(Modifier.fillMaxSize()) {
+//        FloatingActionButton(
+//            modifier = Modifier
+//                .align(alignment = Alignment.BottomEnd)
+//                .padding(bottom = 70.dp, end = 10.dp),
+//            onClick = {
+//                addReservation.value = true
+//            },
+//            containerColor = Color.Red,
+//            shape = RoundedCornerShape(16.dp),
+//        ) {
+//            Icon(
+//                imageVector = Icons.Rounded.Add,
+//                contentDescription = "Add FAB",
+//                tint = Color.White,
+//            )
+//        }
+//    }
+//
+//    if (addReservation.value) {
+//        AddReservationDialog(uiState = uiState, insertReservation)
+//    }
+//}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddReservationDialog(uiState: ReservationUiState, insertReservation: () -> Unit) {
 
-    val txtFieldError = remember { mutableStateOf("") }
-    val reservationName = remember { mutableStateOf(uiState.name) }
-    val reservationPhoneNumber = remember { mutableStateOf(uiState.phoneNumber) }
-    val reservationEvent = remember { mutableStateOf(uiState.event) }
-    val reservationDate = remember { mutableStateOf(uiState.date) }
 
-    val shouldDismiss = remember { mutableStateOf(false) }
-
-    if (shouldDismiss.value) return
-
-    Dialog(
-        onDismissRequest = {
-            shouldDismiss.value = true
-
-        },
-        properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = true,
-        )
-    ) {
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            color = Color.White
-        ) {
-            Box(contentAlignment = Alignment.Center) {
-                Column(modifier = Modifier.padding(20.dp)) {
-                    Text(
-                        text = "Add reservation",
-                        style = androidx.compose.ui.text.TextStyle(
-                            fontSize = 24.sp,
-                            fontFamily = FontFamily.Default,
-                            fontWeight = FontWeight.Bold
-                        )
-                    )
-
-                    TextField(
-                        modifier = Modifier
-                            .padding(top = 12.dp)
-                            .fillMaxWidth()
-                            .border(
-                                BorderStroke(
-                                    width = 2.dp,
-                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.purple_700)
-                                ),
-                                shape = RoundedCornerShape(10)
-                            ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-                        ),
-                        placeholder = { Text(text = "Enter name") },
-                        value = reservationName.value,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                        onValueChange = {
-                            reservationName.value = it
-                        })
-
-                    TextField(
-                        modifier = Modifier
-                            .padding(top = 12.dp)
-                            .fillMaxWidth()
-                            .border(
-                                BorderStroke(
-                                    width = 2.dp,
-                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.green_obstacle)
-                                ),
-                                shape = RoundedCornerShape(10)
-                            ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-                        ),
-                        placeholder = { Text(text = "Enter phoneNumber") },
-                        value = reservationPhoneNumber.value,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        onValueChange = {
-                            reservationPhoneNumber.value = it
-                        })
-
-                    TextField(
-                        modifier = Modifier
-                            .padding(top = 12.dp)
-                            .fillMaxWidth()
-                            .border(
-                                BorderStroke(
-                                    width = 2.dp,
-                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.purple_500)
-                                ),
-                                shape = RoundedCornerShape(10)
-                            ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-                        ),
-                        placeholder = { Text(text = "Enter event") },
-                        value = reservationEvent.value,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                        onValueChange = {
-                            reservationEvent.value = it
-                        })
-
-                    TextField(
-                        modifier = Modifier
-                            .padding(top = 12.dp)
-                            .fillMaxWidth()
-                            .border(
-                                BorderStroke(
-                                    width = 2.dp,
-                                    color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.purple_700)
-                                ),
-                                shape = RoundedCornerShape(10)
-                            ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-                        ),
-                        placeholder = { Text(text = "Enter date") },
-                        value = reservationDate.value,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        onValueChange = {
-                            reservationDate.value = it
-                        })
-
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = {
-                            insertReservation()
-
-                            shouldDismiss.value = true
-                        },
-                        shape = RoundedCornerShape(16.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
-                    ) {
-                        Text("Save")
-                    }
-                }
-            }
-        }
-    }
 }
 
 @Preview(showBackground = true)

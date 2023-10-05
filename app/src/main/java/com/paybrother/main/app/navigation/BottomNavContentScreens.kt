@@ -13,8 +13,11 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.paybrother.R
+import com.paybrother.main.app.compose.AddNewReservationContent
 import com.paybrother.main.app.compose.ContactScreenContent
+import com.paybrother.main.app.viewmodels.LoanViewModel
 
 object BottomNavContentScreens {
 
@@ -38,22 +41,8 @@ object BottomNavContentScreens {
     }
 
     @Composable
-    fun AddReservationScreen() {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(id = R.color.white))
-                .wrapContentSize(Alignment.Center)
-        ) {
-            Text(
-                text = "Add Reservation Screen",
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp
-            )
-        }
+    fun AddReservationScreen(viewModel: LoanViewModel, navController: NavHostController) {
+        AddNewReservationContent(viewModel, navController)
     }
 
 
