@@ -1,0 +1,14 @@
+
+Ckotlin:S125‹"Remove this commented out code.(òñŒÞýÿÿÿÿ8ð•ðÀ®1
+>kotlin:S125Õ"Remove this commented out code.(õãÖí8ñ•ðÀ®1
+rkotlin:S117æ"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(‹Æ’±úÿÿÿÿ8÷•ðÀ®1
+Qkotlin:S1481ü",Remove this unused "context" local variable.(˜®¾‚øÿÿÿÿ8Œ–ðÀ®1
+8kotlin:S1128"Remove this unused import.(Þ‚½8áïºÀ®1
+9kotlin:S1128"Remove this unused import.(ÜÞÍú8áïºÀ®1
+9kotlin:S1128%"Remove this unused import.(°ÎÑÐ8áïºÀ®1
+9kotlin:S1128'"Remove this unused import.(ÏéûÖ8âïºÀ®1
+>kotlin:S1128("Remove this unused import.(ÙÃä¡þÿÿÿÿ8âïºÀ®1
+>kotlin:S1128)"Remove this unused import.(ÍÆÒˆûÿÿÿÿ8âïºÀ®1
+>kotlin:S1128>"Remove this unused import.(¹²…åøÿÿÿÿ8âïºÀ®1
+>kotlin:S1128?"Remove this unused import.(£ñ¹¸ûÿÿÿÿ8”–ðÀ®1
+rkotlin:S3776¶"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(èé³Ù8™–ðÀ®1

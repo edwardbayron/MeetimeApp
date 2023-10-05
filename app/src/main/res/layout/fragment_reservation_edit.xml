@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewmodel"
+            type="com.paybrother.main.app.viewmodels.LoanViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:theme="@style/Theme.MeetimeApp_v3Theme"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/compose_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

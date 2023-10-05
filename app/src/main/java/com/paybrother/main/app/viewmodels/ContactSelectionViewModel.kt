@@ -7,9 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paybrother.main.app.compose.contacts.ContactsUploadHandler
 import com.paybrother.main.app.data.ContactItem
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ContactSelectionViewModel(application: Application) : ViewModel() {
+@HiltViewModel
+class ContactSelectionViewModel @Inject constructor(application: Application) : ViewModel() {
 
     private var contactsUploadManager: ContactsUploadHandler? = null
     private val originalContactsList = mutableListOf<ContactItem>()

@@ -7,7 +7,7 @@ import androidx.room.*
 interface ReservationsDao {
 
     @Query("Select * from reservation")
-    fun getReservationList() : LiveData<List<Reservations>>
+    fun getReservationList() : MutableList<Reservations>
 
     @Query("INSERT into reservation VALUES (:id, :name, :phoneNumber, :event, :date)")
     fun insertReservation(id: Long?, name: String, phoneNumber: String, event: String, date: String)
