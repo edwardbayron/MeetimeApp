@@ -105,7 +105,7 @@ fun AddNewReservationContent(viewModel: LoanViewModel, navController: NavControl
                     onValueChange = {
                         reservationPhoneNumber.value = it
                     })
-
+                //test commit
                 TextField(
                     modifier = Modifier
                         .padding(top = 12.dp)
