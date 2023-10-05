@@ -1,10 +1,8 @@
 package com.paybrother.main.app.compose
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.BorderStroke
@@ -24,7 +22,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -35,11 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.fragment.app.FragmentManager
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -49,20 +42,14 @@ import androidx.navigation.compose.rememberNavController
 import com.paybrother.R
 import com.paybrother.db.Reservations
 import com.paybrother.main.app.data.ReservationUiState
-import com.paybrother.main.app.fake.FakeReservationsRepository
 import com.paybrother.main.app.navigation.BottomNavContentScreens.AddReservationScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.ContactsScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.EmptyScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.NotificationScreen
 import com.paybrother.main.app.navigation.BottomNavItem
-import com.paybrother.main.app.repository.ReservationsInteractor
-import com.paybrother.main.app.repository.ReservationsRepository
-import com.paybrother.main.app.repository.ReservationsRepositoryImpl
 import com.paybrother.main.app.viewmodels.LoanViewModel
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
@@ -80,13 +67,6 @@ class MainActivity : AppCompatActivity() {
                 val viewModel = hiltViewModel<LoanViewModel>()
                 val uiState by viewModel.uiState.collectAsState()
                 val listReservations by viewModel.allReservations.observeAsState(initial = listOf())
-
-                Log.e("MEETIME", "uiState initial name: "+uiState.name)
-                Log.e("MEETIME", "uiState initial phoneNumber: "+uiState.phoneNumber)
-                Log.e("MEETIME", "uiState initial event: "+uiState.event)
-                Log.e("MEETIME", "uiState initial date: "+uiState.date)
-
-
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),

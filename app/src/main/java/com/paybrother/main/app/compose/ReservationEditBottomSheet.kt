@@ -1,8 +1,6 @@
 package com.paybrother.main.app.compose
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,17 +16,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.paybrother.R
 import com.paybrother.databinding.FragmentReservationEditBinding
@@ -57,8 +51,6 @@ class ReservationEditBottomSheet(val viewModel: LoanViewModel) : BottomSheetDial
         val view = binding.root
 
         binding.composeView.apply {
-            // Dispose of the Composition when the view's LifecycleOwner
-            // is destroyed
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -141,8 +133,6 @@ class ReservationEditBottomSheet(val viewModel: LoanViewModel) : BottomSheetDial
                                         TextButton(
                                             modifier = Modifier.fillMaxWidth(),
                                             onClick = {
-                                                //onSavePress(uiState)
-                                                //onSavePress()
                                                 viewModel.updateReservation(state = ReservationUiState(uiState.value.id, reservationTitleText.value, reservationPhoneNumberText.value, reservationEventText.value, reservationDateText.value))
                                                 viewModel.selectedReservation(uiState.value.copy(uiState.value.id, reservationTitleText.value, reservationPhoneNumberText.value, reservationEventText.value, reservationDateText.value))
                                                 this@ReservationEditBottomSheet.dismiss()
