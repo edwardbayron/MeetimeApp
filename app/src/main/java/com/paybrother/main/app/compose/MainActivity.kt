@@ -300,3 +300,5 @@ private fun openReservationActivity(activity: AppCompatActivity, viewModel: Loan
     val reservationBottomSheet = ReservationEditBottomSheet(viewModel)
     reservationBottomSheet.show(activity.supportFragmentManager, "RESERVATION_EDIT_BOTTOM_SHEET")
 }
+
+

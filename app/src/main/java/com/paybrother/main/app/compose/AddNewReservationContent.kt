@@ -2,21 +2,26 @@ package com.paybrother.main.app.compose
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.util.Log
 import android.widget.DatePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -60,7 +65,7 @@ fun AddNewReservationContent(viewModel: LoanViewModel, navController: NavControl
         color = Color.White
     ) {
         Box(contentAlignment = Alignment.Center) {
-            Column(modifier = Modifier.padding(20.dp)) {
+            Column(modifier = Modifier.padding(20.dp).verticalScroll(rememberScrollState())) {
                 Text(
                     text = "Add reservation",
                     style = TextStyle(
@@ -166,6 +171,10 @@ fun AddNewReservationContent(viewModel: LoanViewModel, navController: NavControl
 
                 TimePickerContent()
 
+                TextNotificationContent()
+
+                TextNotificationScheduleContent()
+
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
@@ -258,8 +267,93 @@ fun TimePickerContent(){
     ) {
         Text(text = "Select time")
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TextNotificationContent(){
+    val reservationNotifyText = remember { mutableStateOf("") }
+
+    TextField(
+        modifier = Modifier
+            .padding(top = 12.dp)
+            .fillMaxWidth()
+            .border(
+                BorderStroke(
+                    width = 2.dp,
+                    color = colorResource(id = R.color.black)
+                ),
+                shape = RoundedCornerShape(10)
+            ),
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        ),
+        placeholder = { Text(text = "Notification text") },
+        value = reservationNotifyText.value,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        onValueChange = {
+            reservationNotifyText.value = it
+        })
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TextNotificationScheduleContent(){
+    val context = LocalContext.current
+    var expanded by remember { mutableStateOf(false) }
+    var time by remember { mutableStateOf("")}
+
+    Box(
+        modifier = Modifier.fillMaxWidth()
+            .wrapContentSize(Alignment.TopEnd)
+    ) {
 
 
+        // TODO do it like 1 to 24h, 1 day to 6 days, 1 to 3 weeks and month
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { newValue -> expanded = newValue}
+        ) {
+
+            TextField(
+                value = time,
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                },
+                placeholder = {
+                    Text(text = "Please select time")
+                },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                modifier = Modifier.menuAnchor()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = {
+                    expanded = false
+                }
+            ) {
+
+                for(time in setupNotificationTime()) {
+                    DropdownMenuItem(
+                        text = {
+                            Text(time)
+                        },
+                        onClick = {
+                            expanded = false
+                        }
+                    )
+                }
+            }
+
+
+
+        }
+    }
 }
 
 
@@ -270,4 +364,28 @@ fun PreviewAddNewReservationContent(){
         viewModel = LoanViewModel(ReservationsInteractor(FakeReservationsRepository())),
         navController = NavController(AppCompatActivity())
     )
+}
+
+private fun setupNotificationTime(): MutableList<String> {
+    val hoursAndWeeksList = mutableListOf<String>()
+
+    val min15 = "15 minutes"
+    val min30 = "30 minutes"
+    val hour1 = "1 hour"
+    val hour2 = "2 hours"
+    val hour3 = "3 hours"
+    val day1 = "1 day"
+    val day2 = "2 days"
+    val week = "1 week"
+
+    hoursAndWeeksList.add(min15)
+    hoursAndWeeksList.add(min30)
+    hoursAndWeeksList.add(hour1)
+    hoursAndWeeksList.add(hour2)
+    hoursAndWeeksList.add(hour3)
+    hoursAndWeeksList.add(day1)
+    hoursAndWeeksList.add(day2)
+    hoursAndWeeksList.add(week)
+
+    return hoursAndWeeksList
 }
