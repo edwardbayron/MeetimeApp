@@ -65,6 +65,9 @@ class ReservationEditBottomSheet(val viewModel: LoanViewModel) : BottomSheetDial
                             val reservationPhoneNumberText = remember { mutableStateOf(uiState.value.phoneNumber) }
                             val reservationEventText = remember { mutableStateOf(uiState.value.event) }
                             val reservationDateText = remember { mutableStateOf(uiState.value.date) }
+                            val reservationTimeText = remember { mutableStateOf(uiState.value.time) }
+                            val reservationNotificationText = remember { mutableStateOf(uiState.value.notificationText) }
+                            val reservationNotificationTime = remember { mutableStateOf(uiState.value.notificationTime) }
 
                             Column(
                                 modifier = Modifier
@@ -133,8 +136,24 @@ class ReservationEditBottomSheet(val viewModel: LoanViewModel) : BottomSheetDial
                                         TextButton(
                                             modifier = Modifier.fillMaxWidth(),
                                             onClick = {
-                                                viewModel.updateReservation(state = ReservationUiState(uiState.value.id, reservationTitleText.value, reservationPhoneNumberText.value, reservationEventText.value, reservationDateText.value))
-                                                viewModel.selectedReservation(uiState.value.copy(uiState.value.id, reservationTitleText.value, reservationPhoneNumberText.value, reservationEventText.value, reservationDateText.value))
+                                                viewModel.updateReservation(
+                                                    state = ReservationUiState(
+                                                        id = uiState.value.id,
+                                                        name = reservationTitleText.value,
+                                                        phoneNumber = reservationPhoneNumberText.value,
+                                                        event = reservationEventText.value,
+                                                        date = reservationDateText.value,
+                                                        time = reservationTimeText.value,
+                                                        notificationText = reservationNotificationText.value,
+                                                        notificationTime = reservationNotificationTime.value
+                                                    ))
+                                                viewModel.selectedReservation(
+                                                    uiState.value.copy(
+                                                        uiState.value.id,
+                                                        reservationTitleText.value,
+                                                        reservationPhoneNumberText.value,
+                                                        reservationEventText.value,
+                                                        reservationDateText.value))
                                                 this@ReservationEditBottomSheet.dismiss()
                                             }) {
 

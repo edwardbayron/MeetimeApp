@@ -190,7 +190,7 @@ fun NavigationGraph(
             EmptyScreen()
         }
         composable(BottomNavItem.AddPost.screen_route) {
-            AddReservationScreen(viewModel, navController)
+            AddReservationScreen(viewModel, navController, uiState)
         }
         composable(BottomNavItem.Notification.screen_route) {
             NotificationScreen()
@@ -253,7 +253,16 @@ fun MainPreview() {
         NavigationGraph(
             activity = AppCompatActivity(),
             viewModel = LoanViewModel(ReservationsInteractor(FakeReservationsRepository())),
-            uiState = ReservationUiState(1, ", ", "", "", ""),
+            uiState = ReservationUiState(
+                id = 0L,
+                name = "Eduard",
+                phoneNumber = "67678686",
+                event = "Birthday",
+                date = "15.07.1992",
+                time = "21:36",
+                notificationText = "You have been born at ",
+                notificationTime = "21:36"
+                ),
             navController = NavHostController(AppCompatActivity()),
             allReservations = listOf()
         )

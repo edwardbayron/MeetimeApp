@@ -9,8 +9,24 @@ interface ReservationsDao {
     @Query("Select * from reservation")
     fun getReservationList() : MutableList<Reservations>
 
-    @Query("INSERT into reservation VALUES (:id, :name, :phoneNumber, :event, :date)")
-    fun insertReservation(id: Long?, name: String, phoneNumber: String, event: String, date: String)
+    @Query("INSERT into reservation VALUES (" +
+            ":id, " +
+            ":name, " +
+            ":phoneNumber, " +
+            ":event, " +
+            ":date, " +
+            ":time, " +
+            ":notificationText, " +
+            ":notificationTime)")
+    fun insertReservation(
+        id: Long?,
+        name: String,
+        phoneNumber: String,
+        event: String,
+        date: String,
+        time: String,
+        notificationText: String,
+        notificationTime: String)
 
     @Query("UPDATE reservation SET name = :name WHERE id = :id")
     fun updateReservation(id: Long?, name: String)

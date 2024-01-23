@@ -214,7 +214,16 @@ class ReservationActivity : ComponentActivity() {
     @Composable
     fun DefaultPreview2() {
         MeetimeApp_v3Theme {
-            ReservationContainer(ReservationUiState(1234567890L, "title", "58053317", "event", "1992-07-15"), {}, {})
+            ReservationContainer(ReservationUiState(
+                id = 1234567890L,
+                name = "title",
+                phoneNumber = "58053317",
+                event = "event",
+                date = "1992-07-15",
+                time = "18:00",
+                notificationText = "test",
+                notificationTime = "18:00"
+                ), {}, {})
         }
     }
 }

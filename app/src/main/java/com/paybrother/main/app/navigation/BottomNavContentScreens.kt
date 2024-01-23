@@ -18,6 +18,7 @@ import androidx.navigation.NavHostController
 import com.paybrother.R
 import com.paybrother.main.app.compose.AddNewReservationContent
 import com.paybrother.main.app.compose.ContactScreenContent
+import com.paybrother.main.app.data.ReservationUiState
 import com.paybrother.main.app.viewmodels.LoanViewModel
 
 object BottomNavContentScreens {
@@ -43,8 +44,16 @@ object BottomNavContentScreens {
     }
 
     @Composable
-    fun AddReservationScreen(viewModel: LoanViewModel, navController: NavHostController) {
-        AddNewReservationContent(viewModel, navController)
+    fun AddReservationScreen(
+        viewModel: LoanViewModel,
+        navController: NavHostController,
+        uiState: ReservationUiState
+        ) {
+        AddNewReservationContent(
+            viewModel,
+            navController,
+            uiState
+            )
     }
 
 

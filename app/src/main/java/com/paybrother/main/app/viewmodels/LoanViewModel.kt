@@ -25,7 +25,16 @@ class LoanViewModel @Inject constructor(
     private var _allReservations = MutableLiveData<List<Reservations>>(emptyList())
     val allReservations : LiveData<List<Reservations>> get() = _allReservations
 
-    private var _uiState = MutableStateFlow(ReservationUiState(0L, "", "", "", ""))
+    private var _uiState = MutableStateFlow(ReservationUiState(
+        id = 0L,
+        name = "",
+        phoneNumber = "",
+        event = "",
+        date = "",
+        time = "",
+        notificationText = "",
+        notificationTime = ""
+        ))
     val uiState = _uiState.asStateFlow()
 
     init {
@@ -43,7 +52,16 @@ class LoanViewModel @Inject constructor(
 
     fun insertReservation(state: ReservationUiState){
         viewModelScope.launch(Dispatchers.IO){
-            reservationsInteractor.insertNewReservation(ReservationItem(state.name, state.phoneNumber, state.event, state.date))
+            reservationsInteractor.insertNewReservation(
+                ReservationItem(
+                    state.name,
+                    state.phoneNumber,
+                    state.event,
+                    state.date,
+                    state.time,
+                    state.notificationText,
+                    state.notificationTime,
+                    ))
             reservationsInteractor.fetchReservationsData()
         }
     }

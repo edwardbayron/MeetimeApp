@@ -40,7 +40,10 @@ class ReservationEditActivity : ComponentActivity() {
                     name = intent?.getStringExtra("name").toString(),
                     phoneNumber = intent?.getStringExtra("phoneNumber").toString(),
                     event = intent?.getStringExtra("event").toString(),
-                    date = intent?.getStringExtra("date").toString()
+                    date = intent?.getStringExtra("date").toString(),
+                    time = intent?.getStringExtra("time").toString(),
+                    notificationText = intent?.getStringExtra("notificationText").toString(),
+                    notificationTime = intent?.getStringExtra("notificationTime").toString()
                 )
 
 
@@ -223,6 +226,15 @@ fun ReservationEditDetails(
 @Composable
 fun DefaultPreview() {
     MeetimeApp_v3Theme {
-        ReservationEditContainer(ReservationUiState(1234567890L,"Title", "Sum", "event","2010-05-30"), {}, {})
+        ReservationEditContainer(ReservationUiState(
+            id = 1234567890L,
+            name = "Title",
+            phoneNumber = "Sum",
+            event = "event",
+            date = "2010-05-30",
+            time = "18:00",
+            notificationText = "test",
+            notificationTime = "18:00"
+        ), {}, {})
     }
 }
