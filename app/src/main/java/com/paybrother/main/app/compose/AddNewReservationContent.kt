@@ -143,29 +143,6 @@ fun AddNewReservationContent(viewModel: LoanViewModel, navController: NavControl
                     onValueChange = {
                         reservationEvent.value = it
                     })
-//                TextField(
-//                    modifier = Modifier
-//                        .padding(top = 12.dp)
-//                        .fillMaxWidth()
-//                        .border(
-//                            BorderStroke(
-//                                width = 2.dp,
-//                                color = colorResource(id = if (txtFieldError.value.isEmpty()) R.color.black else R.color.red)
-//                            ),
-//                            shape = RoundedCornerShape(10)
-//                        ),
-//                    colors = TextFieldDefaults.textFieldColors(
-//                        containerColor = Color.Transparent,
-//                        focusedIndicatorColor = Color.Transparent,
-//                        unfocusedIndicatorColor = Color.Transparent
-//                    ),
-//                    placeholder = { Text(text = "Enter date") },
-//                    value = reservationDate.value,
-//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                    onValueChange = {
-//                        reservationDate.value = it
-//                    })
-
 
                 DatePickerContent()
 
