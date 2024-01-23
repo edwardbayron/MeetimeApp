@@ -32,7 +32,7 @@ class LoanViewModel @Inject constructor(
         viewModelScope.launch {
             reservationsInteractor.fetchReservationsData()
         }
-        
+
 
         reservationsInteractor.reservationsList.observeForever(_allReservations::postValue)
     }

@@ -3,6 +3,7 @@ package com.paybrother.main.app.navigation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ object BottomNavContentScreens {
                 .fillMaxSize()
                 .background(colorResource(id = R.color.white))
                 .wrapContentSize(Alignment.Center)
+
         ) {
             Text(
                 text = "Empty Screen",
@@ -52,8 +54,10 @@ object BottomNavContentScreens {
             modifier = Modifier
                 .fillMaxSize()
                 .background(colorResource(id = R.color.white))
+                .navigationBarsPadding()
                 .wrapContentSize(Alignment.Center)
         ) {
+
             Text(
                 text = "Notification Screen",
                 fontWeight = FontWeight.Bold,

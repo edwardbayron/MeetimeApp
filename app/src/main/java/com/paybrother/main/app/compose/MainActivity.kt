@@ -70,26 +70,31 @@ class MainActivity : AppCompatActivity() {
                 val listReservations by viewModel.allReservations.observeAsState(initial = listOf())
 
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
 
                     val navController = rememberNavController()
 
                     Scaffold(
+                        modifier = Modifier.fillMaxSize(),
                         bottomBar = {
                             BottomNavigation(navController = navController)
+                        },
+                        topBar = {
+                            AppBarView()
+                        },
+                        content = {
+                            Box(modifier = Modifier.padding(it)) {
+                                NavigationGraph(
+                                    activity = this@MainActivity,
+                                    viewModel = viewModel,
+                                    uiState = uiState,
+                                    navController = navController,
+                                    listReservations
+                                )
+                            }
                         }
-                    ) {
-
-                        NavigationGraph(
-                            activity = this@MainActivity,
-                            viewModel = viewModel,
-                            uiState = uiState,
-                            navController = navController,
-                            listReservations
-                        )
-                    }
+                    )
                 }
             }
         }
@@ -125,7 +130,6 @@ fun ReservationsListContainer(
     viewModel: LoanViewModel
 ) {
     Column(modifier = Modifier.navigationBarsPadding()) {
-        AppBarView()
         Column {
             Box(modifier = Modifier.fillMaxSize()) {
                 Column(
@@ -157,9 +161,6 @@ fun ReservationsListContainer(
                             })
                     }
                 }
-//                FloatinActionButton(uiState) {
-//                    viewModel.insertReservation()
-//                }
             }
         }
     }
@@ -174,7 +175,6 @@ fun NavigationGraph(
     navController: NavHostController,
     allReservations: List<Reservations>?
 ) {
-
     NavHost(
         navController,
         startDestination = BottomNavItem.Home.screen_route,
@@ -188,6 +188,7 @@ fun NavigationGraph(
             )
         }
         composable(BottomNavItem.MyNetwork.screen_route) {
+
             EmptyScreen()
         }
         composable(BottomNavItem.AddPost.screen_route) {
