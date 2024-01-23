@@ -1,14 +1,19 @@
 
-Ckotlin:S125‹"Remove this commented out code.(òñŒŞıÿÿÿÿ8ğ•ğÀ®1
->kotlin:S125Õ"Remove this commented out code.(õãÖí8ñ•ğÀ®1
-rkotlin:S117æ"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(‹Æ’±úÿÿÿÿ8÷•ğÀ®1
-Qkotlin:S1481ü",Remove this unused "context" local variable.(˜®¾‚øÿÿÿÿ8Œ–ğÀ®1
-8kotlin:S1128"Remove this unused import.(Ş‚½8áïºÀ®1
-9kotlin:S1128"Remove this unused import.(ÜŞÍú8áïºÀ®1
-9kotlin:S1128%"Remove this unused import.(°ÎÑĞ8áïºÀ®1
-9kotlin:S1128'"Remove this unused import.(ÏéûÖ8âïºÀ®1
->kotlin:S1128("Remove this unused import.(ÙÃä¡şÿÿÿÿ8âïºÀ®1
->kotlin:S1128)"Remove this unused import.(ÍÆÒˆûÿÿÿÿ8âïºÀ®1
->kotlin:S1128>"Remove this unused import.(¹²…åøÿÿÿÿ8âïºÀ®1
->kotlin:S1128?"Remove this unused import.(£ñ¹¸ûÿÿÿÿ8”–ğÀ®1
-rkotlin:S3776¶"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(èé³Ù8™–ğÀ®1
+Hkotlin:S1172˜"(Remove these unused function parameters.(èé³Ù8Å›ğ°1
+>kotlin:S125 "Remove this commented out code.(¼ÇİÚ8’œğ°1
+Ckotlin:S125ú"Remove this commented out code.(†×–Îùÿÿÿÿ8 œğ°1
+rkotlin:S117ì"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(‹Æ’±úÿÿÿÿ8÷•ğÀ®1
+>kotlin:S1128"Remove this unused import.(ÊÒÅ­ùÿÿÿÿ8½ğ°1
+>kotlin:S1128"Remove this unused import.(ˆöŸ¤ûÿÿÿÿ8½ğ°1
+>kotlin:S1128	"Remove this unused import.(Õ„´°ùÿÿÿÿ8¾ğ°1
+>kotlin:S1128"Remove this unused import.(¤­‹üÿÿÿÿ8¿ğ°1
+>kotlin:S1128"Remove this unused import.(¹àÇæÿÿÿÿÿ8Àğ°1
+9kotlin:S1128"Remove this unused import.(¬ïİÎ8Áğ°1
+>kotlin:S1128"Remove this unused import.(ÏõÁŞşÿÿÿÿ8Âğ°1
+>kotlin:S1128"Remove this unused import.(É°¹ªøÿÿÿÿ8Ãğ°1
+>kotlin:S1128"Remove this unused import.(À†ŠÔùÿÿÿÿ8Ãğ°1
+>kotlin:S1128"Remove this unused import.(Â­¢Âùÿÿÿÿ8Äğ°1
+9kotlin:S1128"Remove this unused import.(úîĞó8Åğ°1
+9kotlin:S1128!"Remove this unused import.(ğÜÂğ8Æğ°1
+>kotlin:S1128""Remove this unused import.(‚ñÉÿÿÿÿÿ8Æğ°1
+zkotlin:S1186˜"ZAdd a nested comment explaining why this function is empty or complete the implementation.(èé³Ù8çğ°1
