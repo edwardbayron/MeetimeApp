@@ -127,6 +127,14 @@ fun ReservationsListContainer(
     uiState: ReservationUiState,
     viewModel: LoanViewModel
 ) {
+    Log.e("TEST", "uiState.name: "+uiState.name)
+    Log.e("TEST", "uiState.phoneNumber: "+uiState.phoneNumber)
+    Log.e("TEST", "uiState.event: "+uiState.event)
+    Log.e("TEST", "uiState.date: "+uiState.date)
+    Log.e("TEST", "uiState.time: "+uiState.time)
+    Log.e("TEST", "uiState.notificationText: "+uiState.notificationText)
+    Log.e("TEST", "uiState.notificationTime: "+uiState.notificationTime)
+
     Column(modifier = Modifier.navigationBarsPadding()) {
         Column {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -137,6 +145,13 @@ fun ReservationsListContainer(
                 ) {
 
                     allReservations?.forEach { item ->
+                        Log.e("TEST", "item.name: "+item.name)
+                        Log.e("TEST", "Titem.phoneNumber: "+item.phoneNumber)
+                        Log.e("TEST", "item.event: "+item.event)
+                        Log.e("TEST", "item.date: "+item.date)
+                        Log.e("TEST", "item.time: "+item.time)
+                        Log.e("TEST", "item.notificationText: "+item.notificationText)
+                        Log.e("TEST", "item.notificationTime: "+item.notificationTime)
                         ReservationElementView(
                             eventName = item.event,
                             name = item.name,

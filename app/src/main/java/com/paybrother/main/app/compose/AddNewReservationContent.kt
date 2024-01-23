@@ -161,18 +161,23 @@ fun AddNewReservationContent(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        if(reservationName.value.isNotEmpty() && reservationPhoneNumber.value.isNotEmpty() && reservationEvent.value.isNotEmpty()) {
+                        if(reservationName.value.isNotEmpty() &&
+                            reservationPhoneNumber.value.isNotEmpty() &&
+                            reservationEvent.value.isNotEmpty()) {
+
                             viewModel.insertReservation(
-                                ReservationUiState(
+                                uiState.copy(
                                     id = 0L,
                                     name = reservationName.value,
                                     phoneNumber = reservationPhoneNumber.value,
                                     event = reservationEvent.value,
-                                    date = reservationDate.value,
-                                    time = reservationTime.value,
-                                    notificationText = reservationNotificationText.value,
-                                    notificationTime = reservationNotificationTime.value
-                                    ))
+                                    date = uiState.date,
+                                    time = uiState.time,
+                                    notificationText = uiState.notificationText,
+                                    notificationTime = uiState.notificationTime
+
+                                ))
+
                             navController.navigate("home")
                         }
                         else{
@@ -206,7 +211,6 @@ fun DatePickerContent(uiState: ReservationUiState){
             selectedDateText = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
         }, year, month, dayOfMonth
     )
-
     // Disable past dates
     datePicker.datePicker.minDate = calendar.timeInMillis
 
@@ -214,7 +218,6 @@ fun DatePickerContent(uiState: ReservationUiState){
         text = if (selectedDateText.isNotEmpty()) {
             uiState.date = selectedDateText
             "Selected date is $selectedDateText"
-
         } else {
             "Please pick a date"
         }
