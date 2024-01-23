@@ -56,8 +56,6 @@ import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
-
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -246,41 +244,6 @@ fun BottomNavigation(navController: NavController) {
             )
         }
     }
-}
-
-//@Composable
-//fun FloatinActionButton(uiState: ReservationUiState, insertReservation: () -> Unit) {
-//    val addReservation = remember { mutableStateOf(false) }
-//
-//    Box(Modifier.fillMaxSize()) {
-//        FloatingActionButton(
-//            modifier = Modifier
-//                .align(alignment = Alignment.BottomEnd)
-//                .padding(bottom = 70.dp, end = 10.dp),
-//            onClick = {
-//                addReservation.value = true
-//            },
-//            containerColor = Color.Red,
-//            shape = RoundedCornerShape(16.dp),
-//        ) {
-//            Icon(
-//                imageVector = Icons.Rounded.Add,
-//                contentDescription = "Add FAB",
-//                tint = Color.White,
-//            )
-//        }
-//    }
-//
-//    if (addReservation.value) {
-//        AddReservationDialog(uiState = uiState, insertReservation)
-//    }
-//}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AddReservationDialog(uiState: ReservationUiState, insertReservation: () -> Unit) {
-
-
 }
 
 @Preview(showBackground = true)
