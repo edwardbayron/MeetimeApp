@@ -1,5 +1,6 @@
 package com.paybrother.main.app.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,6 +32,10 @@ class LoanViewModel @Inject constructor(
         viewModelScope.launch {
             reservationsInteractor.fetchReservationsData()
         }
+        Log.e("", "TEST")
+        Log.e("", "TEST")
+        Log.e("", "TEST")
+        Log.e("", "TEST")
 
         reservationsInteractor.reservationsList.observeForever(_allReservations::postValue)
     }
