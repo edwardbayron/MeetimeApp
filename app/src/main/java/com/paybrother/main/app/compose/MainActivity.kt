@@ -157,6 +157,9 @@ fun ReservationsListContainer(
                             name = item.name,
                             number = item.phoneNumber,
                             date = item.date,
+                            time = item.time,
+                            notificationText = item.notificationText,
+                            notificationTime = item.notificationTime,
                             onCardClick = {
                                 viewModel.selectedReservation(
                                     uiState.copy(
