@@ -32,7 +32,16 @@ class ReservationsRepositoryImpl(
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     override fun insertReservation(reservation: ReservationItem) {
-        reservationsDao.insertReservation(id = null, name = reservation.name, phoneNumber = reservation.phoneNumber, event = reservation.event, date = reservation.date)
+        reservationsDao.insertReservation(
+            id = null,
+            name = reservation.name,
+            phoneNumber = reservation.phoneNumber,
+            event = reservation.event,
+            date = reservation.date,
+            time = reservation.time,
+            notificationText = reservation.notificationText,
+            notificationTime = reservation.notificationTime
+            )
     }
 
     override fun deleteReservation(name: String){

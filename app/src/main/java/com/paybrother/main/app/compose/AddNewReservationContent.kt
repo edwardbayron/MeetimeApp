@@ -53,12 +53,19 @@ import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddNewReservationContent(viewModel: LoanViewModel, navController: NavController) {
+fun AddNewReservationContent(
+    viewModel: LoanViewModel,
+    navController: NavController,
+    uiState: ReservationUiState
+    ) {
     val txtFieldError = remember { mutableStateOf("") }
     val reservationName = remember { mutableStateOf("") }
     val reservationPhoneNumber = remember { mutableStateOf("") }
     val reservationEvent = remember { mutableStateOf("") }
     val reservationDate = remember { mutableStateOf("") }
+    val reservationTime = remember { mutableStateOf("") }
+    val reservationNotificationText = remember { mutableStateOf("") }
+    val reservationNotificationTime = remember { mutableStateOf("")}
 
     Surface(
         shape = RoundedCornerShape(16.dp),
@@ -143,19 +150,34 @@ fun AddNewReservationContent(viewModel: LoanViewModel, navController: NavControl
                         reservationEvent.value = it
                     })
 
-                DatePickerContent()
+                DatePickerContent(uiState)
 
-                TimePickerContent()
+                TimePickerContent(uiState)
 
-                TextNotificationContent()
+                TextNotificationContent(uiState)
 
-                TextNotificationScheduleContent()
+                TextNotificationScheduleContent(uiState)
 
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        if(reservationName.value.isNotEmpty() && reservationPhoneNumber.value.isNotEmpty() && reservationEvent.value.isNotEmpty()) {
-                            viewModel.insertReservation(ReservationUiState(0L, reservationName.value, reservationPhoneNumber.value, reservationEvent.value, reservationDate.value))
+                        if(reservationName.value.isNotEmpty() &&
+                            reservationPhoneNumber.value.isNotEmpty() &&
+                            reservationEvent.value.isNotEmpty()) {
+
+                            viewModel.insertReservation(
+                                uiState.copy(
+                                    id = 0L,
+                                    name = reservationName.value,
+                                    phoneNumber = reservationPhoneNumber.value,
+                                    event = reservationEvent.value,
+                                    date = uiState.date,
+                                    time = uiState.time,
+                                    notificationText = uiState.notificationText,
+                                    notificationTime = uiState.notificationTime
+
+                                ))
+
                             navController.navigate("home")
                         }
                         else{
@@ -173,7 +195,7 @@ fun AddNewReservationContent(viewModel: LoanViewModel, navController: NavControl
 }
 
 @Composable
-fun DatePickerContent(){
+fun DatePickerContent(uiState: ReservationUiState){
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
@@ -189,12 +211,12 @@ fun DatePickerContent(){
             selectedDateText = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
         }, year, month, dayOfMonth
     )
-
     // Disable past dates
     datePicker.datePicker.minDate = calendar.timeInMillis
 
     Text(
         text = if (selectedDateText.isNotEmpty()) {
+            uiState.date = selectedDateText
             "Selected date is $selectedDateText"
         } else {
             "Please pick a date"
@@ -211,7 +233,7 @@ fun DatePickerContent(){
 }
 
 @Composable
-fun TimePickerContent(){
+fun TimePickerContent(uiState: ReservationUiState){
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
@@ -230,6 +252,7 @@ fun TimePickerContent(){
 
     Text(
         text = if (selectedTimeText.isNotEmpty()) {
+            uiState.time = selectedTimeText
             "Selected time is $selectedTimeText"
         } else {
             "Please select the time"
@@ -247,7 +270,7 @@ fun TimePickerContent(){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TextNotificationContent(){
+fun TextNotificationContent(uiState: ReservationUiState){
     val reservationNotifyText = remember { mutableStateOf("") }
 
     TextField(
@@ -271,12 +294,13 @@ fun TextNotificationContent(){
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         onValueChange = {
             reservationNotifyText.value = it
+            uiState.notificationText = it
         })
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TextNotificationScheduleContent(){
+fun TextNotificationScheduleContent(uiState: ReservationUiState){
     val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
     var time by remember { mutableStateOf("")}
@@ -321,6 +345,7 @@ fun TextNotificationScheduleContent(){
                         },
                         onClick = {
                             expanded = false
+                            uiState.notificationTime = time
                         }
                     )
                 }
@@ -338,7 +363,17 @@ fun TextNotificationScheduleContent(){
 fun PreviewAddNewReservationContent(){
     AddNewReservationContent(
         viewModel = LoanViewModel(ReservationsInteractor(FakeReservationsRepository())),
-        navController = NavController(AppCompatActivity())
+        navController = NavController(AppCompatActivity()),
+        ReservationUiState(
+            id = 0L,
+            name = "Tester",
+            phoneNumber = "5555",
+            event = "Wedding",
+            date = "15.07.1992",
+            time = "18:00",
+            notificationText = "You have a wedding at ",
+            notificationTime = "18:00"
+            )
     )
 }
 

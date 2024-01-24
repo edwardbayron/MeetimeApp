@@ -15,5 +15,11 @@ data class Reservations(
     @ColumnInfo(name = "event")
     var event: String,
     @ColumnInfo(name = "date")
-    var date: String
+    var date: String,
+    @ColumnInfo(name = "time")
+    var time: String,
+    @ColumnInfo(name = "notificationText")
+    var notificationText: String,
+    @ColumnInfo(name = "notificationTime")
+    var notificationTime: String
 )

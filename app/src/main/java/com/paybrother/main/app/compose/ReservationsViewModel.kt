@@ -39,7 +39,17 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.setValue
 
 @Composable
-fun ReservationElementView(eventName: String, name: String, number: String, date: String, onCardClick: () -> Unit, onDeleteClick: () -> Unit) {
+fun ReservationElementView(
+    eventName: String,
+    name: String,
+    number: String,
+    date: String,
+    time: String,
+    notificationText: String,
+    notificationTime: String,
+    onCardClick: () -> Unit,
+    onDeleteClick: () -> Unit
+) {
     var visible by remember { mutableStateOf(false) }
     var arrowExpandableIcon by remember { mutableStateOf(Icons.Filled.ArrowDropDown)}
     val density = LocalDensity.current
@@ -67,8 +77,10 @@ fun ReservationElementView(eventName: String, name: String, number: String, date
 
         Text(modifier = Modifier.padding(10.dp), text = eventName, fontSize = 18.sp, fontWeight = FontWeight.Bold)
         Row {
-            Text(modifier = Modifier.padding(10.dp), text = "Today at 17:00", fontSize = 14.sp, color = Color.Black)
+            Text(modifier = Modifier.padding(10.dp), text = "Date: $date", fontSize = 14.sp, color = Color.Black)
         }
+        Text(modifier = Modifier.padding(10.dp), text = "Time: $time", fontSize = 14.sp, color = Color.Black)
+
 
         AnimatedVisibility(
             visible = visible,
@@ -86,7 +98,9 @@ fun ReservationElementView(eventName: String, name: String, number: String, date
         ) {
             Column {
                 Text(modifier = Modifier.padding(10.dp), text = name, fontSize = 14.sp)
-                Text(modifier = Modifier.padding(10.dp), text = number.toString(), color = Color.Red, fontSize = 14.sp)
+                Text(modifier = Modifier.padding(10.dp), text = number, color = Color.Red, fontSize = 14.sp)
+                Text(modifier = Modifier.padding(10.dp), text = "Notification message: $notificationText", fontSize = 14.sp, color = Color.Black)
+                Text(modifier = Modifier.padding(10.dp), text = "Notify before: $notificationTime", fontSize = 14.sp, color = Color.Black)
 
                 Row(modifier = Modifier.fillMaxWidth()){
                     Box {
@@ -133,5 +147,15 @@ fun ReservationElementView(eventName: String, name: String, number: String, date
 @Preview
 @Composable
 fun Preview(){
-    ReservationElementView("Nails + Massage", "Aleksei Borovikov", "55665544", "2010-05-30 22:15:52", onCardClick = {}, onDeleteClick = {})
+    ReservationElementView(
+        eventName = "Nails + Massage",
+        name = "Aleksei Borovikov",
+        number = "55665544",
+        date = "2010-05-30",
+        time = "22:15",
+        notificationText = "You have an appointment at ",
+        notificationTime = "2 hours",
+        onCardClick = {},
+        onDeleteClick = {}
+    )
 }

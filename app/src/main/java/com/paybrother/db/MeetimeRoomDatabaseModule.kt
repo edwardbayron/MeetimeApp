@@ -20,6 +20,8 @@ class MeetimeRoomDatabaseModule {
 
     @Provides
     fun provideAppDatabase(@ApplicationContext context: Context) : MeetimeRoomDatabase{
-        return Room.databaseBuilder(context, MeetimeRoomDatabase::class.java, "meetimeDb").build()
+        return Room.databaseBuilder(context, MeetimeRoomDatabase::class.java, "meetimeDb")
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }

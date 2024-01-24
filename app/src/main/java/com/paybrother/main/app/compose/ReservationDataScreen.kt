@@ -77,5 +77,14 @@ fun EditAppBarView(data: ReservationUiState, onBackPress: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewReservationDataScreen(){
-    ReservationDataContainer(ReservationUiState(1234567890L,"test", "test", "test", "1992-07-15"))
+    ReservationDataContainer(ReservationUiState(
+        id = 1234567890L,
+        name = "test",
+        phoneNumber = "test",
+        event = "test",
+        date = "1992-07-15",
+        time = "18:00",
+        notificationText = "test",
+        notificationTime = "18:00"
+        ))
 }

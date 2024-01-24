@@ -127,6 +127,14 @@ fun ReservationsListContainer(
     uiState: ReservationUiState,
     viewModel: LoanViewModel
 ) {
+    Log.e("TEST", "uiState.name: "+uiState.name)
+    Log.e("TEST", "uiState.phoneNumber: "+uiState.phoneNumber)
+    Log.e("TEST", "uiState.event: "+uiState.event)
+    Log.e("TEST", "uiState.date: "+uiState.date)
+    Log.e("TEST", "uiState.time: "+uiState.time)
+    Log.e("TEST", "uiState.notificationText: "+uiState.notificationText)
+    Log.e("TEST", "uiState.notificationTime: "+uiState.notificationTime)
+
     Column(modifier = Modifier.navigationBarsPadding()) {
         Column {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -137,11 +145,21 @@ fun ReservationsListContainer(
                 ) {
 
                     allReservations?.forEach { item ->
+                        Log.e("TEST", "item.name: "+item.name)
+                        Log.e("TEST", "Titem.phoneNumber: "+item.phoneNumber)
+                        Log.e("TEST", "item.event: "+item.event)
+                        Log.e("TEST", "item.date: "+item.date)
+                        Log.e("TEST", "item.time: "+item.time)
+                        Log.e("TEST", "item.notificationText: "+item.notificationText)
+                        Log.e("TEST", "item.notificationTime: "+item.notificationTime)
                         ReservationElementView(
                             eventName = item.event,
                             name = item.name,
                             number = item.phoneNumber,
                             date = item.date,
+                            time = item.time,
+                            notificationText = item.notificationText,
+                            notificationTime = item.notificationTime,
                             onCardClick = {
                                 viewModel.selectedReservation(
                                     uiState.copy(
@@ -190,7 +208,7 @@ fun NavigationGraph(
             EmptyScreen()
         }
         composable(BottomNavItem.AddPost.screen_route) {
-            AddReservationScreen(viewModel, navController)
+            AddReservationScreen(viewModel, navController, uiState)
         }
         composable(BottomNavItem.Notification.screen_route) {
             NotificationScreen()
@@ -253,7 +271,16 @@ fun MainPreview() {
         NavigationGraph(
             activity = AppCompatActivity(),
             viewModel = LoanViewModel(ReservationsInteractor(FakeReservationsRepository())),
-            uiState = ReservationUiState(1, ", ", "", "", ""),
+            uiState = ReservationUiState(
+                id = 0L,
+                name = "Eduard",
+                phoneNumber = "67678686",
+                event = "Birthday",
+                date = "15.07.1992",
+                time = "21:36",
+                notificationText = "You have been born at ",
+                notificationTime = "21:36"
+                ),
             navController = NavHostController(AppCompatActivity()),
             allReservations = listOf()
         )
