@@ -9,3 +9,7 @@ sealed class BottomNavItem(var title:String, var icon:Int, var screen_route:Stri
     object Notification: BottomNavItem("Notifications",R.drawable.ic_notification,"notification")
     object Jobs: BottomNavItem("Contacts",R.drawable.ic_job,"jobs")
 }
+
+sealed class HomeNavItem(var title: String, var screen_route: String){
+    object EditScreen: HomeNavItem("EditScree", "editScreen")
+}

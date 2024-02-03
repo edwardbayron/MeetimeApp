@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -48,6 +49,7 @@ import com.paybrother.main.app.navigation.BottomNavContentScreens.ContactsScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.EmptyScreen
 import com.paybrother.main.app.navigation.BottomNavContentScreens.NotificationScreen
 import com.paybrother.main.app.navigation.BottomNavItem
+import com.paybrother.main.app.navigation.HomeNavItem
 import com.paybrother.main.app.repository.ReservationsInteractor
 import com.paybrother.main.app.viewmodels.LoanViewModel
 import com.paybrother.ui.theme.MeetimeApp_v3Theme
@@ -64,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MeetimeApp_v3Theme {
                 val viewModel = hiltViewModel<LoanViewModel>()
-                val uiState by viewModel.uiState.collectAsState()
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 val listReservations by viewModel.allReservations.observeAsState(initial = listOf())
 
                 Surface(
@@ -125,7 +127,8 @@ fun ReservationsListContainer(
     activity: AppCompatActivity,
     allReservations: List<Reservations>?,
     uiState: ReservationUiState,
-    viewModel: LoanViewModel
+    viewModel: LoanViewModel,
+    navController: NavHostController
 ) {
     Log.e("TEST", "uiState.name: "+uiState.name)
     Log.e("TEST", "uiState.phoneNumber: "+uiState.phoneNumber)
@@ -163,14 +166,17 @@ fun ReservationsListContainer(
                             onCardClick = {
                                 viewModel.selectedReservation(
                                     uiState.copy(
-                                        item.id,
-                                        item.name,
-                                        item.phoneNumber,
-                                        item.event,
-                                        item.date
+                                        id = item.id,
+                                        name = item.name,
+                                        phoneNumber = item.phoneNumber,
+                                        event = item.event,
+                                        date = item.date
                                     )
                                 )
-                                openReservationActivity(activity, viewModel)
+                                navController.navigate("editScreen") {
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                             },
                             onDeleteClick = {
                                 viewModel.deleteReservation(item.name)
@@ -200,11 +206,11 @@ fun NavigationGraph(
                 activity = activity,
                 allReservations = allReservations,
                 uiState = uiState,
-                viewModel = viewModel
+                viewModel = viewModel,
+                navController
             )
         }
         composable(BottomNavItem.MyNetwork.screen_route) {
-
             EmptyScreen()
         }
         composable(BottomNavItem.AddPost.screen_route) {
@@ -215,6 +221,12 @@ fun NavigationGraph(
         }
         composable(BottomNavItem.Jobs.screen_route) {
             ContactsScreen()
+        }
+
+        composable(HomeNavItem.EditScreen.screen_route){
+            ReservationEditBottomSheet(
+                viewModel = viewModel,
+                uiState = uiState)
         }
     }
 }
@@ -285,11 +297,6 @@ fun MainPreview() {
             allReservations = listOf()
         )
     }
-}
-
-private fun openReservationActivity(activity: AppCompatActivity, viewModel: LoanViewModel) {
-    val reservationBottomSheet = ReservationEditBottomSheet(viewModel)
-    reservationBottomSheet.show(activity.supportFragmentManager, "RESERVATION_EDIT_BOTTOM_SHEET")
 }
 
 
